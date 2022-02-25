@@ -1,16 +1,17 @@
 <template>
     <div id="app">
         <Header></Header>
-        <Breadcrumb name="测试" slug="test" root="/test" :publishEnable="true" :adminEnable="true" :feedbackEnable="true" :crumbEnable="true">
-            <img slot="logo" svg-inline :src="getAppIcon('macro')" />
+        <!-- TODO:发布链接 -->
+        <Breadcrumb name="江湖百科" slug="world" root="/world" :publishEnable="true" :feedbackEnable="true" :crumbEnable="false">
+            <img slot="logo" svg-inline :src="getAppIcon('world')" />
         </Breadcrumb>
-        <LeftSidebar>left side</LeftSidebar>
-        <Main :withoutRight="false">
-            <img src="@/assets/img/logo.svg" alt="">
+        <LeftSidebar>
+            <Nav />
+        </LeftSidebar>
+        <Main :withoutRight="true">
             <div class="m-main">
                 <router-view />
             </div>
-            <RightSidebar>right side</RightSidebar>
             <Footer></Footer>
         </Main>
     </div>
@@ -18,6 +19,7 @@
 
 <script>
 import { getAppIcon } from "@jx3box/jx3box-common/js/utils";
+import Nav from '@/components/Nav.vue'
 export default {
     name: "App",
     props: [],
@@ -26,7 +28,7 @@ export default {
     },
     computed: {},
     methods: { getAppIcon },
-    components: {},
+    components: {Nav},
 };
 </script>
 
