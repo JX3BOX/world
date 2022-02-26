@@ -6,20 +6,14 @@ const Setting = require("./setting.json");
 module.exports = {
 
     //❤️ Multiple pages ~
-    // pages:{
-    //     index : {
-    //         title : 'Home - JX3BOX',
-    //         entry:'src/main.js',
-    //         template : 'public/index.html',
-    //         filename:'index.html',
-    //     },
-    //     $project : {
-    //         title : 'Home - JX3BOX',
-    //         entry:'src/core/$project/index.js',
-    //         template : 'public/$project/index.html',
-    //         filename:'$project/index.html',
-    //     },
-    // },
+    pages:{
+        knowledge : {
+            title : '通识百科 - JX3BOX',
+            template : 'public/index.html',
+            entry:'src/pages/knowledge.js',
+            filename:'knowledge/index.html',
+        },
+    },
 
     //❤️ Porxy ~
     devServer: {
@@ -148,14 +142,14 @@ module.exports = {
 
         //💘 html-webpack-plugin ~
         // Multiple pages disable the block below
-        config.plugin("html").tap(args => {
-            args[0].meta = {                            //------设置SEO信息
-                Keywords: Setting.keys,
-                Description: Setting.desc
-            };
-            args[0].title = Setting.title + SEO.title;  //------自动添加标题后缀
-            return args;
-        });
+        // config.plugin("html").tap(args => {
+        //     args[0].meta = {                            //------设置SEO信息
+        //         Keywords: Setting.keys,
+        //         Description: Setting.desc
+        //     };
+        //     args[0].title = Setting.title + SEO.title;  //------自动添加标题后缀
+        //     return args;
+        // });
 
 
         //💝 in-line small imgs ~

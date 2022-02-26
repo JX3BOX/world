@@ -1,11 +1,12 @@
 <template>
-    <div class="v-index">
+    <div class="v-knowledge-index">
+        通识首页
     </div>
 </template>
 
 <script>
 export default {
-    name: "Index",
+    name: "KnowledgeIndex",
     props: [],
     data: function() {
         return {
@@ -22,6 +23,3 @@ export default {
 };
 </script>
 
-<style lang="less">
-@import "../assets/css/index.less";
-</style>

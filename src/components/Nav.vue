@@ -1,24 +1,33 @@
 <template>
     <div class="m-nav">
-        <el-tree :data="data" :props="defaultProps" node-key="key" :default-expanded-keys="['world']">
-            <router-link class="el-tree-node__label" slot-scope="{ data }" to="/">
+        <el-tree :data="tree_data" :props="defaultProps" node-key="key" :default-expanded-keys="['knowledge']" @node-click="clickHandler">
+            <a
+                class="el-tree-node__label"
+                :href="data.href"
+                slot-scope="{data}"
+                :class="{on:isActive(data.key)}"
+            >
                 <span class="u-name" v-text="data.label"></span>
-                <em v-if="data.count" class="u-count" v-text="`(${data.count})`"></em>
-            </router-link>
+                <em v-if="data.count" class="u-count" v-text="`( ${data.count} )`"></em>
+            </a>
         </el-tree>
     </div>
 </template>
 
 <script>
+import { getKnowledgeMenus } from "@/service/wiki.js";
+import { map, each } from "lodash";
 export default {
     name: "Nav",
     props: [],
     components: {},
     data: function () {
         return {
-            data: [
+            active : 'calendar',
+
+            data: {
                 // TODO:构建2019~现在及未来的数据
-                {
+                calendar: {
                     label: "日历",
                     children: [
                         {
@@ -33,7 +42,7 @@ export default {
                 },
 
                 // TODO:关联书籍接口
-                {
+                book: {
                     label: "书籍",
                     key: "book",
                     children: [
@@ -50,7 +59,7 @@ export default {
                 },
 
                 // TODO:关联接口
-                {
+                reputation: {
                     label: "声望",
                     children: [
                         {
@@ -63,7 +72,7 @@ export default {
                 },
 
                 // TODO:关联接口
-                {
+                quest: {
                     label: "任务",
                     children: [
                         {
@@ -72,54 +81,108 @@ export default {
                     ],
                 },
 
-                // TODO:关联接口
-                {
-                    label: "江湖",
-                    key: "world",
+                knowledge: {
+                    label: "通识",
+                    key: "knowledge",
+                    href : '/knowledge/',
                     children: [
                         {
                             label: "事件",
                             key: "bigbang",
+                            count: 0,
+                            href : '/knowledge/#/type/bigbang',
                         },
                         {
                             label: "八卦",
                             key: "gossip",
+                            count: 0,
+                            href : '/knowledge/#/type/gossip',
                         },
                         {
                             label: "玩法",
                             key: "game",
+                            count: 0,
+                            href : '/knowledge/#/type/game',
                         },
                         {
                             label: "术语",
                             key: "jargon",
+                            count: 0,
+                            href : '/knowledge/#/type/jargon',
                         },
                         {
                             label: "玩家",
                             key: "player",
+                            count: 0,
+                            href : '/knowledge/#/type/player',
                         },
                         {
                             label: "组织",
                             key: "organization",
+                            count: 0,
+                            href : '/knowledge/#/type/organization',
                         },
                         {
                             label: "其它",
                             key: "other",
+                            count: 0,
+                            href : '/knowledge/#/type/other',
                         },
                     ],
                 },
-            ],
+            },
             defaultProps: {
                 children: "children",
                 label: "label",
             },
         };
     },
-    computed: {},
+    computed: {
+        tree_data: function () {
+            return map(this.data, (item, key) => {
+                return item;
+            });
+        },
+    },
     watch: {},
-    methods: {},
+    methods: {
+        // 数据加载
+        init: function () {
+            this.loadKnowledge();
+        },
+        loadKnowledge: function () {
+            // 加载通识子类统计
+            getKnowledgeMenus().then((res) => {
+                let knowledgeMenus = res?.data?.data?.menus;
+                let knowledgeTreeIndex = {};
+                this.data.knowledge.children.forEach((item, i) => {
+                    knowledgeTreeIndex[item.key] = i;
+                });
+                each(knowledgeMenus, (item, i) => {
+                    let typePos = knowledgeTreeIndex[item.name];
+                    if (knowledgeTreeIndex[item.name] !== undefined) {
+                        let distItem = this.data.knowledge.children[typePos];
+                        distItem["count"] = item.count;
+                    }
+                });
+            });
+        },
+
+        // 交互操作
+        clickHandler : function (data){
+            console.log(data)
+            this.active = data.key
+        },
+        isActive : function (key){
+            return this.active == key
+        }
+    },
     filters: {},
-    created: function () {},
-    mounted: function () {},
+    created: function () {
+        this.init();
+    },
+    mounted: function () {
+    },
 };
 </script>
 
