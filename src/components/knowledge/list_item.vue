@@ -32,7 +32,7 @@ export default {
 	methods: {
 		// 是否有标签
 		hasTag(data) {
-			return data && data.tags.filter(Boolean).length ? true : false;
+			return data && data.tags?.filter(Boolean).length ? true : false;
 		},
 	},
 	created: function () {},
