@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0bfe92"],{4011:function(e,n,t){"use strict";t.r(n);var o=function(){var e=this,n=e.$createElement,t=e._self._c||n;return t("div",{staticClass:"v-knowledge-list"},[e._v(" 通识列表 ")])},s=[],c={name:"KnowledgeList",props:[],data:function(){return{}},computed:{},methods:{},created:function(){},components:{}},u=c,a=t("2877"),l=Object(a["a"])(u,o,s,!1,null,null,null);n["default"]=l.exports}}]);
-//# sourceMappingURL=chunk-2d0bfe92.86e1ee6f.js.map

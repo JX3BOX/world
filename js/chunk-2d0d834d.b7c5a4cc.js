@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0d834d"],{"79a6":function(n,e,t){"use strict";t.r(e);var o=function(){var n=this,e=n.$createElement,t=n._self._c||e;return t("div",{staticClass:"v-knowledge-index"},[n._v(" 通识首页 ")])},c=[],d={name:"KnowledgeIndex",props:[],data:function(){return{}},computed:{},methods:{},created:function(){},components:{}},a=d,s=t("2877"),u=Object(s["a"])(a,o,c,!1,null,null,null);e["default"]=u.exports}}]);
-//# sourceMappingURL=chunk-2d0d834d.b7c5a4cc.js.map
