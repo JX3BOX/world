@@ -1,25 +1,25 @@
 <template>
-    <div class="v-knowledge-index">
-        通识首页
-    </div>
+	<div class="v-knowledge-index">
+		<!-- 搜索 -->
+		<knowledgeSearch @onSearchKey="onSearchKey" />
+		<!-- 搜索结果 -->
+	</div>
 </template>
 
 <script>
+import knowledgeSearch from "@/components/knowledge/search.vue";
 export default {
-    name: "KnowledgeIndex",
-    props: [],
-    data: function() {
-        return {
-        };
-    },
-    computed: {
-    },
-    methods: {
-    },
-    created: function() {
-    },
-    components: {
-    },
+	name: "KnowledgeIndex",
+	components: { knowledgeSearch },
+	data: function () {
+		return {};
+	},
+	computed: {},
+	methods: {
+		onSearchKey(search) {
+			console.log(search);
+		},
+	},
+	created: function () {},
 };
 </script>
-

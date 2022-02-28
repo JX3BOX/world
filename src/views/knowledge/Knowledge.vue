@@ -35,5 +35,5 @@ export default {
 
 <style lang="less">
 @import "~@/assets/css/app.less";
-@import "~@/assets/css/knowledge.less";
+@import "~@/assets/css/knowledge/index.less";
 </style>
