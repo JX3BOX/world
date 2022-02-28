@@ -2,22 +2,20 @@
 	<div class="v-knowledge-list" v-loading="loading">
 		<!-- 搜索 -->
 		<knowledgeSearch @onSearchKey="onSearchKey" />
-		<!-- 搜索结果 -->
-		<div class="m-knowledge" v-if="list.length">
-			<knowledgeItem v-for="(item, index) in list" :key="index" :data="item" />
-		</div>
-		<div v-else>没有数据</div>
+		<!-- 搜索结果 & list列表 -->
+		<knowledgeList :list="list" :total="total" :pagination="pagination" @onPageKey="onPageKey" />
 	</div>
 </template>
 
 <script>
 import knowledgeSearch from "@/components/knowledge/search.vue";
-import knowledgeItem from "@/components/knowledge/list_item.vue";
+
+import knowledgeList from "@/components/knowledge/list.vue";
 import { getKnowledgeList, getKnowledgeSearch } from "@/service/knowledge.js";
 
 export default {
 	name: "KnowledgeList",
-	components: { knowledgeSearch, knowledgeItem },
+	components: { knowledgeSearch, knowledgeList },
 	data: function () {
 		return {
 			loading: false,
@@ -46,6 +44,13 @@ export default {
 
 			return params;
 		},
+		pagination() {
+			return {
+				page: this.page,
+				total: this.total,
+				per: this.per,
+			};
+		},
 	},
 	methods: {
 		// 获取数据
@@ -57,7 +62,6 @@ export default {
 			this.loading = true;
 			getKnowledgeList(params)
 				.then((res) => {
-					console.log(res);
 					this.total = res.total;
 					this.list = res.data;
 				})
@@ -82,6 +86,10 @@ export default {
 		onSearchKey(val) {
 			this.search = val;
 			this.page = 1;
+		},
+		// 切换页码
+		onPageKey(val) {
+			this.page = val;
 		},
 	},
 	watch: {
