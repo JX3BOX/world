@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<!-- 搜索结果 -->
-		<div class="m-knowledge">
+		<div class="m-knowledge" v-if="list">
 			<template v-if="list.length">
 				<knowledgeItem v-for="(item, index) in list" :key="index" :data="item" />
 			</template>
@@ -28,7 +28,8 @@ export default {
 };
 </script>
 <style lang="less">
-.m-noKnowledge,.m-archive-pages {
+.m-noKnowledge,
+.m-archive-pages {
 	.mt(20px);
 }
 </style>

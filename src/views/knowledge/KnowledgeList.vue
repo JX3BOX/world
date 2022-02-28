@@ -9,7 +9,6 @@
 
 <script>
 import knowledgeSearch from "@/components/knowledge/search.vue";
-
 import knowledgeList from "@/components/knowledge/list.vue";
 import { getKnowledgeList, getKnowledgeSearch } from "@/service/knowledge.js";
 
@@ -29,11 +28,18 @@ export default {
 		};
 	},
 	computed: {
+		type_id() {
+			let id = "";
+			for (const key in this.$route.params) {
+				id = this.$route.params[key];
+			}
+			return id;
+		},
 		params() {
 			let params = {
 				limit: this.per,
 				page: this.page,
-				...this.$route.params,
+				knowledge_type: this.type_id,
 			};
 			if (this.search) {
 				delete params.knowledge_type;
@@ -95,6 +101,9 @@ export default {
 	watch: {
 		params() {
 			this.getData();
+		},
+		type_id() {
+			this.page = 1;
 		},
 	},
 	created: function () {
