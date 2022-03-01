@@ -53,8 +53,5 @@ export default {
 			return value;
 		},
 	},
-	created: function () {
-		if (this.list) console.log(this.list);
-	},
 };
 </script>
