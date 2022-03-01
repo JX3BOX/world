@@ -2,7 +2,7 @@
 	<div class="v-knowledge-single" v-loading="loading">
 		<div class="m-navigation">
 			<el-button class="u-goback" size="medium" icon="el-icon-arrow-left" @click="goBack" plain>返回列表</el-button>
-			<Fav class="u-collect" post-type="knowledge" :post-id="id" />
+			<!-- <Fav class="u-collect" post-type="knowledge" :post-id="id" /> -->
 		</div>
 
 		<div class="m-wiki" v-if="data && data.post">
@@ -19,7 +19,7 @@
 				</template>
 				<template slot="body">
 					<Article :content="data.post.content" />
-					<Thx class="m-thx" slot="single-append" :postId="id" postType="knowledge" :userId="author_id" :adminBoxcoinEnable="isRevision" :userBoxcoinEnable="isRevision" />
+					<Thx class="m-thx" slot="single-append" :postId="id" postType="knowledge" :userId="author_id" :adminBoxcoinEnable="isRevision" :userBoxcoinEnable="isRevision" mode="wiki"/>
 				</template>
 			</WikiPanel>
 
@@ -122,5 +122,8 @@ export default {
 	.flex;
 	justify-content: space-between;
 	align-items: center;
+}
+.w-boxcoin-records-list{
+	background-color:#fff;
 }
 </style>
