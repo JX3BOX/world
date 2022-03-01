@@ -26,6 +26,7 @@
 </template>
 <script>
 import { __iconPath } from "@jx3box/jx3box-common/data/jx3box";
+import { getStatRank } from "@jx3box/jx3box-common/js/stat";
 export default {
 	name: "Hot",
 	props: ["data"],
@@ -55,6 +56,23 @@ export default {
 			return _list;
 		},
 	},
+	methods : {
+		// 获取热门
+        getHotData() {
+            getStatRank("plot", "views", 18).then((res) => {
+                let list = [];
+                res.data.forEach((item) => {
+                    if (item.name.startsWith("plot")) {
+                        let id = item.name.split("-").pop();
+                        list.push(id);
+                    }
+                });
+                getKnowledgeSearch({ ids: list.join() }).then((res) => {
+                    this.hot.list = res.data;
+                });
+            });
+        },
+	}
 };
 </script>
 <style scoped>
@@ -63,4 +81,39 @@ export default {
 	margin-bottom: 10px;
 	overflow: hidden;
 }
+/* .m-hot {
+	.flex;
+	.size(100%,66px);
+	.u-hot {
+		.size(33.3%,66px);
+		.flex;
+		.r(5px);
+		.mr(20px);
+		.mb(10px);
+		padding: 8px 5px;
+		flex-wrap: nowrap;
+		box-sizing: border-box;
+		border: 1px solid #d7dae1;
+		border-left: 5px solid #3a97eb;
+		background-color: #f5f7fa;
+
+		&:nth-child(3n) {
+			.mr(0);
+		}
+	}
+	.u-icon {
+		.size(48px);
+		.mr(10px);
+	}
+	.u-content {
+		.flex;
+		flex-direction: column;
+		justify-content: center;
+		.color(@color);
+		.u-desc {
+			.fz(12px);
+			opacity: 0.6;
+		}
+	}
+} */
 </style>
