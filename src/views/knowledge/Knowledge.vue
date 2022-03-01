@@ -18,18 +18,17 @@
 
 <script>
 import { getAppIcon } from "@jx3box/jx3box-common/js/utils";
-import Nav from '@/components/Nav.vue'
+import Nav from "@/components/Nav.vue";
 export default {
     name: "App",
     props: [],
-    data: function() {
+    data: function () {
         return {};
     },
     computed: {},
     methods: { getAppIcon },
-    components: {Nav},
-    mounted : function (){
-    }
+    components: { Nav },
+    mounted: function () {},
 };
 </script>
 

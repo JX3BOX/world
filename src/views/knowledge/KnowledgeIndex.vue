@@ -6,7 +6,7 @@
 		<knowledgeList v-if="search" :list="list" :pagination="pagination" @onSearchKey="onSearchKey" />
 		<template v-else>
 			<!-- 便捷入口 -->
-			<wikiEntry />
+			<!-- <wikiEntry /> -->
 			<!--  玩法指南 -->
 			<wikiGuide :data="guide" />
 			<!-- 热门剧情 -->
@@ -20,10 +20,10 @@
 <script>
 import knowledgeSearch from "@/components/knowledge/search.vue";
 import knowledgeList from "@/components/knowledge/list.vue";
-import wikiEntry from "@/components/wiki/entry.vue";
-import wikiGuide from "@/components/wiki/guide.vue";
-import wikiHot from "@/components/wiki/hot.vue";
-import wikiRecent from "@/components/wiki/recent.vue";
+// import wikiEntry from "@/components/knowledge/entry.vue";
+import wikiGuide from "@/components/knowledge/guide.vue";
+import wikiHot from "@/components/knowledge/hot.vue";
+import wikiRecent from "@/components/knowledge/recent.vue";
 import { getKnowledgeSearch } from "@/service/knowledge.js";
 import { getKnowledgeNewest, getMenuGroups } from "@/service/wiki.js";
 import { getStatRank } from "@jx3box/jx3box-common/js/stat";
@@ -32,7 +32,7 @@ export default {
 	components: {
 		knowledgeSearch,
 		knowledgeList,
-		wikiEntry,
+		// wikiEntry,
 		wikiGuide,
 		wikiHot,
 		wikiRecent,
@@ -133,8 +133,11 @@ export default {
 	},
 	created: function () {
 		this.getGuideData();
-		this.getHotData();
+		// this.getHotData();
 		this.getRecentData();
 	},
 };
 </script>
+<style lang="less">
+@import "~@/assets/css/knowledge/index.less";
+</style>

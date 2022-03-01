@@ -45,6 +45,4 @@ export default {
 	},
 };
 </script>
-<style lang="less">
-@import "~@/assets/css/wiki/index.less";
-</style>
+
