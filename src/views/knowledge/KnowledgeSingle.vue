@@ -2,6 +2,7 @@
 	<div class="v-knowledge-single" v-loading="loading">
 		<div class="m-navigation">
 			<el-button class="u-goback" size="medium" icon="el-icon-arrow-left" @click="goBack" plain>返回列表</el-button>
+			<Fav class="u-collect" post-type="knowledge" :post-id="id" />
 		</div>
 
 		<div class="m-wiki" v-if="data && data.post">
@@ -116,5 +117,10 @@ export default {
 	a:hover {
 		box-shadow: 0 1px 0 @primary;
 	}
+}
+.m-navigation {
+	.flex;
+	justify-content: space-between;
+	align-items: center;
 }
 </style>
