@@ -8,7 +8,7 @@
 			<WikiPanel class="m-knowledge-panel" :wiki-post="data">
 				<template slot="head-title">
 					<img class="u-icon" svg-inline src="../../assets/img/knowledge.svg" />
-					<span>通识 - {{ data.post.title }} </span>
+					<span>{{ data.source.label }} - {{ data.post.title }} </span>
 				</template>
 				<template slot="head-actions">
 					<a class="el-button el-button--primary" :href="publishLink(`knowledge/${id}`)">
@@ -41,7 +41,6 @@
 <script>
 import { getKnowledgeDetail } from "@/service/knowledge.js";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
-import { WikiPost } from "@jx3box/jx3box-common/js/helper";
 import { publishLink } from "@jx3box/jx3box-common/js/utils";
 import WikiPanel from "@jx3box/jx3box-common-ui/src/wiki/WikiPanel";
 import WikiRevisions from "@jx3box/jx3box-common-ui/src/wiki/WikiRevisions";
@@ -83,9 +82,11 @@ export default {
 			getKnowledgeDetail(this.id)
 				.then((res) => {
 					this.data = res;
+					if (this.data.source) this.data.source.post = this.data.post;
 				})
 				.finally(() => {
 					this.loading = false;
+					postStat(this.type, this.id);
 				});
 		},
 		goBack() {
@@ -95,28 +96,6 @@ export default {
 	},
 	created: function () {
 		this.getData();
-	},
-	watch: {
-		"$route.params.post_id": {
-			immediate: true,
-			handler() {
-				if (this.$route.params.post_id) {
-					// 获取指定攻略
-					WikiPost.view(this.$route.params.post_id)
-						.then((res) => {
-							res = res.data;
-							if (res.code === 200) {
-								this.data = res.data;
-								if (this.data.source) this.data.source.post = this.data.post;
-							}
-						})
-						.then(() => {
-							// 提交子统计
-							postStat(this.type, this.id);
-						});
-				}
-			},
-		},
 	},
 };
 </script>
