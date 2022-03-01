@@ -4,14 +4,16 @@
 		<knowledgeSearch @onSearchKey="onSearchKey" />
 		<!-- 搜索结果 -->
 		<knowledgeList v-if="search" :list="list" :pagination="pagination" @onSearchKey="onSearchKey" />
-		<!-- 便捷入口 -->
-		<wikiEntry />
-		<!--  玩法指南 -->
-		<wikiGuide :data="guide" />
-		<!-- 热门剧情 -->
-		<wikiHot :data="hot" />
-		<!-- 热门剧情 -->
-		<wikiRecent :list="recent" />
+		<template v-else>
+			<!-- 便捷入口 -->
+			<wikiEntry />
+			<!--  玩法指南 -->
+			<wikiGuide :data="guide" />
+			<!-- 热门剧情 -->
+			<wikiHot :data="hot" />
+			<!-- 热门剧情 -->
+			<wikiRecent :list="recent" />
+		</template>
 	</div>
 </template>
 
@@ -130,9 +132,9 @@ export default {
 		},
 	},
 	created: function () {
-		this.getRecentData();
 		this.getGuideData();
 		this.getHotData();
+		this.getRecentData();
 	},
 };
 </script>

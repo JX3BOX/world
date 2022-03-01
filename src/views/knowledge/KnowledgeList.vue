@@ -3,7 +3,7 @@
 		<!-- 搜索 -->
 		<knowledgeSearch @onSearchKey="onSearchKey" />
 		<!-- 搜索结果 & list列表 -->
-		<knowledgeList :list="list" :total="total" :pagination="pagination" @onPageKey="onPageKey" />
+		<knowledgeList v-if="list" :list="list" :total="total" :pagination="pagination" @onPageKey="onPageKey" />
 	</div>
 </template>
 
@@ -19,7 +19,7 @@ export default {
 		return {
 			loading: false,
 			search: "",
-			list: [],
+			list: "",
 
 			page: 1,
 			per: 20,

@@ -7,6 +7,7 @@ function getKnowledgeList(params) {
 			return res.data.data;
 		});
 }
+
 function getKnowledgeSearch(params) {
 	return $helper()
 		.get(`api/knowledges`, { params })
@@ -14,5 +15,17 @@ function getKnowledgeSearch(params) {
 			return res.data.data;
 		});
 }
+function getKnowledgeDetail(id) {
+	return $helper()
+		.get(`api/wiki/post`, {
+			params: {
+				source_id: id,
+				type: "knowledge",
+			},
+		})
+		.then((res) => {
+			return res.data.data;
+		});
+}
 
-export { getKnowledgeList,getKnowledgeSearch };
+export { getKnowledgeList, getKnowledgeSearch, getKnowledgeDetail };
