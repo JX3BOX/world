@@ -4,7 +4,7 @@
 			<span class="u-title-left"><i class="el-icon-location-information"></i><span> 便捷入口</span></span>
 			<a class="u-title-right" target="_blank" :href="feedback">反馈建议 &raquo;</a>
 		</div>
-		<div class="m-entry">
+		<div class="m-entry m-panel">
 			<a class="u-entry" v-for="(item, index) in list" :key="index" :href="item.link" target="_blank">
 				<i :class="item.icon"></i>
 				<span>{{ item.name }}</span>

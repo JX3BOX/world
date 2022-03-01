@@ -4,20 +4,20 @@
 			<span class="u-title-left"><i class="el-icon-orange"></i><span> 玩法指南</span></span>
 			<router-link class="u-title-right" to="/type/game">查看更多 &raquo;</router-link>
 		</div>
-		<div class="m-guide">
-            
-        </div>
+		<div class="m-guide m-panel">
+			<div v-for="(item, index) in data" :key="index" class="u-guide">
+				<div class="u-title">{{ item.label }}</div>
+				<div class="u-list">
+					<a class="u-label" v-for="(menu, key) in item.menus" :key="key" :href="menu.link" target="_blank" v-html="menu.label"></a>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 <script>
-//import { demo } from '@/utils/common.js';
-//import xSearch from '@/components/search.vue';
 export default {
 	name: "Guide",
-	props: [],
-	components: {
-		//demo
-	},
+	props: ["data"],
 	data: function () {
 		return {
 			loading: false,
@@ -30,6 +30,4 @@ export default {
 	mounted: function () {},
 };
 </script>
-<style lang="less">
-//@import '@/assets/css/demo.less';
-</style>
+ 
