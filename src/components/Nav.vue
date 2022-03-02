@@ -170,7 +170,6 @@ export default {
 
         // 交互操作
         clickHandler : function (data){
-            console.log(data)
             this.active = data.key
         },
         isActive : function (key){

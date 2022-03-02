@@ -8,7 +8,7 @@
 			<div v-for="(item, index) in data" :key="index" class="u-guide">
 				<div class="u-title">{{ item.label }}</div>
 				<div class="u-list">
-					<a class="u-label" v-for="(menu, key) in item.menus" :key="key" :href="menu.link" target="_blank" v-html="menu.label"></a>
+					<a class="u-label" v-for="(menu, key) in item.menus" :key="key" :href="menu.link" v-html="menu.label"></a>
 				</div>
 			</div>
 		</div>

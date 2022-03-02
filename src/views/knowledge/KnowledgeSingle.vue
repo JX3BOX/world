@@ -9,7 +9,7 @@
 			<WikiPanel class="m-knowledge-panel" :wiki-post="data">
 				<template slot="head-title">
 					<img class="u-icon" svg-inline src="../../assets/img/knowledge.svg" />
-					<span>{{ data.source.label }} - {{ data.post.title }} </span>
+					<span>{{ title }} </span>
 				</template>
 				<template slot="head-actions">
 					<a class="el-button el-button--primary" :href="publishLink(`knowledge/${id}`)">
@@ -18,7 +18,7 @@
 					</a>
 				</template>
 				<template slot="body">
-					<Article :content="data.post.content" />
+					<Article :content="content" />
 					<Thx class="m-thx" slot="single-append" :postId="id" postType="knowledge" :userId="author_id" :adminBoxcoinEnable="isRevision" :userBoxcoinEnable="isRevision" mode="wiki" />
 				</template>
 			</WikiPanel>
@@ -68,14 +68,20 @@ export default {
 			return this.$route.params.source_id;
 		},
 		type: function () {
-			return this.data.source.type;
+			return this.data?.source?.type;
 		},
 		isRevision: function () {
 			return !!this.$route.params.post_id;
 		},
 		author_id: function () {
-			return ~~this.data.post.user_id;
+			return ~~this.data?.post?.user_id;
 		},
+		title : function (){
+			return this.data?.source?.name
+		},
+		content : function (){
+			return this.data?.post?.content
+		}
 	},
 	methods: {
 		getData() {
@@ -148,5 +154,8 @@ export default {
 }
 .w-boxcoin-records-list {
 	background-color: #fff;
+}
+.m-thx{
+	.mt(20px);
 }
 </style>

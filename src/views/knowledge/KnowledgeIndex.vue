@@ -6,7 +6,7 @@
 		<knowledgeList v-if="search" :list="list" :total="total" :pagination="pagination" @onPageKey="onPageKey" />
 		<template v-else>
 			<!-- 快捷入口 -->
-			<wikiEntry />
+			<!-- <wikiEntry /> -->
 			<!--  玩法指南 -->
 			<wikiGuide />
 			<!-- 热门剧情 -->
@@ -22,7 +22,7 @@
 <script>
 import knowledgeSearch from "@/components/knowledge/search.vue";
 import knowledgeList from "@/components/knowledge/list.vue";
-import wikiEntry from "@/components/knowledge/entry.vue"; // 快捷入口
+// import wikiEntry from "@/components/knowledge/entry.vue"; // 快捷入口
 import wikiGuide from "@/components/knowledge/guide.vue"; // 玩法指南
 // import wikiHot from "@/components/knowledge/hot.vue"; // 热门剧情
 import wikiJargon from "@/components/knowledge/jargon.vue"; // 术语大全
@@ -34,7 +34,7 @@ export default {
 	components: {
 		knowledgeSearch,
 		knowledgeList,
-		wikiEntry,
+		// wikiEntry,
 		// wikiHot,
 		wikiJargon,
 		wikiGuide,
