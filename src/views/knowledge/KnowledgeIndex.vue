@@ -3,7 +3,7 @@
 		<!-- 搜索 -->
 		<knowledgeSearch @onSearchKey="onSearchKey" />
 		<!-- 搜索结果 -->
-		<knowledgeList v-if="search" :list="list" :pagination="pagination" @onSearchKey="onSearchKey" />
+		<knowledgeList v-if="search" :list="list" :total="total" :pagination="pagination" @onPageKey="onPageKey" />
 		<template v-else>
 			<!-- 快捷入口 -->
 			<wikiEntry />
@@ -11,6 +11,8 @@
 			<wikiGuide />
 			<!-- 热门剧情 -->
 			<!-- <wikiHot /> -->
+			<!-- 术语大全 -->
+			<wikiJargon />
 			<!-- 最新更新 -->
 			<wikiRecent />
 		</template>
@@ -23,6 +25,7 @@ import knowledgeList from "@/components/knowledge/list.vue";
 import wikiEntry from "@/components/knowledge/entry.vue"; // 快捷入口
 import wikiGuide from "@/components/knowledge/guide.vue"; // 玩法指南
 // import wikiHot from "@/components/knowledge/hot.vue"; // 热门剧情
+import wikiJargon from "@/components/knowledge/jargon.vue"; // 术语大全
 import wikiRecent from "@/components/knowledge/recent.vue"; // 最新更新
 import { getKnowledgeSearch } from "@/service/knowledge.js";
 
@@ -33,6 +36,7 @@ export default {
 		knowledgeList,
 		wikiEntry,
 		// wikiHot,
+		wikiJargon,
 		wikiGuide,
 		wikiRecent,
 	},
@@ -43,7 +47,7 @@ export default {
 			list: "",
 
 			page: 1,
-			per: 15,
+			per: 20,
 			total: 1,
 			pages: 1,
 		};
