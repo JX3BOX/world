@@ -8,6 +8,7 @@ function getKnowledgeList(params) {
 		});
 }
 
+// 搜索
 function getKnowledgeSearch(params) {
 	return $helper()
 		.get(`api/knowledges`, { params })
@@ -15,6 +16,8 @@ function getKnowledgeSearch(params) {
 			return res.data.data;
 		});
 }
+
+// 获取内容详情
 function getKnowledgeDetail(id) {
 	return $helper()
 		.get(`api/wiki/post`, {
@@ -27,6 +30,16 @@ function getKnowledgeDetail(id) {
 			return res.data.data;
 		});
 }
+
+// 获取版本
+function getKnowledgePost(id) {
+	return $helper()
+		.get(`api/wiki/post/${id}`)
+		.then((res) => {
+			return res.data.data;
+		});
+}
+
 // 获取最新更新帖子
 function getKnowledgeNewest(params) {
 	return $helper()
@@ -45,4 +58,4 @@ function getMenuGroups(params) {
 		});
 }
 
-export { getKnowledgeList, getKnowledgeSearch, getKnowledgeDetail, getKnowledgeNewest, getMenuGroups };
+export { getKnowledgeList, getKnowledgeSearch, getKnowledgeDetail, getKnowledgePost, getKnowledgeNewest, getMenuGroups };

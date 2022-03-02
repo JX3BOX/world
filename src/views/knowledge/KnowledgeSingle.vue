@@ -19,7 +19,7 @@
 				</template>
 				<template slot="body">
 					<Article :content="data.post.content" />
-					<Thx class="m-thx" slot="single-append" :postId="id" postType="knowledge" :userId="author_id" :adminBoxcoinEnable="isRevision" :userBoxcoinEnable="isRevision" mode="wiki"/>
+					<Thx class="m-thx" slot="single-append" :postId="id" postType="knowledge" :userId="author_id" :adminBoxcoinEnable="isRevision" :userBoxcoinEnable="isRevision" mode="wiki" />
 				</template>
 			</WikiPanel>
 
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { getKnowledgeDetail } from "@/service/knowledge.js";
+import { getKnowledgeDetail, getKnowledgePost } from "@/service/knowledge.js";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
 import { publishLink } from "@jx3box/jx3box-common/js/utils";
 import WikiPanel from "@jx3box/jx3box-common-ui/src/wiki/WikiPanel";
@@ -90,13 +90,36 @@ export default {
 					postStat(this.type, this.id);
 				});
 		},
+		getPostData() {
+			this.loading = true;
+			getKnowledgePost(this.$route.params.post_id)
+				.then((res) => { 
+					this.data = res;
+					if (this.data.source) this.data.source.post = this.data.post;
+				})
+				.finally(() => {
+					this.loading = false;
+					postStat(this.type, this.id);
+				});
+		},
 		goBack() {
 			this.$router.push({ name: "normal", params: { knowledge_type: this.data.source.type } });
 		},
 		publishLink,
 	},
 	created: function () {
-		this.getData();
+		this.getData(this.id);
+	},
+	watch: {
+		"$route.params.post_id": {
+			immediate: true,
+			handler() {
+				if (this.$route.params.post_id) {
+					// 获取指定攻略
+					this.getPostData();
+				}
+			},
+		},
 	},
 };
 </script>
@@ -123,7 +146,7 @@ export default {
 	justify-content: space-between;
 	align-items: center;
 }
-.w-boxcoin-records-list{
-	background-color:#fff;
+.w-boxcoin-records-list {
+	background-color: #fff;
 }
 </style>
