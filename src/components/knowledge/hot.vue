@@ -1,5 +1,5 @@
 <template>
-	<div class="m-wiki-panel">
+	<div class="m-knowledge-panel">
 		<div class="m-title">
 			<span class="u-title-left">
 				<i :class="icon"></i><span> {{ title }}</span>
@@ -27,23 +27,25 @@
 <script>
 import { __iconPath } from "@jx3box/jx3box-common/data/jx3box";
 import { getStatRank } from "@jx3box/jx3box-common/js/stat";
+import { getKnowledgeSearch } from "@/service/knowledge.js";
 export default {
 	name: "Hot",
-	props: ["data"],
+	props: [],
 	data: function () {
 		return {
 			hot_img: __iconPath + "icon/243.png",
+			hotList: "",
 		};
 	},
 	computed: {
 		icon() {
-			return this.data.icon;
+			return this.data?.icon || "el-icon-collection";
 		},
 		title() {
-			return this.data.title;
+			return this.data?.title || "热门剧情";
 		},
 		link() {
-			return this.data.link || "";
+			return this.data?.link || "";
 		},
 		list() {
 			let _list = [];
@@ -52,27 +54,32 @@ export default {
 				for (let i = 0; i < list.length; i += 3) {
 					_list.push(list.slice(i, i + 3));
 				}
+			} else {
+				_list = this.hotList;
 			}
 			return _list;
 		},
 	},
-	methods : {
+	methods: {
 		// 获取热门
-        getHotData() {
-            getStatRank("plot", "views", 18).then((res) => {
-                let list = [];
-                res.data.forEach((item) => {
-                    if (item.name.startsWith("plot")) {
-                        let id = item.name.split("-").pop();
-                        list.push(id);
-                    }
-                });
-                getKnowledgeSearch({ ids: list.join() }).then((res) => {
-                    this.hot.list = res.data;
-                });
-            });
-        },
-	}
+		getHotData() {
+			getStatRank("plot", "views", 18).then((res) => {
+				let list = [];
+				res.data.forEach((item) => {
+					if (item.name.startsWith("plot")) {
+						let id = item.name.split("-").pop();
+						list.push(id);
+					}
+				});
+				getKnowledgeSearch({ ids: list.join() }).then((res) => {
+					this.hotList = res.data;
+				});
+			});
+		},
+	},
+	created() {
+		this.getHotData();
+	},
 };
 </script>
 <style scoped>

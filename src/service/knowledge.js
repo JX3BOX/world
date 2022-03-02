@@ -8,6 +8,7 @@ function getKnowledgeList(params) {
 		});
 }
 
+// 搜索
 function getKnowledgeSearch(params) {
 	return $helper()
 		.get(`api/knowledges`, { params })
@@ -15,6 +16,8 @@ function getKnowledgeSearch(params) {
 			return res.data.data;
 		});
 }
+
+// 获取内容详情
 function getKnowledgeDetail(id) {
 	return $helper()
 		.get(`api/wiki/post`, {
@@ -28,4 +31,31 @@ function getKnowledgeDetail(id) {
 		});
 }
 
-export { getKnowledgeList, getKnowledgeSearch, getKnowledgeDetail };
+// 获取版本
+function getKnowledgePost(id) {
+	return $helper()
+		.get(`api/wiki/post/${id}`)
+		.then((res) => {
+			return res.data.data;
+		});
+}
+
+// 获取最新更新帖子
+function getKnowledgeNewest(params) {
+	return $helper()
+		.get(`/api/wiki/posts/newest`, { params })
+		.then((res) => {
+			return res.data.data;
+		});
+}
+
+// 获取玩法指南
+function getMenuGroups(params) {
+	return $helper()
+		.get(`/api/menu_groups`, { params })
+		.then((res) => {
+			return res.data.data;
+		});
+}
+
+export { getKnowledgeList, getKnowledgeSearch, getKnowledgeDetail, getKnowledgePost, getKnowledgeNewest, getMenuGroups };
