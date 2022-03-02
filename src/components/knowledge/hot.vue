@@ -51,7 +51,7 @@ export default {
 			let _list = [];
 			if (this.data?.list) {
 				let list = this.data.list.filter(Boolean);
-				for (var i = 0; i < list.length; i += 3) {
+				for (let i = 0; i < list.length; i += 3) {
 					_list.push(list.slice(i, i + 3));
 				}
 			} else {
