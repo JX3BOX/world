@@ -12,6 +12,12 @@ module.exports = {
 			entry: "src/pages/knowledge.js",
 			filename: "knowledge/index.html",
 		},
+		calendar: {
+			title: "剑三日历 - JX3BOX",
+			template: "public/index.html",
+			entry: "src/pages/calendar.js",
+			filename: "calendar/index.html",
+		},
 	},
 
 	//❤️ Porxy ~
