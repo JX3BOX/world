@@ -1,5 +1,5 @@
 <template>
-    <div class="m-wiki-panel">
+    <div class="m-knowledge-panel">
         <div class="m-title">
             <span class="u-title-left"><i class="el-icon-location-information"></i><span> 便捷入口</span></span>
             <a class="u-title-right" target="_blank" :href="feedback">反馈建议 &raquo;</a>
@@ -48,20 +48,20 @@ export default {
 
 <style scoped lang="less">
 .m-entry {
-    .flex;
-    .u-entry {
-        .mr(20px);
-        .db;
-        .r(4px);
-        .color(#fff);
-        padding: 8px 20px;
-        background-color: #3a97eb;
-        i {
-            .mr(5px);
-        }
-        &:hover {
-            filter: brightness(110%);
-        }
-    }
+	.flex;
+	.u-entry {
+		.mr(20px);
+		.db;
+		.r(4px);
+		.color(#fff);
+		padding: 8px 20px;
+		background-color: #3a97eb;
+		i {
+			.mr(5px);
+		}
+		&:hover {
+			filter: brightness(110%);
+		}
+	}
 }
 </style>
