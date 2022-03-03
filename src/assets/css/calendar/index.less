@@ -1,0 +1,48 @@
+.v-calendar {
+    .m-calendar-year {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .u-year {
+            margin: 0 10px;
+        }
+    }
+
+    .m-calendar-month {
+        .mt(20px);
+        text-align: center;
+
+        .u-month {
+            width: 80px;
+        }
+    }
+
+    .m-calendar-content {
+        width: 100%;
+        .mt(24px);
+        .m-calendar-week {
+            display: flex;
+
+            .u-week {
+                flex: 1;
+                text-align: center;
+            }
+        }
+
+        .m-calendar-date {
+            width: 100%;
+            display: flex;
+            flex-flow: row wrap;
+            .mt(20px);
+
+            .u-date {
+                flex: 0 0 14.285%;
+                height: 80px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    }
+}
