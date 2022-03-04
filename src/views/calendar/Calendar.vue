@@ -1,59 +1,74 @@
 <template>
     <div class="v-calendar">
-        <!-- 年份切换 -->
-        <section class="m-calendar-year">
-            <el-button
-                icon="el-icon-arrow-left"
-                size="mini"
-                :disabled="prevDisabled"
-                @click="toggleYear('prev')"
-            ></el-button>
-            <span class="u-year">{{ current.year }}</span>
-            <el-button
-                icon="el-icon-arrow-right"
-                size="mini"
-                :disabled="nextDisabled"
-                @click="toggleYear('next')"
-            ></el-button>
-        </section>
-        <!-- 月份切换 -->
-        <section class="m-calendar-month">
-            <el-button-group>
+        <main class="m-calendar-main">
+            <!-- 年份切换 -->
+            <section class="m-calendar-year">
                 <el-button
-                    v-for="(item, index) in months"
-                    :type="current.month - 1 == index ? 'primary' : ''"
-                    :key="index"
-                    size="small"
-                    clas="u-month"
-                    @click="toggleMonth(index)"
-                    >{{ item }}月</el-button
-                >
-            </el-button-group>
-        </section>
-        <main class="m-calendar-content">
-            <section class="m-calendar-week">
-                <div class="u-week" v-for="week in weeks" :key="week">
-                    <span>{{ week }}</span>
-                </div>
+                    icon="el-icon-arrow-left"
+                    size="mini"
+                    :disabled="prevDisabled"
+                    @click="toggleYear('prev')"
+                ></el-button>
+                <span class="u-year">{{ current.year }}</span>
+                <el-button
+                    icon="el-icon-arrow-right"
+                    size="mini"
+                    :disabled="nextDisabled"
+                    @click="toggleYear('next')"
+                ></el-button>
             </section>
-            <section class="m-calendar-date">
-                <div
-                    class="u-date"
-                    v-for="(item, index) in dataArr"
-                    :key="index"
-                >
-                    {{ item }}
-                </div>
+            <!-- 月份切换 -->
+            <section class="m-calendar-month">
+                <el-button-group>
+                    <el-button
+                        v-for="(item, index) in months"
+                        :type="current.month - 1 == index ? 'primary' : ''"
+                        :key="index"
+                        size="small"
+                        clas="u-month"
+                        @click="toggleMonth(index)"
+                        >{{ item }}月</el-button
+                    >
+                </el-button-group>
+            </section>
+            <section class="m-calendar-content">
+                <section class="m-calendar-week">
+                    <div class="u-week" v-for="week in weeks" :key="week">
+                        <span>{{ week }}</span>
+                    </div>
+                </section>
+                <section class="m-calendar-date">
+                    <div
+                        v-for="(item, index) in dataArr"
+                        class="u-date"
+                        @click.prevent="dateClick(item)"
+                        :class="[
+                            { 'u-other': ['pre', 'next'].includes(item.type) },
+                            { 'u-today': isToday(item) },
+                            { 'u-current': isCurrent(item) },
+                        ]"
+                        :key="index"
+                    >
+                        {{ item.date }}
+                    </div>
+                </section>
             </section>
         </main>
+        <aside class="m-calendar-aside">
+            <calendar-detail></calendar-detail>
+        </aside>
     </div>
 </template>
 
 <script>
 import { months, weeks } from "@/assets/data/calendar.json";
+import calendarDetail from '@/components/calendar/calendar_detail.vue';
 
 export default {
     name: "Calendar",
+    components: {
+        calendarDetail
+    },
     data: () => ({
         current: {
             year: "",
@@ -84,6 +99,9 @@ export default {
                 date,
             };
         },
+        today() {
+            return new Date().getDate();
+        },
     },
     mounted() {
         this.init();
@@ -100,19 +118,23 @@ export default {
                 : (this.current.year += 1);
 
             this.current.date = 1;
+
+            this.dataArr = this.getMonthData();
         },
         /**
          * 切换月份
          * @param {number} num
          */
         toggleMonth(num) {
-            this.current.month = num;
+            this.current.month = num + 1;
 
             this.current.date = 1;
+
+            this.dataArr = this.getMonthData();
         },
         // 获取指定月份数据
         getMonthData() {
-            const { year, month, date } = this.current;
+            const { year, month } = this.current;
             let dataArr = [];
             let daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
@@ -124,34 +146,39 @@ export default {
             const monthStartWeekday = new Date(year, month - 1, 1).getDay();
             const monthEndtWeekday = new Date(year, month, 1).getDay() || 7;
 
+            const preInfo = this.getPreMonth(this.current);
+            const nextInfo = this.getNextMonth();
+
             for (let i = 0; i < monthStartWeekday; i++) {
-                let emptyObj = {
+                let preObj = {
                     type: "pre",
-                    date: daysInMonth,
-                    month: "",
-                    year: "",
+                    date:
+                        daysInMonth[preInfo.month - 1] -
+                        (monthStartWeekday - i - 1),
+                    month: preInfo.month,
+                    year: preInfo.year,
                 };
-                dataArr.push(emptyObj);
+                dataArr.push(preObj);
             }
 
             for (let i = 0; i < daysInMonth[month - 1]; i++) {
-                let emptyObj = {
+                let itemObj = {
                     type: "normal",
-                    day: "",
-                    month: "",
-                    year: "",
+                    date: i + 1,
+                    month,
+                    year,
                 };
-                dataArr.push(emptyObj);
+                dataArr.push(itemObj);
             }
 
-            for (let i = 0; i < 6 - monthEndtWeekday; i++) {
-                let emptyObj = {
+            for (let i = 0; i < 7 - monthEndtWeekday; i++) {
+                let nextObj = {
                     type: "next",
-                    day: "",
-                    month: "",
-                    year: "",
+                    date: i + 1,
+                    month: nextInfo.month,
+                    year: nextInfo.year,
                 };
-                dataArr.push(emptyObj);
+                dataArr.push(nextObj);
             }
 
             return dataArr;
@@ -181,6 +208,31 @@ export default {
 
             return { year, month, date: defaultDate };
         },
+        dateClick({ date, month, year }) {
+            this.current.year = year;
+            this.current.month = month;
+            this.current.date = date;
+            this.dataArr = this.getMonthData();
+        },
+        isToday({ year, month, date }) {
+            const dateObj = new Date();
+
+            return (
+                dateObj.getFullYear() === year &&
+                dateObj.getMonth() + 1 === month &&
+                dateObj.getDate() === date
+            );
+        },
+        isCurrent({ year, month, date }) {
+            const { current } = this;
+
+            return (
+                current.year === year &&
+                current.month === month &&
+                current.date === date
+            );
+        },
+        // 点击当前日期
         init() {
             const date = new Date();
             this.current.year = date.getFullYear();

@@ -1,4 +1,12 @@
 .v-calendar {
+    display: flex;
+    gap: 20px;
+    .m-calendar-main {
+        flex: 1;
+    }
+    .m-calendar-aside {
+        width: 300px;
+    }
     .m-calendar-year {
         display: flex;
         align-items: center;
@@ -42,6 +50,24 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                cursor: pointer;
+
+                &:hover {
+                    background: rgba(#3585de, 0.1);
+                }
+
+                &.u-other {
+                    color: #ccc;
+                }
+
+                &.u-current {
+                    color: #fff;
+                    background: #2b4450;
+                }
+
+                &.u-today {
+                    color: #3585de;
+                }
             }
         }
     }
