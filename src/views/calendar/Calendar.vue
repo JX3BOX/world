@@ -21,7 +21,7 @@
             <el-button-group>
                 <el-button
                     v-for="(item, index) in months"
-                    :type="current.month == index ? 'primary' : ''"
+                    :type="current.month - 1 == index ? 'primary' : ''"
                     :key="index"
                     size="small"
                     clas="u-month"
@@ -37,17 +37,20 @@
                 </div>
             </section>
             <section class="m-calendar-date">
-                <div class="u-date" v-for="(item, index) in dataArr" :key="index">{{ item }}</div>
+                <div
+                    class="u-date"
+                    v-for="(item, index) in dataArr"
+                    :key="index"
+                >
+                    {{ item }}
+                </div>
             </section>
         </main>
     </div>
 </template>
 
 <script>
-import dayjs from "dayjs";
 import { months, weeks } from "@/assets/data/calendar.json";
-import isLeapYear from 'dayjs/plugin/isLeapYear';
-dayjs.extend(isLeapYear);
 
 export default {
     name: "Calendar",
@@ -60,12 +63,12 @@ export default {
         months,
         weeks,
 
-        dataArr: []
+        dataArr: [],
     }),
     computed: {
         // 禁止下一年
         nextDisabled() {
-            const this_year = dayjs().year();
+            const this_year = new Date().getFullYear();
             return this_year + 1 <= this.current.year;
         },
         // 禁止上一年
@@ -84,7 +87,7 @@ export default {
     },
     mounted() {
         this.init();
-        this.dataArr = Array(40).fill(0,0,40)
+        this.dataArr = this.getMonthData();
     },
     methods: {
         /**
@@ -95,6 +98,8 @@ export default {
             action === "prev"
                 ? (this.current.year -= 1)
                 : (this.current.year += 1);
+
+            this.current.date = 1;
         },
         /**
          * 切换月份
@@ -102,21 +107,85 @@ export default {
          */
         toggleMonth(num) {
             this.current.month = num;
+
+            this.current.date = 1;
         },
+        // 获取指定月份数据
         getMonthData() {
             const { year, month, date } = this.current;
             let dataArr = [];
             let daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
             // 闰年
-            if (dayjs(year).isLeapYear()) {
-                daysInMonth[1] = 29
+            if ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0) {
+                daysInMonth[1] = 29;
             }
+
+            const monthStartWeekday = new Date(year, month - 1, 1).getDay();
+            const monthEndtWeekday = new Date(year, month, 1).getDay() || 7;
+
+            for (let i = 0; i < monthStartWeekday; i++) {
+                let emptyObj = {
+                    type: "pre",
+                    date: daysInMonth,
+                    month: "",
+                    year: "",
+                };
+                dataArr.push(emptyObj);
+            }
+
+            for (let i = 0; i < daysInMonth[month - 1]; i++) {
+                let emptyObj = {
+                    type: "normal",
+                    day: "",
+                    month: "",
+                    year: "",
+                };
+                dataArr.push(emptyObj);
+            }
+
+            for (let i = 0; i < 6 - monthEndtWeekday; i++) {
+                let emptyObj = {
+                    type: "next",
+                    day: "",
+                    month: "",
+                    year: "",
+                };
+                dataArr.push(emptyObj);
+            }
+
+            return dataArr;
+        },
+        // 获取前一个月的年月日信息
+        getPreMonth(date, defaultDate = 1) {
+            let { year, month } = date || this.current;
+
+            if (month === 1) {
+                year -= 1;
+                month = 12;
+            } else {
+                month -= 1;
+            }
+
+            return { year, month, date: defaultDate };
+        },
+        // 获取后一个月的年月日信息
+        getNextMonth(defaultDate = 1) {
+            let { year, month } = this.current;
+            if (month === 12) {
+                year += 1;
+                month = 1;
+            } else {
+                month += 1;
+            }
+
+            return { year, month, date: defaultDate };
         },
         init() {
-            this.current.year = dayjs().year();
-            this.current.month = dayjs().month();
-            this.current.date = dayjs().date();
+            const date = new Date();
+            this.current.year = date.getFullYear();
+            this.current.month = date.getMonth() + 1;
+            this.current.date = date.getDate();
         },
     },
 };
