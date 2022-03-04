@@ -28,26 +28,18 @@ export default {
 		};
 	},
 	computed: {
-		type_id() {
-			let id = "";
-			for (const key in this.$route.params) {
-				id = this.$route.params[key];
-			}
-			return id;
+		type() {
+			return this.$route.params.knowledge_type;
 		},
 		params() {
 			let params = {
 				limit: this.per,
 				page: this.page,
-				knowledge_type: this.type_id,
+				knowledge_type: this.type,
 			};
 			if (this.search) {
-				delete params.knowledge_type;
-				params = { ...params, keyword: this.search };
-			} else {
-				delete params.keyword;
+				params.keyword = this.search
 			}
-
 			return params;
 		},
 		pagination() {
@@ -102,7 +94,7 @@ export default {
 		params() {
 			this.getData();
 		},
-		type_id() {
+		type() {
 			this.page = 1;
 		},
 	},

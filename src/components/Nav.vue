@@ -5,7 +5,7 @@
                 class="el-tree-node__label"
                 :href="data.href"
                 slot-scope="{data}"
-                :class="{on:isActive(data.key)}"
+                :class="{on:isActive(data)}"
             >
                 <span class="u-name" v-text="data.label"></span>
                 <em v-if="data.count" class="u-count" v-text="`( ${data.count} )`"></em>
@@ -17,6 +17,7 @@
 <script>
 import { getKnowledgeMenus } from "@/service/wiki.js";
 import { map, each } from "lodash";
+import {getAppType} from '@jx3box/jx3box-common/js/utils'
 export default {
     name: "Nav",
     props: [],
@@ -172,8 +173,12 @@ export default {
         clickHandler : function (data){
             this.active = data.key
         },
-        isActive : function (key){
-            return this.active == key
+        isActive : function (data){
+            if(data.children){
+                return getAppType() == data.key
+            }else{
+                return this.active == data.key
+            }
         }
     },
     filters: {},
