@@ -4,10 +4,10 @@
         <Breadcrumb name="剑三日历" slug="calendar" root="/calendar" :feedbackEnable="true" :crumbEnable="false">
             <img slot="logo" svg-inline :src="getAppIcon('calendar')" />
         </Breadcrumb>
-        <LeftSidebar>
+        <LeftSidebar :open="false">
             <Nav />
         </LeftSidebar>
-        <Main :withoutRight="true">
+        <Main :withoutRight="true" :withoutLeft="true">
             <div class="m-main">
                 <router-view />
             </div>
