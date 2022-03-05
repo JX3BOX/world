@@ -3,16 +3,16 @@
         <main class="m-calendar-main">
             <!-- 年份切换 -->
             <section class="m-calendar-year">
-                <el-button icon="el-icon-arrow-left" size="mini" :disabled="prevDisabled" @click="toggleYear('prev')"></el-button>
+                <el-button icon="el-icon-arrow-left" size="medium" :disabled="prevDisabled" @click="toggleYear('prev')" class="u-btn"></el-button>
                 <span class="u-year">{{ current.year }}</span>
-                <el-button icon="el-icon-arrow-right" size="mini" :disabled="nextDisabled" @click="toggleYear('next')"></el-button>
+                <el-button icon="el-icon-arrow-right" size="medium" :disabled="nextDisabled" @click="toggleYear('next')" class="u-btn"></el-button>
             </section>
             <!-- 月份切换 -->
             <section class="m-calendar-month">
+                <!-- TODO:标语调用 -->
+                <div class="u-slogan">烟花三月下扬州</div>
                 <el-button-group>
-                    <el-button v-for="(item, index) in months" :type="current.month - 1 == index ? 'primary' : ''" :key="index" size="small" clas="u-month" @click="toggleMonth(index)"
-                        >{{ item }}月</el-button
-                    >
+                    <el-button v-for="(item, index) in months" :key="index" size="medium" class="u-month" @click="toggleMonth(index)" :class="{active : current.month - 1 == index}">{{ item }}</el-button>
                 </el-button-group>
             </section>
             <section class="m-calendar-content">
@@ -100,7 +100,7 @@ export default {
         toggleYear(action) {
             action === "prev" ? (this.current.year -= 1) : (this.current.year += 1);
 
-            this.current.date = 1;
+            this.current.date = 0;
 
             this.dataArr = this.getMonthData();
         },
@@ -111,7 +111,7 @@ export default {
         toggleMonth(num) {
             this.current.month = num + 1;
 
-            this.current.date = 1;
+            this.current.date = 0;
 
             this.dataArr = this.getMonthData();
         },
@@ -165,7 +165,7 @@ export default {
             return dataArr;
         },
         // 获取前一个月的年月日信息
-        getPreMonth(date, defaultDate = 0) {
+        getPreMonth(date, defaultDate = 1) {
             let { year, month } = date || this.current;
 
             if (month === 1) {
@@ -178,7 +178,7 @@ export default {
             return { year, month, date: defaultDate };
         },
         // 获取后一个月的年月日信息
-        getNextMonth(defaultDate = 0) {
+        getNextMonth(defaultDate = 1) {
             let { year, month } = this.current;
             if (month === 12) {
                 year += 1;
@@ -217,7 +217,7 @@ export default {
         "$route.params": {
             immediate: true,
             handler: function ({ year, month, date }) {
-                this.current = { year : ~~year, month : ~~month, date : ~~date || 0 };
+                this.current = { year: ~~year, month: ~~month, date: ~~date || 0 };
             },
         },
     },

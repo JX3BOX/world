@@ -15,7 +15,7 @@ Vue.use(JX3BOX_UI);
 import router from "@/router/calendar.js";
 import store from "@/store";
 
-import App from "@/views/calendar/index.vue";
+import App from "@/views/calendar/Index.vue";
 
 new Vue({
     router,
