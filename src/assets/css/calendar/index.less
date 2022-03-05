@@ -1,73 +1,83 @@
-.v-calendar {
+.m-main{
+    padding:0;
+}
+
+.m-calendar {
     display: flex;
     gap: 20px;
-    .m-calendar-main {
-        flex: 1;
+    min-height: calc(100vh - @header-height - @bread-height - 80px);
+    border-bottom:1px solid #eee;
+}
+
+.m-calendar-main {
+    flex: 1;
+}
+.m-calendar-aside {
+    width: 420px;
+    border-left:1px solid #eee;
+    background-color:@bg-light;
+}
+
+.m-calendar-year {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .u-year {
+        margin: 0 10px;
     }
-    .m-calendar-aside {
-        width: 300px;
+}
+
+.m-calendar-month {
+    .mt(20px);
+    text-align: center;
+
+    .u-month {
+        width: 80px;
     }
-    .m-calendar-year {
+}
+
+.m-calendar-content {
+    width: 100%;
+    .mt(24px);
+    .m-calendar-week {
         display: flex;
-        align-items: center;
-        justify-content: center;
 
-        .u-year {
-            margin: 0 10px;
+        .u-week {
+            flex: 1;
+            text-align: center;
         }
     }
 
-    .m-calendar-month {
-        .mt(20px);
-        text-align: center;
-
-        .u-month {
-            width: 80px;
-        }
-    }
-
-    .m-calendar-content {
+    .m-calendar-date {
         width: 100%;
-        .mt(24px);
-        .m-calendar-week {
-            display: flex;
+        display: flex;
+        flex-flow: row wrap;
+        .mt(20px);
 
-            .u-week {
-                flex: 1;
-                text-align: center;
+        .u-date {
+            flex: 0 0 14.285%;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+
+            &:hover {
+                background: rgba(#3585de, 0.1);
             }
-        }
 
-        .m-calendar-date {
-            width: 100%;
-            display: flex;
-            flex-flow: row wrap;
-            .mt(20px);
+            &.u-other {
+                color: #ccc;
+            }
 
-            .u-date {
-                flex: 0 0 14.285%;
-                height: 80px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
+            &.u-current {
+                color: #fff;
+                background: #2b4450;
+            }
 
-                &:hover {
-                    background: rgba(#3585de, 0.1);
-                }
-
-                &.u-other {
-                    color: #ccc;
-                }
-
-                &.u-current {
-                    color: #fff;
-                    background: #2b4450;
-                }
-
-                &.u-today {
-                    color: #3585de;
-                }
+            &.u-today {
+                color: #3585de;
             }
         }
     }

@@ -1,32 +1,16 @@
 <template>
-    <div class="v-calendar">
+    <div class="v-calendar m-calendar">
         <main class="m-calendar-main">
             <!-- 年份切换 -->
             <section class="m-calendar-year">
-                <el-button
-                    icon="el-icon-arrow-left"
-                    size="mini"
-                    :disabled="prevDisabled"
-                    @click="toggleYear('prev')"
-                ></el-button>
+                <el-button icon="el-icon-arrow-left" size="mini" :disabled="prevDisabled" @click="toggleYear('prev')"></el-button>
                 <span class="u-year">{{ current.year }}</span>
-                <el-button
-                    icon="el-icon-arrow-right"
-                    size="mini"
-                    :disabled="nextDisabled"
-                    @click="toggleYear('next')"
-                ></el-button>
+                <el-button icon="el-icon-arrow-right" size="mini" :disabled="nextDisabled" @click="toggleYear('next')"></el-button>
             </section>
             <!-- 月份切换 -->
             <section class="m-calendar-month">
                 <el-button-group>
-                    <el-button
-                        v-for="(item, index) in months"
-                        :type="current.month - 1 == index ? 'primary' : ''"
-                        :key="index"
-                        size="small"
-                        clas="u-month"
-                        @click="toggleMonth(index)"
+                    <el-button v-for="(item, index) in months" :type="current.month - 1 == index ? 'primary' : ''" :key="index" size="small" clas="u-month" @click="toggleMonth(index)"
                         >{{ item }}月</el-button
                     >
                 </el-button-group>
@@ -42,11 +26,7 @@
                         v-for="(item, index) in dataArr"
                         class="u-date"
                         @click.prevent="dateClick(item)"
-                        :class="[
-                            { 'u-other': ['pre', 'next'].includes(item.type) },
-                            { 'u-today': isToday(item) },
-                            { 'u-current': isCurrent(item) },
-                        ]"
+                        :class="[{ 'u-other': ['pre', 'next'].includes(item.type) }, { 'u-today': isToday(item) }, { 'u-current': isCurrent(item) }]"
                         :key="index"
                     >
                         {{ item.date }}
@@ -54,20 +34,22 @@
                 </section>
             </section>
         </main>
-        <aside class="m-calendar-aside">
-            <calendar-detail></calendar-detail>
-        </aside>
+        <transition name="fade">
+            <aside class="m-calendar-aside" v-if="isExact">
+                <calendar-detail></calendar-detail>
+            </aside>
+        </transition>
     </div>
 </template>
 
 <script>
 import { months, weeks } from "@/assets/data/calendar.json";
-import calendarDetail from '@/components/calendar/calendar_detail.vue';
+import calendarDetail from "@/components/calendar/calendar_detail.vue";
 
 export default {
-    name: "Calendar",
+    name: "Archive",
     components: {
-        calendarDetail
+        calendarDetail,
     },
     data: () => ({
         current: {
@@ -102,6 +84,9 @@ export default {
         today() {
             return new Date().getDate();
         },
+        isExact() {
+            return !!this.current.date;
+        },
     },
     mounted() {
         this.init();
@@ -113,9 +98,7 @@ export default {
          * @param {String}} action next 下一年 prev 上一年
          */
         toggleYear(action) {
-            action === "prev"
-                ? (this.current.year -= 1)
-                : (this.current.year += 1);
+            action === "prev" ? (this.current.year -= 1) : (this.current.year += 1);
 
             this.current.date = 1;
 
@@ -152,9 +135,7 @@ export default {
             for (let i = 0; i < monthStartWeekday; i++) {
                 let preObj = {
                     type: "pre",
-                    date:
-                        daysInMonth[preInfo.month - 1] -
-                        (monthStartWeekday - i - 1),
+                    date: daysInMonth[preInfo.month - 1] - (monthStartWeekday - i - 1),
                     month: preInfo.month,
                     year: preInfo.year,
                 };
@@ -184,7 +165,7 @@ export default {
             return dataArr;
         },
         // 获取前一个月的年月日信息
-        getPreMonth(date, defaultDate = 1) {
+        getPreMonth(date, defaultDate = 0) {
             let { year, month } = date || this.current;
 
             if (month === 1) {
@@ -197,7 +178,7 @@ export default {
             return { year, month, date: defaultDate };
         },
         // 获取后一个月的年月日信息
-        getNextMonth(defaultDate = 1) {
+        getNextMonth(defaultDate = 0) {
             let { year, month } = this.current;
             if (month === 12) {
                 year += 1;
@@ -217,27 +198,27 @@ export default {
         isToday({ year, month, date }) {
             const dateObj = new Date();
 
-            return (
-                dateObj.getFullYear() === year &&
-                dateObj.getMonth() + 1 === month &&
-                dateObj.getDate() === date
-            );
+            return dateObj.getFullYear() === year && dateObj.getMonth() + 1 === month && dateObj.getDate() === date;
         },
         isCurrent({ year, month, date }) {
             const { current } = this;
 
-            return (
-                current.year === year &&
-                current.month === month &&
-                current.date === date
-            );
+            return current.year === year && current.month === month && current.date === date;
         },
         // 点击当前日期
         init() {
-            const date = new Date();
-            this.current.year = date.getFullYear();
-            this.current.month = date.getMonth() + 1;
-            this.current.date = date.getDate();
+            // const date = new Date();
+            // this.current.year = date.getFullYear();
+            // this.current.month = date.getMonth() + 1;
+            // this.current.date = date.getDate();
+        },
+    },
+    watch: {
+        "$route.params": {
+            immediate: true,
+            handler: function ({ year, month, date }) {
+                this.current = { year : ~~year, month : ~~month, date : ~~date || 0 };
+            },
         },
     },
 };
