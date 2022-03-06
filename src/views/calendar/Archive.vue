@@ -45,6 +45,7 @@
 <script>
 import { months, weeks } from "@/assets/data/calendar.json";
 import calendarDetail from "@/components/calendar/calendar_detail.vue";
+import { getCalendar } from '@/service/calendar.js';
 
 export default {
     name: "Archive",
@@ -91,6 +92,7 @@ export default {
     mounted() {
         this.init();
         this.dataArr = this.getMonthData();
+        this.loadCalendar()
     },
     methods: {
         /**
@@ -132,12 +134,13 @@ export default {
             const preInfo = this.getPreMonth(this.current);
             const nextInfo = this.getNextMonth();
 
-            for (let i = 0; i < monthStartWeekday; i++) {
+            for (let i = 0; i < monthStartWeekday - 1; i++) {
                 let preObj = {
                     type: "pre",
-                    date: daysInMonth[preInfo.month - 1] - (monthStartWeekday - i - 1),
+                    date: daysInMonth[preInfo.month - 1] - (monthStartWeekday - i - 2),
                     month: preInfo.month,
                     year: preInfo.year,
+                    children: []
                 };
                 dataArr.push(preObj);
             }
@@ -148,16 +151,18 @@ export default {
                     date: i + 1,
                     month,
                     year,
+                    children: []
                 };
                 dataArr.push(itemObj);
             }
 
-            for (let i = 0; i < 7 - monthEndtWeekday; i++) {
+            for (let i = 0; i < 8 - monthEndtWeekday; i++) {
                 let nextObj = {
                     type: "next",
                     date: i + 1,
                     month: nextInfo.month,
                     year: nextInfo.year,
+                    children: []
                 };
                 dataArr.push(nextObj);
             }
@@ -212,6 +217,19 @@ export default {
             // this.current.month = date.getMonth() + 1;
             // this.current.date = date.getDate();
         },
+        loadCalendar() {
+            const { year, month } = this.current;
+            getCalendar({ year, month }).then(res => {
+                const data = res.data.data
+                data.forEach(item => {
+                    let { year, month, date } = item;
+                    let index = this.dataArr.findIndex(d => d.year === year && d.month === month && d.date === date)
+                    if (index) {
+                        this.dataArr[index].children.push(item)
+                    }
+                })
+            })
+        }
     },
     watch: {
         "$route.params": {
