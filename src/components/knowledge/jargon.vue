@@ -26,7 +26,7 @@ export default {
     methods: {
         getJargon: function () {
             getKnowledgeSearch({
-                type: "jargon",
+                knowledge_type: "jargon",
                 limit: 48,
             }).then((res) => {
                 this.list = res.data;
