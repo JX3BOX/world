@@ -1,12 +1,27 @@
 <template>
     <div class="m-calendar-detail">
         详情
+        <el-button class="u-add-btn" size="medium" type="primary" icon="el-icon-plus" @click="add">新增</el-button>
+
+        <calendar-dialog v-model="showAdd"></calendar-dialog>
     </div>
 </template>
 
 <script>
+import calendar_dialog from './calendar_dialog.vue';
 export default {
-    name: 'calendar-detail'
+    name: 'calendar-detail',
+    components: {
+        'calendar-dialog': calendar_dialog
+    },
+    data: () => ({
+        showAdd: false
+    }),
+    methods: {
+        add() {
+            this.showAdd = true
+        }
+    }
 }
 </script>
 

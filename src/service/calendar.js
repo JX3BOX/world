@@ -31,5 +31,6 @@ const addCalendar = (params, data) => {
 }
 
 export {
-    getCalendar
+    getCalendar,
+    addCalendar
 }
