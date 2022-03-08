@@ -3,7 +3,7 @@
         详情
         <el-button class="u-add-btn" size="medium" type="primary" icon="el-icon-plus" @click="add">新增</el-button>
 
-        <calendar-dialog v-model="showAdd"></calendar-dialog>
+        <calendar-dialog v-model="showAdd" :date-obj="dateObj" @update="update"></calendar-dialog>
     </div>
 </template>
 
@@ -11,6 +11,12 @@
 import calendar_dialog from './calendar_dialog.vue';
 export default {
     name: 'calendar-detail',
+    props: {
+        dateObj: {
+            type: Object,
+            default: () => {}
+        }
+    },
     components: {
         'calendar-dialog': calendar_dialog
     },
@@ -20,6 +26,9 @@ export default {
     methods: {
         add() {
             this.showAdd = true
+        },
+        update() {
+
         }
     }
 }

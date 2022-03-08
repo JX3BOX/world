@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :visible="value" @close="close">
+    <el-dialog :visible="value" @close="cancel">
         <template v-slot:title>
             <header>新增</header>
         </template>
@@ -8,7 +8,7 @@
                 <el-form-item label="日期" required :error="dateError">
                     <div class="m-date">
                         <el-input-number
-                            placeholder="请输入年"
+                            placeholder="请输入年份"
                             :min="2009"
                             :max="maxYear"
                             class="u-date"
@@ -16,7 +16,7 @@
                             v-model.number="form.year"
                         ></el-input-number>
                         <el-input-number
-                            placeholder="请输入月"
+                            placeholder="请输入月份"
                             :min="1"
                             :max="12"
                             class="u-date"
@@ -24,7 +24,7 @@
                             v-model.number="form.month"
                         ></el-input-number>
                         <el-input-number
-                            placeholder="请输入日"
+                            placeholder="请输入日期"
                             :min="1"
                             :max="31"
                             class="u-date"
@@ -33,13 +33,13 @@
                         ></el-input-number>
                     </div>
                 </el-form-item>
-                <el-form-item label="类型" required prop="type">
+                <el-form-item label="类型" required>
                     <el-radio-group size="small" v-model="form.type">
                         <el-radio-button :label="1">事件</el-radio-button>
                         <el-radio-button :label="2">活动</el-radio-button>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="描述" required prop="desc" :error="descError">
+                <el-form-item label="描述" required :error="descError">
                     <el-input
                         type="textarea"
                         v-model="form.desc"
@@ -120,6 +120,7 @@ export default {
     watch: {
         dateObj: {
             deep: true,
+            immediate: true,
             handler(val) {
                 if (Object.keys(val).length) {
                     this.form = {
@@ -131,11 +132,18 @@ export default {
                 }
             },
         },
+        value(val) {
+            if (val) {
+                this.form = {
+                    ...this.form,
+                    year: this.dateObj?.year || "",
+                    month: this.dateObj?.month || "",
+                    date: this.dateObj?.date || "",
+                };
+            }
+        }
     },
     methods: {
-        close() {
-            this.$emit("input", false);
-        },
         addLink() {
             this.form.link.push({
                 link: "",
@@ -150,36 +158,39 @@ export default {
             this.form = this.$options.data().form;
 
             this.dateError = ''
+            this.descError = ''
 
-            this.close()
+            this.$emit("input", false);
+        },
+        validate() {
+            const { year, month, date, desc } = this.form;
+            if (!year) {
+                this.dateError = '请输入年份'
+            } else {
+                this.dateError = ''
+                if (!month) {
+                    this.dateError = '请输入月份'
+                } else {
+                    this.dateError = !date ? '请输入日期' : ''
+                }
+            }
+
+            this.descError = !desc ? '请输入事件描述' : ''
         },
         confirm() {
+            this.validate()
+            if (!this.descError && !this.dateError) return
             let { year, month, date, desc, type, link } = this.form;
-
-            if (!year) {
-                this.dateError = '输入年份';
-                return 
-            }
-            if (!month) {
-                this.dateError = '输入月份';
-                return 
-            }
-            if (!date) {
-                this.dateError = '输入日期';
-                return 
-            }
-            if (!desc) {
-                this.descError = '输入描述'
-                return
-            }
             link = link.map(item => {
                 return {
                     label: item.label,
                     link: item.link
                 }
             })
-            addCalendar({ year, mnonth, date }, { desc, type, link }).then(res => {
+            addCalendar({ year, month, date }, { desc, type, link }).then(res => {
                 console.log(res)
+
+
             })
         }
     },

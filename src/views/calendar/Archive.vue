@@ -36,7 +36,7 @@
         </main>
         <transition name="fade">
             <aside class="m-calendar-aside" v-if="isExact">
-                <calendar-detail></calendar-detail>
+                <calendar-detail :date-obj="current"></calendar-detail>
             </aside>
         </transition>
     </div>
