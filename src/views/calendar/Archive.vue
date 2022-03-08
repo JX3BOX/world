@@ -36,7 +36,7 @@
         </main>
         <transition name="fade">
             <aside class="m-calendar-aside" v-if="isExact">
-                <calendar-detail :date-obj="current"></calendar-detail>
+                <calendar-detail :date-obj="current" @update="update"></calendar-detail>
             </aside>
         </transition>
     </div>
@@ -229,6 +229,9 @@ export default {
                     }
                 })
             })
+        },
+        update() {
+            this.loadCalendar()
         }
     },
     watch: {

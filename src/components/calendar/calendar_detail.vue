@@ -1,5 +1,5 @@
 <template>
-    <div class="m-calendar-detail">
+    <div class="m-calendar-detail" :loading="loading">
         详情
         <el-button class="u-add-btn" size="medium" type="primary" icon="el-icon-plus" @click="add">新增</el-button>
 
@@ -8,32 +8,47 @@
 </template>
 
 <script>
-import calendar_dialog from './calendar_dialog.vue';
+import { getCalendar } from "@/service/calendar.js";
+import calendar_dialog from "./calendar_dialog.vue";
 export default {
-    name: 'calendar-detail',
+    name: "calendar-detail",
     props: {
         dateObj: {
             type: Object,
-            default: () => {}
-        }
+            default: () => {},
+        },
     },
     components: {
-        'calendar-dialog': calendar_dialog
+        "calendar-dialog": calendar_dialog,
     },
     data: () => ({
-        showAdd: false
+        showAdd: false,
+        loading: false,
+        dateInfo: {},
     }),
     methods: {
         add() {
-            this.showAdd = true
+            this.showAdd = true;
         },
         update() {
-
-        }
-    }
-}
+            this.loadData();
+            this.showAdd = false
+        },
+        loadData() {
+            this.loading = true;
+            getCalendar(this.dateObj)
+                .then((res) => {
+                    this.dateInfo = res.data.data;
+                    this.$emit("update");
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
+    },
+};
 </script>
 
 <style lang="less">
-@import '~@/assets/css/calendar/calendar_detail.less';
+@import "~@/assets/css/calendar/calendar_detail.less";
 </style>

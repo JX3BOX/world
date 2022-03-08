@@ -1,9 +1,6 @@
 import { $cms } from '@jx3box/jx3box-common/js/https'
-import Axios from 'axios'
 
-const $ = Axios.create({
-    baseURL: 'http://localhost:5120/api/cms'
-})
+const $ = $cms()
 
 const genUrl = (params) => {
     const { year, month, date } = params;
@@ -21,13 +18,13 @@ const getCalendar = (params) => {
 
     let url = genUrl(params);
 
-    return $.get('/post/calendar/archive' + url)
+    return $.get('/api/cms/post/calendar/archive' + url)
 }
 
 const addCalendar = (params, data) => {
     const url = genUrl(params);
 
-    return $.post(url, data)
+    return $.post('/api/cms/post/calendar/archive' + url, data)
 }
 
 export {
