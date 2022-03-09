@@ -4,6 +4,53 @@
         display: block;
         width: 100%;
         margin-top: 5px;
+        margin-bottom: 10px;
+    }
+
+    .u-date {
+        font-size: 18px;
+        margin-bottom: 10px;
+        font-weight: bold;
+        text-align: center;
+        font-style: italic;
+    }
+
+    .m-content {
+        &-part {
+            &:not(:last-of-type) {
+                margin-bottom: 10px;
+            }
+            .u-part-header {
+                font-size: 16px;
+                font-weight: 900;
+            }
+
+            .u-item {
+                display: flex;
+                align-items: center;
+                height: 40px;
+                .u-avatar {
+                    .size(24px);
+                    .mr(4px);
+                }
+
+                .u-desc {
+                    font-size: 14px;
+                    flex: 1;
+                    .break(3);
+                }
+
+                .u-actions {
+                    display: none;
+                }
+
+                &:hover {
+                    .u-actions {
+                        display: block;
+                    }
+                }
+            }
+        }
     }
 
     .u-form {

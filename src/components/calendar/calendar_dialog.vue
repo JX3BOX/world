@@ -1,7 +1,7 @@
 <template>
     <el-dialog :visible="value" @close="cancel">
         <template v-slot:title>
-            <header>新增</header>
+            <header>{{ title }}</header>
         </template>
         <main class="u-form">
             <el-form label-position="left" label-width="80px">
@@ -19,7 +19,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="描述" required :error="descError">
-                    <el-input type="textarea" v-model="form.desc" :rows="4" placeholder="输入事件描述"></el-input>
+                    <el-input type="textarea" v-model="form.desc" :rows="3" placeholder="输入事件描述"></el-input>
                 </el-form-item>
                 <el-form-item label="参考资料">
                     <template v-for="(item, index) in form.link">
@@ -29,7 +29,7 @@
                             <el-button class="u-del-icon" type="text" icon="el-icon-circle-close" @click="removeLink(index)" title="删除参考资料"></el-button>
                         </div>
                     </template>
-                    <el-button type="primary" size="small" icon="el-icon-plus" @click="addLink">添加</el-button>
+                    <el-button type="primary" size="small" icon="el-icon-plus" @click="addLink" :disabled="addDisabled">添加</el-button>
                 </el-form-item>
             </el-form>
         </main>
@@ -53,6 +53,10 @@ export default {
             type: Object,
             default: () => {},
         },
+        type: {
+            type: String,
+            default: 'add'
+        }
     },
     data: () => ({
         form: {
@@ -68,9 +72,16 @@ export default {
         loading: false,
     }),
     computed: {
+        // 标题
+        title() {
+            return this.type === 'add' ? '新增' : '编辑'
+        },
         maxYear() {
             return new Date().getFullYear() + 1;
         },
+        addDisabled() {
+            return this.form.link?.length >=5
+        }
     },
     watch: {
         dateObj: {

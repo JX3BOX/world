@@ -89,6 +89,14 @@ export default {
             return !!this.current.date;
         },
     },
+    watch: {
+        "$route.params": {
+            immediate: true,
+            handler: function ({ year, month, date }) {
+                this.current = { year: ~~year, month: ~~month, date: ~~date || 0 };
+            },
+        },
+    },
     mounted() {
         this.init();
         this.dataArr = this.getMonthData();
@@ -233,14 +241,6 @@ export default {
         update() {
             this.loadCalendar()
         }
-    },
-    watch: {
-        "$route.params": {
-            immediate: true,
-            handler: function ({ year, month, date }) {
-                this.current = { year: ~~year, month: ~~month, date: ~~date || 0 };
-            },
-        },
-    },
+    }
 };
 </script>

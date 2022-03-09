@@ -1,7 +1,42 @@
 <template>
-    <div class="m-calendar-detail" :loading="loading">
-        详情
+    <div class="m-calendar-detail" v-loading="loading">
+        <header class="u-date">{{ currentDate }}</header>
         <el-button class="u-add-btn" size="medium" type="primary" icon="el-icon-plus" @click="add">新增</el-button>
+
+        <main class="m-content">
+            <section class="m-content-part">
+                <div class="u-part-header">
+                    <el-divider content-position="left"><i class="el-icon-s-order"></i> 事件</el-divider>
+                </div>
+                <div class="m-part-content">
+                    <div class="u-item" v-for="item in events" :key="item.id" :title="item.desc">
+                        <img class="u-avatar" :src="showAvatar(item.user_info.user_avatar)" :alt="item.user_info.display_name">
+                        <span class="u-desc" :style="descStyle(item)">{{ item.desc }}</span>
+                        <div class="u-actions">
+                            <el-button type="text" icon="el-icon-s-comment" title="评论"></el-button>
+                            <el-button type="text" icon="el-icon-edit-outline" title="编辑"></el-button>
+                            <el-button type="text" icon="el-icon-delete" title="删除"></el-button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="m-content-part">
+                <div class="u-part-header">
+                    <el-divider content-position="left"><i class="el-icon-s-flag"></i> 活动</el-divider>
+                </div>
+                <div class="m-part-content">
+                    <div class="u-item" v-for="item in activities" :key="item.id" :title="item.desc">
+                        <img class="u-avatar" :src="item.img">
+                        <span class="u-desc" :style="descStyle(item)">{{ item.desc }}</span>
+                        <div class="u-actions">
+                            <el-button type="text" icon="el-icon-s-comment" title="评论"></el-button>
+                            <el-button type="text" icon="el-icon-edit-outline" title="编辑"></el-button>
+                            <el-button type="text" icon="el-icon-delete" title="删除"></el-button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
 
         <calendar-dialog v-model="showAdd" :date-obj="dateObj" @update="update"></calendar-dialog>
     </div>
@@ -10,13 +45,14 @@
 <script>
 import { getCalendar } from "@/service/calendar.js";
 import calendar_dialog from "./calendar_dialog.vue";
+import { showAvatar } from '@jx3box/jx3box-common/js/utils';
 export default {
     name: "calendar-detail",
     props: {
         dateObj: {
             type: Object,
             default: () => {},
-        },
+        }
     },
     components: {
         "calendar-dialog": calendar_dialog,
@@ -24,22 +60,49 @@ export default {
     data: () => ({
         showAdd: false,
         loading: false,
-        dateInfo: {},
+        list: [],
     }),
+    computed: {
+        // 事件
+        events() {
+            return this.list?.filter(item => item.type === 1)
+        },
+        // 活动
+        activities() {
+            return this.list?.filter(item => item.type === 2)
+        },
+        currentDate() {
+            const { year, month, date } = this.dateObj;
+            return `${year} / ${month} / ${date}`
+        }
+    },
+    watch: {
+        dateObj: {
+            deep: true,
+            handler() {
+                this.loadData();
+            },
+        },
+    },
     methods: {
+        showAvatar,
+        descStyle({ color }) {
+            return color ? { color, fontWeight: 'bold' } : {}
+        },
         add() {
             this.showAdd = true;
         },
         update() {
-            this.loadData();
-            this.showAdd = false
+            this.loadData().then(() => {
+                this.$emit("update");
+            });
+            this.showAdd = false;
         },
         loadData() {
             this.loading = true;
-            getCalendar(this.dateObj)
+            return getCalendar(this.dateObj)
                 .then((res) => {
-                    this.dateInfo = res.data.data;
-                    this.$emit("update");
+                    this.list = res.data.data;
                 })
                 .finally(() => {
                     this.loading = false;
