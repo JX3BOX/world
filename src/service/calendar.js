@@ -27,7 +27,12 @@ const addCalendar = (params, data) => {
     return $.post('/api/cms/post/calendar/archive' + url, data)
 }
 
+const putCalendar = (id, data) => {
+    return $.put(`/api/cms/post/calendar/${id}`, data)
+}
+
 export {
     getCalendar,
-    addCalendar
+    addCalendar,
+    putCalendar,
 }

@@ -14,7 +14,7 @@
                         <span class="u-desc" :style="descStyle(item)">{{ item.desc }}</span>
                         <div class="u-actions">
                             <el-button type="text" icon="el-icon-s-comment" title="评论"></el-button>
-                            <el-button type="text" icon="el-icon-edit-outline" title="编辑"></el-button>
+                            <el-button type="text" icon="el-icon-edit-outline" title="编辑" @click="edit(item)"></el-button>
                             <el-button type="text" icon="el-icon-delete" title="删除"></el-button>
                         </div>
                     </div>
@@ -38,7 +38,7 @@
             </section>
         </main>
 
-        <calendar-dialog v-model="showAdd" :date-obj="dateObj" @update="update"></calendar-dialog>
+        <calendar-dialog v-model="showAdd" :date-obj="dateObj" :selected="selected" @update="update"></calendar-dialog>
     </div>
 </template>
 
@@ -61,6 +61,7 @@ export default {
         showAdd: false,
         loading: false,
         list: [],
+        selected: {}
     }),
     computed: {
         // 事件
@@ -90,6 +91,7 @@ export default {
             return color ? { color, fontWeight: 'bold' } : {}
         },
         add() {
+            this.selected = {}
             this.showAdd = true;
         },
         update() {
@@ -108,6 +110,14 @@ export default {
                     this.loading = false;
                 });
         },
+        /**
+         * 编辑日历
+         * @param {Object} item 待选日历
+         */
+        edit(item) {
+            this.selected = item;
+            this.showAdd = true
+        }
     },
 };
 </script>

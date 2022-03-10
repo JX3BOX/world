@@ -1,5 +1,36 @@
 .m-calendar-detail {
     padding: 10px;
+
+    ::-webkit-scrollbar {
+        background-color: lightgray;
+        border-radius: 5px;
+        width: 5px;
+        height: 10px;
+        background-clip: padding-box;
+    }
+
+    // /*滚动条两端方向按钮*/
+    // ::-webkit-scrollbar-button {
+    //     background-color: pink;
+    // }
+
+    /*滚动条中间滑动部分*/
+    ::-webkit-scrollbar-thumb {
+        background-color: #a8a8a8;
+        border-radius: 5px;
+    }
+
+    /*滚动条右下角区域*/
+    ::-webkit-scrollbar-corner {
+        background-color: red;
+    }
+
+    .el-dialog__body {
+        max-height: calc(100vh - 400px);
+        overflow-y: auto;
+        margin-right: 5px;
+    }
+
     .u-add-btn {
         display: block;
         width: 100%;
