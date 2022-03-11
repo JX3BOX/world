@@ -12,10 +12,12 @@
                     <div class="u-item" v-for="item in events" :key="item.id" :title="item.desc">
                         <img class="u-avatar" :src="showAvatar(item.user_info.user_avatar)" :alt="item.user_info.display_name">
                         <span class="u-desc" :style="descStyle(item)">{{ item.desc }}</span>
-                        <div class="u-actions">
+                        <div class="u-actions" v-if="isEditor">
                             <el-button type="text" icon="el-icon-s-comment" title="评论"></el-button>
                             <el-button type="text" icon="el-icon-edit-outline" title="编辑" @click="edit(item)"></el-button>
-                            <el-button type="text" icon="el-icon-delete" title="删除"></el-button>
+                            <el-popconfirm title="确认删除该事件吗?" @confirm="del(item)">
+                                <el-button slot="reference" class="u-del-btn" type="text" icon="el-icon-delete" title="删除"></el-button>
+                            </el-popconfirm>
                         </div>
                     </div>
                 </div>
@@ -28,10 +30,12 @@
                     <div class="u-item" v-for="item in activities" :key="item.id" :title="item.desc">
                         <img class="u-avatar" :src="item.img">
                         <span class="u-desc" :style="descStyle(item)">{{ item.desc }}</span>
-                        <div class="u-actions">
+                        <div class="u-actions" v-if="isEditor">
                             <el-button type="text" icon="el-icon-s-comment" title="评论"></el-button>
                             <el-button type="text" icon="el-icon-edit-outline" title="编辑"></el-button>
-                            <el-button type="text" icon="el-icon-delete" title="删除"></el-button>
+                            <el-popconfirm title="确认删除该活动吗?" @confirm="del(item)">
+                                <el-button slot="reference" class="u-del-btn" type="text" icon="el-icon-delete" title="删除"></el-button>
+                            </el-popconfirm>
                         </div>
                     </div>
                 </div>
@@ -43,9 +47,10 @@
 </template>
 
 <script>
-import { getCalendar } from "@/service/calendar.js";
+import { getCalendar, delCalendar } from "@/service/calendar.js";
 import calendar_dialog from "./calendar_dialog.vue";
 import { showAvatar } from '@jx3box/jx3box-common/js/utils';
+import User from '@jx3box/jx3box-common/js/user.js';
 export default {
     name: "calendar-detail",
     props: {
@@ -75,6 +80,9 @@ export default {
         currentDate() {
             const { year, month, date } = this.dateObj;
             return `${year} / ${month} / ${date}`
+        },
+        isEditor() {
+            return User.isEditor()
         }
     },
     watch: {
@@ -117,6 +125,12 @@ export default {
         edit(item) {
             this.selected = item;
             this.showAdd = true
+        },
+        // 删除日历
+        del({ id }) {
+            delCalendar(id).then(() => {
+                this.list = this.list.filter(record => record.id !== id)
+            })
         }
     },
 };

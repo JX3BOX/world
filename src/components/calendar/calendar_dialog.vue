@@ -46,7 +46,7 @@
                         <el-input v-model="form.remark" size="medium" placeholder="请输入备注"></el-input>
                     </el-form-item>
                     <el-form-item label="样式">
-                        <el-input v-model="form.style" size="medium" placeholder="请输入样式"></el-input>
+                        <el-select v-model="form.style" size="medium" placeholder="请选择样式"></el-select>
                     </el-form-item>
                     <el-form-item label="海报">
                         <img-upload :data="form.banner" @update="bannerChange"></img-upload>
@@ -54,15 +54,19 @@
                     <el-form-item label="图片">
                         <img-upload :data="form.img" @update="imgChange"></img-upload>
                     </el-form-item>
-                    <el-form-item label="背景色">
+                    <el-form-item label="背景色" class="m-color-item">
+                        <span class="u-color-value" v-show="form.bgcolor">【{{ form.bgcolor }}】</span>
                         <el-color-picker
                             v-model="form.bgcolor"
+                            size="small"
                             :predefine="predefineColors">
                         </el-color-picker>
                     </el-form-item>
-                    <el-form-item label="颜色">
+                    <el-form-item label="颜色" class="m-color-item">
+                        <span class="u-color-value" v-show="form.color">【{{ form.color }}】</span>
                         <el-color-picker
                             v-model="form.color"
+                            size="small"
                             :predefine="predefineColors">
                         </el-color-picker>
                     </el-form-item>
@@ -170,12 +174,16 @@ export default {
         },
         value(val) {
             if (val) {
-                this.form = {
-                    ...this.form,
-                    year: this.dateObj?.year || "",
-                    month: this.dateObj?.month || "",
-                    date: this.dateObj?.date || "",
-                };
+                if (this.selected && Object.keys(this.selected).length) {
+                    this.form = this.selected
+                } else {
+                    this.form = {
+                        ...this.form,
+                        year: this.dateObj?.year || "",
+                        month: this.dateObj?.month || "",
+                        date: this.dateObj?.date || "",
+                    };
+                }
             }
         },
         selected: {

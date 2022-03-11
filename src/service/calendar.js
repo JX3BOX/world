@@ -31,8 +31,13 @@ const putCalendar = (id, data) => {
     return $.put(`/api/cms/post/calendar/${id}`, data)
 }
 
+const delCalendar = (id) => {
+    return $.delete(`/api/cms/post/calendar/${id}`)
+}
+
 export {
     getCalendar,
     addCalendar,
     putCalendar,
+    delCalendar,
 }
