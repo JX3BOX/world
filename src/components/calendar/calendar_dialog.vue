@@ -32,7 +32,7 @@
                     <el-button type="primary" size="small" icon="el-icon-plus" @click="addLink" :disabled="addDisabled">添加</el-button>
                 </el-form-item>
 
-                <template v-if="isEditor">
+                <template v-if="isEditor && isEdit">
                     <el-form-item label="显示日历">
                         <el-radio-group size="small" v-model="form.is_top">
                             <el-radio-button :label="0">否</el-radio-button>
@@ -146,6 +146,10 @@ export default {
         // 标题
         title() {
             return this.selected && Object.keys(this.selected).length ? '编辑' : '新增'
+        },
+        // 编辑模式
+        isEdit() {
+            return this.selected && Object.keys(this.selected).length
         },
         maxYear() {
             return new Date().getFullYear() + 1;

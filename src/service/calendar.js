@@ -18,21 +18,21 @@ const getCalendar = (params) => {
 
     let url = genUrl(params);
 
-    return $.get('/api/cms/post/calendar/archive' + url)
+    return $.get('/api/cms/calendar/archive' + url)
 }
 
 const addCalendar = (params, data) => {
     const url = genUrl(params);
 
-    return $.post('/api/cms/post/calendar/archive' + url, data)
+    return $.post('/api/cms/calendar/archive' + url, data)
 }
 
 const putCalendar = (id, data) => {
-    return $.put(`/api/cms/post/calendar/${id}`, data)
+    return $.put(`/api/cms/calendar/${id}`, data)
 }
 
 const delCalendar = (id) => {
-    return $.delete(`/api/cms/post/calendar/${id}`)
+    return $.delete(`/api/cms/calendar/${id}`)
 }
 
 export {
