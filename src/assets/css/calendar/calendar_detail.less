@@ -26,7 +26,7 @@
     }
 
     .el-dialog__body {
-        max-height: calc(100vh - 400px);
+        max-height: 550px;
         overflow-y: auto;
         margin-right: 5px;
     }
@@ -99,13 +99,21 @@
         }
 
         .m-color-item {
-            .el-form-item__content {
-                display: flex;
-                align-items: center;
+            display: flex;
+            align-items: center;
 
-                .u-color-val {
-                    margin-right: 20px;
-                }
+            .u-color-val {
+                margin-right: 20px;
+            }
+        }
+
+        .m-style {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+
+            .u-label {
+                margin-right: 10px;
             }
         }
 

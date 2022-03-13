@@ -33,7 +33,7 @@
                 </el-form-item>
 
                 <template v-if="isEditor && isEdit">
-                    <el-form-item label="显示日历">
+                    <el-form-item label="置顶显示">
                         <el-radio-group size="small" v-model="form.is_top">
                             <el-radio-button :label="0">否</el-radio-button>
                             <el-radio-button :label="1">是</el-radio-button>
@@ -42,11 +42,20 @@
                     <el-form-item label="重要级别">
                         <el-input-number v-model="form.level" size="medium"></el-input-number>
                     </el-form-item>
-                    <el-form-item label="备注">
-                        <el-input v-model="form.remark" size="medium" placeholder="请输入备注"></el-input>
-                    </el-form-item>
                     <el-form-item label="样式">
-                        <el-select v-model="form.style" size="medium" placeholder="请选择样式"></el-select>
+                        <div class="m-style">
+                            <el-select v-model="form.style" size="medium" placeholder="请选择样式"></el-select>
+                            <div class="m-color-item">
+                                <label class="u-label">背景色</label>
+                                <span class="u-color-value" v-show="form.bgcolor">【{{ form.bgcolor }}】</span>
+                                <el-color-picker v-model="form.bgcolor" size="small" :predefine="predefineColors"> </el-color-picker>
+                            </div>
+                            <div class="m-color-item">
+                                <label class="u-label">颜色</label>
+                                <span class="u-color-value" v-show="form.color">【{{ form.color }}】</span>
+                                <el-color-picker v-model="form.color" size="small" :predefine="predefineColors"> </el-color-picker>
+                            </div>
+                        </div>
                     </el-form-item>
                     <el-form-item label="海报">
                         <img-upload :data="form.banner" @update="bannerChange"></img-upload>
@@ -54,21 +63,8 @@
                     <el-form-item label="图片">
                         <img-upload :data="form.img" @update="imgChange"></img-upload>
                     </el-form-item>
-                    <el-form-item label="背景色" class="m-color-item">
-                        <span class="u-color-value" v-show="form.bgcolor">【{{ form.bgcolor }}】</span>
-                        <el-color-picker
-                            v-model="form.bgcolor"
-                            size="small"
-                            :predefine="predefineColors">
-                        </el-color-picker>
-                    </el-form-item>
-                    <el-form-item label="颜色" class="m-color-item">
-                        <span class="u-color-value" v-show="form.color">【{{ form.color }}】</span>
-                        <el-color-picker
-                            v-model="form.color"
-                            size="small"
-                            :predefine="predefineColors">
-                        </el-color-picker>
+                    <el-form-item label="备注">
+                        <el-input v-model="form.remark" size="medium" placeholder="请输入备注"></el-input>
                     </el-form-item>
                 </template>
             </el-form>
@@ -82,12 +78,12 @@
 
 <script>
 import { addCalendar, putCalendar } from "@/service/calendar.js";
-import User from '@jx3box/jx3box-common/js/user.js';
-import img_upload from './img_upload.vue';
+import User from "@jx3box/jx3box-common/js/user.js";
+import img_upload from "./img_upload.vue";
 export default {
     name: "calendar_dialog",
     components: {
-        'img-upload': img_upload,
+        "img-upload": img_upload,
     },
     props: {
         value: {
@@ -100,8 +96,8 @@ export default {
         },
         selected: {
             type: Object,
-            default: () => {}
-        }
+            default: () => {},
+        },
     },
     data: () => ({
         form: {
@@ -115,51 +111,51 @@ export default {
             // 编辑字段
             is_top: 0,
             level: 0,
-            banner: '',
-            bgcolor: '',
-            color: '',
-            img: '',
-            remark: '',
-            style: ''
+            banner: "",
+            bgcolor: "",
+            color: "",
+            img: "",
+            remark: "",
+            style: "",
         },
         dateError: "",
         descError: "",
         loading: false,
         predefineColors: [
-          '#ff4500',
-          '#ff8c00',
-          '#ffd700',
-          '#90ee90',
-          '#00ced1',
-          '#1e90ff',
-          '#c71585',
-          'rgba(255, 69, 0, 0.68)',
-          'rgb(255, 120, 0)',
-          'hsv(51, 100, 98)',
-          'hsva(120, 40, 94, 0.5)',
-          'hsl(181, 100%, 37%)',
-          'hsla(209, 100%, 56%, 0.73)',
-          '#c7158577'
+            "#ff4500",
+            "#ff8c00",
+            "#ffd700",
+            "#90ee90",
+            "#00ced1",
+            "#1e90ff",
+            "#c71585",
+            "rgba(255, 69, 0, 0.68)",
+            "rgb(255, 120, 0)",
+            "hsv(51, 100, 98)",
+            "hsva(120, 40, 94, 0.5)",
+            "hsl(181, 100%, 37%)",
+            "hsla(209, 100%, 56%, 0.73)",
+            "#c7158577",
         ],
     }),
     computed: {
         // 标题
         title() {
-            return this.selected && Object.keys(this.selected).length ? '编辑' : '新增'
+            return this.selected && Object.keys(this.selected).length ? "编辑" : "新增";
         },
         // 编辑模式
         isEdit() {
-            return this.selected && Object.keys(this.selected).length
+            return this.selected && Object.keys(this.selected).length;
         },
         maxYear() {
             return new Date().getFullYear() + 1;
         },
         addDisabled() {
-            return this.form?.link?.length >=5
+            return this.form?.link?.length >= 5;
         },
         isEditor() {
-            return User.isEditor()
-        }
+            return User.isEditor();
+        },
     },
     watch: {
         dateObj: {
@@ -179,7 +175,7 @@ export default {
         value(val) {
             if (val) {
                 if (this.selected && Object.keys(this.selected).length) {
-                    this.form = this.selected
+                    this.form = this.selected;
                 } else {
                     this.form = {
                         ...this.form,
@@ -195,10 +191,10 @@ export default {
             immediate: true,
             handler(val) {
                 if (val && Object.keys(val).length) {
-                    this.form = val
+                    this.form = val;
                 }
-            }
-        }
+            },
+        },
     },
     methods: {
         addLink() {
@@ -212,12 +208,12 @@ export default {
             this.form.link.splice(index, 1);
         },
         cancel() {
+            this.$emit("input", false);
+
             this.form = this.$options.data().form;
 
             this.dateError = "";
             this.descError = "";
-
-            this.$emit("input", false);
         },
         validate() {
             const { year, month, date, desc } = this.form;
@@ -242,8 +238,8 @@ export default {
             const fn = Object.keys(this.selected).length ? this.put : this.post;
 
             fn().then(() => {
-                this.loading = false
-            })
+                this.loading = false;
+            });
         },
         post() {
             let { year, month, date, desc, type, link } = this.form;
@@ -260,7 +256,7 @@ export default {
                 })
                 .catch((err) => {
                     console.log(err);
-                })
+                });
         },
         put() {
             let { link } = this.form;
@@ -272,23 +268,23 @@ export default {
             });
             return putCalendar(this.selected.id, {
                 ...this.form,
-                link
+                link,
             })
-            .then(() => {
-                this.$emit("update");
-                this.cancel();
-            })
-            .catch((err) => {
-                console.log(err);
-            })
+                .then(() => {
+                    this.$emit("update");
+                    this.cancel();
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         },
         // 海报变更
         bannerChange(banner) {
-            this.form.banner = banner
+            this.form.banner = banner;
         },
         // 图片变更
         imgChange(img) {
-            this.form.img = img
+            this.form.img = img;
         },
     },
 };
