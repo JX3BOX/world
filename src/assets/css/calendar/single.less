@@ -1,0 +1,40 @@
+.v-calendar-single {
+    display: flex;
+    gap: 20px;
+    padding: 10px;
+
+    .m-today {
+        flex: 1;
+    }
+    .m-history {
+        flex: 1;
+
+        .u-header {
+            font-size: 20px;
+            font-weight: 500;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        &-content {
+            .m-history-item {
+                display: flex;
+                margin-bottom: 10px;
+                gap: 20px;
+
+                .u-time {
+                    font-style: oblique;
+                }
+
+                .u-desc {
+
+                    &:hover {
+                        cursor: pointer;
+                        color: #f39;
+                        box-shadow: 0 1px 0 #f39;
+                    }
+                }
+            }
+        }
+    }
+}

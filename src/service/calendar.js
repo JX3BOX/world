@@ -35,9 +35,22 @@ const delCalendar = (id) => {
     return $.delete(`/api/cms/calendar/${id}`)
 }
 
+const getDetail = (id) => {
+    return $.get(`/api/cms/calendar/${id}`)
+}
+
+const getHistory = (params, query) => {
+    let url = genUrl(params)
+    return $.get(`/api/cms/calendar/history/${url}`, {
+        params: query
+    })
+}
+
 export {
     getCalendar,
     addCalendar,
     putCalendar,
     delCalendar,
+    getDetail,
+    getHistory,
 }

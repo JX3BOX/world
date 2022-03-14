@@ -11,7 +11,7 @@
                 <div class="m-part-content">
                     <div class="u-item" v-for="item in events" :key="item.id" :title="item.desc">
                         <img class="u-avatar" :src="showAvatar(item.user_info.user_avatar)" :alt="item.user_info.display_name">
-                        <span class="u-desc" :style="descStyle(item)">{{ item.desc }}</span>
+                        <span class="u-desc" :style="descStyle(item)" @click="toDetail(item)">{{ item.desc }}</span>
                         <div class="u-actions" v-if="isEditor">
                             <el-button type="text" icon="el-icon-s-comment" title="评论"></el-button>
                             <el-button type="text" icon="el-icon-edit-outline" title="编辑" @click="edit(item)"></el-button>
@@ -131,6 +131,10 @@ export default {
             delCalendar(id).then(() => {
                 this.list = this.list.filter(record => record.id !== id)
             })
+        },
+        // 跳转至详情页
+        toDetail({ id }) {
+            this.$router.push(`/detail/${id}`)
         }
     },
 };
