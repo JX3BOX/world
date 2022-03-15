@@ -1,6 +1,4 @@
 .m-calendar-detail {
-    padding: 10px;
-
     ::-webkit-scrollbar {
         background-color: lightgray;
         border-radius: 5px;
@@ -8,11 +6,6 @@
         height: 10px;
         background-clip: padding-box;
     }
-
-    // /*滚动条两端方向按钮*/
-    // ::-webkit-scrollbar-button {
-    //     background-color: pink;
-    // }
 
     /*滚动条中间滑动部分*/
     ::-webkit-scrollbar-thumb {
@@ -29,64 +22,6 @@
         max-height: 550px;
         overflow-y: auto;
         margin-right: 5px;
-    }
-
-    .u-add-btn {
-        display: block;
-        width: 100%;
-        margin-top: 5px;
-        margin-bottom: 10px;
-    }
-
-    .u-date {
-        font-size: 18px;
-        margin-bottom: 10px;
-        font-weight: bold;
-        text-align: center;
-        font-style: italic;
-    }
-
-    .m-content {
-        &-part {
-            &:not(:last-of-type) {
-                margin-bottom: 10px;
-            }
-            .u-part-header {
-                font-size: 16px;
-                font-weight: 900;
-            }
-
-            .u-item {
-                display: flex;
-                align-items: center;
-                height: 40px;
-                .u-avatar {
-                    .size(24px);
-                    .mr(4px);
-                }
-
-                .u-desc {
-                    cursor: pointer;
-                    font-size: 14px;
-                    flex: 1;
-                    .break(3);
-                }
-
-                .u-actions {
-                    display: none;
-                }
-
-                &:hover {
-                    .u-actions {
-                        display: block;
-                    }
-                }
-
-                .u-del-btn {
-                    margin-left: 10px;
-                }
-            }
-        }
     }
 
     .u-form {
@@ -126,6 +61,97 @@
             .u-del-icon {
                 font-size: 18px;
             }
+        }
+    }
+}
+
+.m-calendar-detail-header {
+    padding: 5px 15px 10px 15px;
+}
+
+.m-calendar-detail-title {
+    font-size: 22px;
+    margin: 15px 0;
+    font-weight: 300;
+    text-align: center;
+}
+
+.m-calendar-detail-add {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.m-calendar-detail-content {
+    .m-content-part {
+        &:not(:last-of-type) {
+            margin-bottom: 10px;
+        }
+        .u-part-header {
+            font-size: 16px;
+            font-weight: 900;
+            .el-divider__text {
+                background-color: rgb(250, 251, 252);
+            }
+            margin: 0 15px;
+        }
+
+        .u-count{
+            color:#999;
+            font-style: normal;
+            .ml(3px);
+        }
+
+        .u-item {
+            padding: 15px;
+            .pointer;
+
+            .u-primary {
+                display: flex;
+            }
+
+            .u-author {
+                .mr(4px);
+            }
+
+            .u-avatar {
+                .size(24px);
+                .db;
+                .pr;
+                top: 3px;
+            }
+
+            .u-desc {
+                cursor: pointer;
+                .fz(13px,2);
+                flex: 1;
+                .break(3);
+                color: @color;
+            }
+
+            .u-actions {
+                // display: none;
+                // .x(right);
+                .fz(12px);
+                .mt(5px);
+                margin-left: 18px;
+                i {
+                    .fz(16px);
+                    .mr(3px);
+                    .y(-2px);
+                }
+            }
+
+            .u-action{
+                .ml(10px);
+                color:@purple;
+                .pointer;
+            }
+
+            &:hover {
+                background-color: @bg-gray;
+            }
+
         }
     }
 }

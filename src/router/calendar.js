@@ -18,7 +18,7 @@ const routes = [
     },
     { name: "archive", path: "/archive/:year(\\d+)/:month(\\d+)/:date(\\d*)", component: Archive },
     { name: "history", path: "/history/:year(\\d+)/:month(\\d+)/:date(\\d*)", component: History },
-    { name: "detail", path: "/detail/:id", component: Single }
+    { name: "view", path: "/view/:id", component: Single }
 ];
 
 const router = new VueRouter({

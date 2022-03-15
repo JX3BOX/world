@@ -1,41 +1,74 @@
 <template>
     <div class="m-calendar-detail" v-loading="loading">
-        <header class="u-date">{{ currentDate }}</header>
-        <el-button class="u-add-btn" size="medium" type="primary" icon="el-icon-plus" @click="add">新增</el-button>
+        <!-- 头部 -->
+        <header class="m-calendar-detail-header">
+            <h1 class="m-calendar-detail-title">{{ currentDate }}</h1>
+            <el-button class="m-calendar-detail-add" size="medium" type="primary" icon="el-icon-plus" @click="add">新增</el-button>
+        </header>
 
-        <main class="m-content">
-            <section class="m-content-part">
+        <main class="m-calendar-detail-content">
+            <!-- 活动 -->
+            <section class="m-content-part" v-if="activities && activities.length">
                 <div class="u-part-header">
-                    <el-divider content-position="left"><i class="el-icon-s-order"></i> 事件</el-divider>
+                    <el-divider content-position="left"><i class="el-icon-s-flag"></i> 活动<span class="u-count">({{activities_count}})</span></el-divider>
                 </div>
                 <div class="m-part-content">
-                    <div class="u-item" v-for="item in events" :key="item.id" :title="item.desc">
-                        <img class="u-avatar" :src="showAvatar(item.user_info.user_avatar)" :alt="item.user_info.display_name">
-                        <span class="u-desc" :style="descStyle(item)" @click="toDetail(item)">{{ item.desc }}</span>
-                        <div class="u-actions" v-if="isEditor">
-                            <el-button type="text" icon="el-icon-s-comment" title="评论"></el-button>
-                            <el-button type="text" icon="el-icon-edit-outline" title="编辑" @click="edit(item)"></el-button>
-                            <el-popconfirm title="确认删除该事件吗?" @confirm="del(item)">
-                                <el-button slot="reference" class="u-del-btn" type="text" icon="el-icon-delete" title="删除"></el-button>
-                            </el-popconfirm>
+                    <div class="u-item" v-for="item in activities" :key="item.id" @click="view(item.id)">
+                        <router-link class="u-primary" :to="`/view/${item.id}`">
+                            <img class="u-icon" :src="iconLink(item.img)" />
+                            <span class="u-desc" :style="descStyle(item)" >{{ item.desc }}</span>
+                        </router-link>
+
+                        <div class="u-actions">
+                            <span class="u-action u-comment" :to="`/view/${item.id}`">
+                                <i class="u-comment-icon el-icon-chat-dot-round"></i
+                                ><span class="u-comment-count"
+                                    >评论<em class="u-count">({{ item.count || 0 }})</em></span
+                                >
+                            </span>
+
+                            <span class="u-action u-edit" @click.stop="edit(item)" v-if="isEditor">
+                                <i class="el-icon-edit-outline"></i>
+                                <span class="u-edit-text">编辑</span>
+                            </span>
                         </div>
                     </div>
                 </div>
             </section>
+
+            <!-- 事件 -->
             <section class="m-content-part">
                 <div class="u-part-header">
-                    <el-divider content-position="left"><i class="el-icon-s-flag"></i> 活动</el-divider>
+                    <el-divider content-position="left"><i class="el-icon-collection-tag"></i> 事件<span class="u-count">({{events_count}})</span></el-divider>
                 </div>
                 <div class="m-part-content">
-                    <div class="u-item" v-for="item in activities" :key="item.id" :title="item.desc">
-                        <img class="u-avatar" :src="item.img">
-                        <span class="u-desc" :style="descStyle(item)">{{ item.desc }}</span>
-                        <div class="u-actions" v-if="isEditor">
-                            <el-button type="text" icon="el-icon-s-comment" title="评论"></el-button>
-                            <el-button type="text" icon="el-icon-edit-outline" title="编辑"></el-button>
-                            <el-popconfirm title="确认删除该活动吗?" @confirm="del(item)">
-                                <el-button slot="reference" class="u-del-btn" type="text" icon="el-icon-delete" title="删除"></el-button>
-                            </el-popconfirm>
+                    <div class="u-item" v-for="item in events" :key="item.id" @click="view(item.id)">
+                        <router-link class="u-primary" :to="`/view/${item.id}`">
+                            <a class="u-author" @click.stop target="_blank" :href="authorLink(item.user_id)" :title="`由${item.user_info.display_name}贡献`"
+                                ><img class="u-avatar" :src="showAvatar(item.user_info.user_avatar)" :alt="item.user_info.display_name"
+                            /></a>
+                            <span class="u-desc" :style="descStyle(item)" >{{ item.desc }}</span>
+                        </router-link>
+
+                        <div class="u-actions">
+                            <span class="u-action u-comment" :to="`/view/${item.id}`">
+                                <i class="u-comment-icon el-icon-chat-dot-round"></i
+                                ><span class="u-comment-count"
+                                    >评论<em class="u-count">({{ item.count || 0 }})</em></span
+                                >
+                            </span>
+
+                            <span class="u-action u-edit" @click.stop="edit(item)" v-if="isEditor">
+                                <i class="el-icon-edit-outline"></i>
+                                <span class="u-edit-text">编辑</span>
+                            </span>
+
+                            <!-- <el-popconfirm title="确认删除该事件吗?" >
+                            <span class="u-action u-delete" @confirm="del(item)" slot="reference">
+                                <i class="el-icon-delete"></i>
+                                <span class="u-edit-text">删除</span>
+                            </span>
+                            </el-popconfirm> -->
                         </div>
                     </div>
                 </div>
@@ -47,99 +80,115 @@
 </template>
 
 <script>
-import { getCalendar, delCalendar } from "@/service/calendar.js";
-import calendar_dialog from "./calendar_dialog.vue";
-import { showAvatar } from '@jx3box/jx3box-common/js/utils';
-import User from '@jx3box/jx3box-common/js/user.js';
-export default {
-    name: "calendar-detail",
-    props: {
-        dateObj: {
-            type: Object,
-            default: () => {},
-        }
-    },
-    components: {
-        "calendar-dialog": calendar_dialog,
-    },
-    data: () => ({
-        showAdd: false,
-        loading: false,
-        list: [],
-        selected: {}
-    }),
-    computed: {
-        // 事件
-        events() {
-            return this.list?.filter(item => item.type === 1)
-        },
-        // 活动
-        activities() {
-            return this.list?.filter(item => item.type === 2)
-        },
-        currentDate() {
-            const { year, month, date } = this.dateObj;
-            return `${year} / ${month} / ${date}`
-        },
-        isEditor() {
-            return User.isEditor()
-        }
-    },
-    watch: {
-        dateObj: {
-            deep: true,
-            handler() {
-                this.loadData();
+    import { getCalendar, delCalendar } from "@/service/calendar.js";
+    import calendar_dialog from "./calendar_dialog.vue";
+    import { showAvatar, authorLink, iconLink } from "@jx3box/jx3box-common/js/utils";
+    import User from "@jx3box/jx3box-common/js/user.js";
+    export default {
+        name: "calendar-detail",
+        props: {
+            dateObj: {
+                type: Object,
+                default: () => {},
             },
         },
-    },
-    methods: {
-        showAvatar,
-        descStyle({ color }) {
-            return color ? { color, fontWeight: 'bold' } : {}
+        components: {
+            "calendar-dialog": calendar_dialog,
         },
-        add() {
-            this.selected = {}
-            this.showAdd = true;
+        data: () => ({
+            showAdd: false,
+            loading: false,
+            list: [],
+            selected: {},
+        }),
+        computed: {
+            // 事件
+            events() {
+                return this.list?.filter((item) => item.type === 1);
+            },
+            // 活动
+            activities() {
+                return this.list?.filter((item) => item.type === 2);
+            },
+            currentDate() {
+                const { year, month, date } = this.dateObj;
+                return `${year} / ${month} / ${date}`;
+            },
+            isEditor() {
+                return User.isEditor();
+            },
+            // 统计
+            events_count : function (){
+                return this.events?.length || 0
+            },
+            activities_count : function (){
+                return this.activities?.length || 0
+            }
         },
-        update() {
-            this.loadData().then(() => {
-                this.$emit("update");
-            });
-            this.showAdd = false;
+        watch: {
+            dateObj: {
+                deep: true,
+                handler() {
+                    this.loadData();
+                },
+            },
         },
-        loadData() {
-            this.loading = true;
-            return getCalendar(this.dateObj)
-                .then((res) => {
-                    this.list = res.data.data;
-                })
-                .finally(() => {
-                    this.loading = false;
+        methods: {
+            // 数据
+            // ======================
+            loadData() {
+                this.loading = true;
+                return getCalendar(this.dateObj)
+                    .then((res) => {
+                        this.list = res.data.data;
+                    })
+                    .finally(() => {
+                        this.loading = false;
+                    });
+            },
+
+            // 操作
+            // ======================
+            // 添加
+            add() {
+                this.selected = {};
+                this.showAdd = true;
+            },
+            // 编辑
+            edit(item) {
+                this.selected = item;
+                this.showAdd = true;
+            },
+            // 提交
+            update() {
+                this.loadData().then(() => {
+                    this.$emit("update");
                 });
+                this.showAdd = false;
+            },
+            // 删除
+            del({ id }) {
+                delCalendar(id).then(() => {
+                    this.list = this.list.filter((record) => record.id !== id);
+                });
+            },
+            // 查看
+            view(id) {
+                this.$router.push(`/view/${id}`);
+            },
+
+            // 过滤方法
+            // =========================
+            authorLink,
+            iconLink,
+            showAvatar,
+            descStyle({ color }) {
+                return color ? { color, fontWeight: "bold" } : {};
+            },
         },
-        /**
-         * 编辑日历
-         * @param {Object} item 待选日历
-         */
-        edit(item) {
-            this.selected = item;
-            this.showAdd = true
-        },
-        // 删除日历
-        del({ id }) {
-            delCalendar(id).then(() => {
-                this.list = this.list.filter(record => record.id !== id)
-            })
-        },
-        // 跳转至详情页
-        toDetail({ id }) {
-            this.$router.push(`/detail/${id}`)
-        }
-    },
-};
+    };
 </script>
 
 <style lang="less">
-@import "~@/assets/css/calendar/calendar_detail.less";
+    @import "~@/assets/css/calendar/calendar_detail.less";
 </style>
