@@ -3,7 +3,6 @@ import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
 const Archive = () => import("@/views/calendar/Archive.vue");
-const History = () => import("@/views/calendar/History.vue");
 const Single = () => import("@/views/calendar/Single.vue");
 
 const today = new Date();
@@ -16,9 +15,22 @@ const routes = [
             return { path: `/archive/${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}` };
         },
     },
-    { name: "archive", path: "/archive/:year(\\d+)/:month(\\d+)/:date(\\d*)", component: Archive },
-    { name: "history", path: "/history/:year(\\d+)/:month(\\d+)/:date(\\d*)", component: History },
-    { name: "view", path: "/view/:id", component: Single }
+    {
+        name: "archive",
+        path: "/archive/:year(\\d+)/:month(\\d+)/:date(\\d*)",
+        component: Archive,
+        meta: {
+            sidebar: false,
+        },
+    },
+    {
+        name: "view",
+        path: "/view/:id",
+        component: Single,
+        meta: {
+            sidebar: true,
+        },
+    },
 ];
 
 const router = new VueRouter({

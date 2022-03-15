@@ -4,10 +4,10 @@
         <Breadcrumb name="剑三日历" slug="calendar" root="/calendar" :feedbackEnable="true" :crumbEnable="false">
             <img slot="logo" svg-inline :src="getAppIcon('calendar')" />
         </Breadcrumb>
-        <LeftSidebar :open="false">
+        <LeftSidebar :open="hasSidebar">
             <Nav />
         </LeftSidebar>
-        <Main :withoutRight="true" :withoutLeft="true">
+        <Main :withoutRight="true" :withoutLeft="!hasSidebar">
             <div class="m-main">
                 <router-view />
             </div>
@@ -25,7 +25,11 @@ export default {
     data: function () {
         return {};
     },
-    computed: {},
+    computed: {
+        hasSidebar : function (){
+            return this.$route.meta.sidebar
+        }
+    },
     methods: { getAppIcon },
     components: { Nav },
     mounted: function () {},
