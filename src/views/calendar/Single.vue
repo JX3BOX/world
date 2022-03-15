@@ -25,6 +25,8 @@
             </div>
         </section>
 
+        <Thx :postId="id" postType="calendar" :userId="author" :adminBoxcoinEnable="true" :userBoxcoinEnable="true" />
+
         <Comment class="m-comment" :id="id" category="calendar" />
     </div>
 </template>
@@ -49,6 +51,9 @@
         computed: {
             id() {
                 return this.$route.params.id;
+            },
+            author(){
+                return this.today.user_id
             },
             params({ today }) {
                 return today

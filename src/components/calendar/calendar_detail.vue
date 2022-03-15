@@ -23,8 +23,9 @@
                             <span class="u-action u-comment" :to="`/view/${item.id}`">
                                 <i class="u-comment-icon el-icon-chat-dot-round"></i
                                 ><span class="u-comment-count"
-                                    >评论<em class="u-count">({{ item.count || 0 }})</em></span
+                                    >评论</span
                                 >
+                                <!-- <em class="u-count">({{ item.count || 0 }})</em> -->
                             </span>
 
                             <span class="u-action u-edit" @click.stop="edit(item)" v-if="isEditor">
@@ -54,8 +55,9 @@
                             <span class="u-action u-comment" :to="`/view/${item.id}`">
                                 <i class="u-comment-icon el-icon-chat-dot-round"></i
                                 ><span class="u-comment-count"
-                                    >评论<em class="u-count">({{ item.count || 0 }})</em></span
+                                    >评论</span
                                 >
+                                <!-- <em class="u-count">({{ item.count || 0 }})</em> -->
                             </span>
 
                             <span class="u-action u-edit" @click.stop="edit(item)" v-if="isEditor">
