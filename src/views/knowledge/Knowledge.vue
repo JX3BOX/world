@@ -1,8 +1,7 @@
 <template>
     <div id="app">
         <Header></Header>
-        <Breadcrumb name="通识百科" slug="knowledge" root="/knowledge" :publishEnable="true" :feedbackEnable="true" :crumbEnable="false">
-            <img slot="logo" svg-inline :src="getAppIcon('knowledge')" />
+        <Breadcrumb name="通识百科" slug="knowledge" :publishEnable="true" :feedbackEnable="true" :crumbEnable="false">
         </Breadcrumb>
         <LeftSidebar>
             <Nav />
@@ -17,7 +16,6 @@
 </template>
 
 <script>
-import { getAppIcon } from "@jx3box/jx3box-common/js/utils";
 import Nav from "@/components/Nav.vue";
 export default {
     name: "App",
@@ -26,7 +24,6 @@ export default {
         return {};
     },
     computed: {},
-    methods: { getAppIcon },
     components: { Nav },
     mounted: function () {},
 };

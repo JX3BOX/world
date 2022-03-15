@@ -17,7 +17,7 @@ const routes = [
     },
     {
         name: "archive",
-        path: "/archive/:year(\\d+)/:month(\\d+)/:date(\\d*)",
+        path: "/archive/:year(\\d+)/:month(\\d+)/:date(\\d+)",
         component: Archive,
         meta: {
             sidebar: false,

@@ -34,11 +34,9 @@
                 </section>
             </section>
         </main>
-        <transition name="fade">
-            <aside class="m-calendar-aside" v-if="isExact">
-                <calendar-detail :date-obj="current" @update="update"></calendar-detail>
-            </aside>
-        </transition>
+        <aside class="m-calendar-aside">
+            <calendar-detail :date-obj="current" @update="update"></calendar-detail>
+        </aside>
     </div>
 </template>
 
@@ -85,15 +83,12 @@ export default {
         today() {
             return new Date().getDate();
         },
-        isExact() {
-            return !!this.current.date;
-        },
     },
     watch: {
         "$route.params": {
             immediate: true,
             handler: function ({ year, month, date }) {
-                this.current = { year: ~~year, month: ~~month, date: ~~date || 0 };
+                this.current = { year: ~~year, month: ~~month, date: ~~date || 1 };
             },
         },
     },
@@ -110,7 +105,7 @@ export default {
         toggleYear(action) {
             action === "prev" ? (this.current.year -= 1) : (this.current.year += 1);
 
-            this.current.date = 0;
+            this.current.date = 1;
 
             this.dataArr = this.getMonthData();
         },
@@ -121,7 +116,7 @@ export default {
         toggleMonth(num) {
             this.current.month = num + 1;
 
-            this.current.date = 0;
+            this.current.date = 1;
 
             this.dataArr = this.getMonthData();
         },

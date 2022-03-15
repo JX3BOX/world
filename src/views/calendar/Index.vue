@@ -1,8 +1,7 @@
 <template>
     <div id="app">
         <Header></Header>
-        <Breadcrumb name="剑三日历" slug="calendar" root="/calendar" :feedbackEnable="true" :crumbEnable="false">
-            <img slot="logo" svg-inline :src="getAppIcon('calendar')" />
+        <Breadcrumb name="剑三日历" slug="calendar" :feedbackEnable="true" :crumbEnable="false">
         </Breadcrumb>
         <LeftSidebar :open="hasSidebar">
             <Nav />
@@ -17,7 +16,6 @@
 </template>
 
 <script>
-import { getAppIcon } from "@jx3box/jx3box-common/js/utils";
 import Nav from "@/components/Nav.vue";
 export default {
     name: "App",
@@ -30,7 +28,6 @@ export default {
             return this.$route.meta.sidebar
         }
     },
-    methods: { getAppIcon },
     components: { Nav },
     mounted: function () {},
 };
