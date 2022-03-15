@@ -77,7 +77,7 @@
             </section>
         </main>
 
-        <calendar-dialog v-model="showAdd" :date-obj="dateObj" :selected="selected" @update="update"></calendar-dialog>
+        <calendar-dialog v-model="showAdd" :date-obj="dateObj" :selected="selected" @update="update" @del="del"></calendar-dialog>
     </div>
 </template>
 
@@ -130,6 +130,7 @@
         watch: {
             dateObj: {
                 deep: true,
+                immediate: true,
                 handler() {
                     this.loadData();
                 },
@@ -162,16 +163,34 @@
                 this.showAdd = true;
             },
             // 提交
-            update() {
-                this.loadData().then(() => {
-                    this.$emit("update");
-                });
+            update(res) {
+                let { data } = res?.data
+
+                if (data) {
+                    data.desc = `(待审核)${data.desc}`
+                    data.user_info = {
+                        display_name: localStorage.getItem('name'),
+                        user_avatar: localStorage.getItem('avatar'),
+                    }
+                    this.list.unshift(data)
+
+                    this.$notify({
+                        type: 'success',
+                        title: '成功',
+                        message: '提交成功'
+                    })
+                }
+                // this.loadData().then(() => {
+                //     this.$emit("update");
+                // });
                 this.showAdd = false;
             },
             // 删除
-            del({ id }) {
+            del(id) {
                 delCalendar(id).then(() => {
                     this.list = this.list.filter((record) => record.id !== id);
+
+                    this.showAdd = false
                 });
             },
             // 查看

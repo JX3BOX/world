@@ -66,6 +66,10 @@
                     <el-form-item label="备注">
                         <el-input v-model="form.remark" size="medium" placeholder="请输入备注"></el-input>
                     </el-form-item>
+                    <el-form-item label="操作">
+                        <el-button icon="el-icon-delete" size="small" @click="del" type="danger">删除</el-button>
+                        <el-button icon="el-icon-refresh-left" size="small" @click="recheck" type="primary">复审</el-button>
+                    </el-form-item>
                 </template>
             </el-form>
         </main>
@@ -77,7 +81,7 @@
 </template>
 
 <script>
-import { addCalendar, putCalendar } from "@/service/calendar.js";
+import { addCalendar, putCalendar, delCalendar } from "@/service/calendar.js";
 import User from "@jx3box/jx3box-common/js/user.js";
 import img_upload from "./img_upload.vue";
 export default {
@@ -250,8 +254,8 @@ export default {
                 };
             });
             return addCalendar({ year, month, date }, { desc, type, link })
-                .then(() => {
-                    this.$emit("update");
+                .then(res => {
+                    this.$emit("update", res);
                     this.cancel();
                 })
                 .catch((err) => {
@@ -270,7 +274,7 @@ export default {
                 ...this.form,
                 link,
             })
-                .then(() => {
+                .then(res => {
                     this.$emit("update");
                     this.cancel();
                 })
@@ -286,6 +290,30 @@ export default {
         imgChange(img) {
             this.form.img = img;
         },
+        del() {
+            delCalendar(this.selected.id).then(() => {
+                this.$emit('del', this.selected.id)
+
+                this.$notify({
+                    type: 'success',
+                    title: '操作成功',
+                    message: '状态修改成功'
+                })
+            });
+        },
+        recheck() {
+            putCalendar(this.selected.id, {
+                status: 0
+            }).then(() => {
+                this.$notify({
+                    type: 'success',
+                    title: '操作成功',
+                    message: '状态修改成功'
+                })
+
+                this.$emit('del', this.selected.id)
+            })
+        }
     },
 };
 </script>
