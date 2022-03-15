@@ -15,7 +15,7 @@
                 <div class="m-part-content">
                     <div class="u-item" v-for="item in activities" :key="item.id" @click="view(item.id)">
                         <router-link class="u-primary" :to="`/view/${item.id}`">
-                            <img class="u-icon" :src="iconLink(item.img)" />
+                            <img class="u-icon" :src="iconLink(item.icon)" />
                             <span class="u-desc" :style="descStyle(item)" >{{ item.desc }}</span>
                         </router-link>
 
@@ -47,7 +47,7 @@
                             <a class="u-author" @click.stop target="_blank" :href="authorLink(item.user_id)" :title="`由${item.user_info.display_name}贡献`"
                                 ><img class="u-avatar" :src="showAvatar(item.user_info.user_avatar)" :alt="item.user_info.display_name"
                             /></a>
-                            <span class="u-desc" :style="descStyle(item)" >{{ item.desc }}</span>
+                            <span class="u-desc" :style="descStyle(item)" ><span v-if="item.is_top">⭐️</span>{{ item.desc }}</span>
                         </router-link>
 
                         <div class="u-actions">
