@@ -1,6 +1,5 @@
 <template>
     <div class="m-calendar-detail-item" @click="view(data.id)">
-
         <div class="u-primary" :to="`/view/${data.id}`">
             <!-- 图标 -->
             <img v-if="data.type == 2" class="u-icon" :src="iconLink(data.icon)" />
@@ -8,7 +7,10 @@
                 ><img class="u-avatar" :src="showAvatar(data.user_info.user_avatar)" :alt="data.user_info.display_name"
             /></a>
             <!-- 文本 -->
-            <span class="u-desc" :style="descStyle(data)">{{ data.desc }}</span>
+            <span class="u-desc" :style="descStyle(data)"
+                ><i class="u-client" v-if="data.type == 1" :class="data.client">{{ data.client == "std" ? "正" : "怀" }}</i
+                >{{ data.desc }}</span
+            >
         </div>
 
         <div class="u-actions">
@@ -34,11 +36,11 @@
 </template>
 
 <script>
-import { showAvatar, authorLink, iconLink } from "@jx3box/jx3box-common/js/utils";
-import User from "@jx3box/jx3box-common/js/user.js";
+    import { showAvatar, authorLink, iconLink } from "@jx3box/jx3box-common/js/utils";
+    import User from "@jx3box/jx3box-common/js/user.js";
     export default {
         name: "CalendarDetailItem",
-        props: ["type",'data'],
+        props: ["type", "data"],
         components: {},
         data: function () {
             return {};
@@ -50,14 +52,13 @@ import User from "@jx3box/jx3box-common/js/user.js";
         },
         watch: {},
         methods: {
-
             // 查看
             view(id) {
                 this.$router.push(`/view/${id}`);
             },
             // 编辑
-            edit(data){
-                this.$emit('edit',data)
+            edit(data) {
+                this.$emit("edit", data);
             },
 
             // 过滤方法

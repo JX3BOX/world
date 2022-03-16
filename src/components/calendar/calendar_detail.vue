@@ -75,20 +75,28 @@
                 const { year, month, date } = this.dateObj;
                 return `${year} / ${month} / ${date}`;
             },
-            // 事件
-            events() {
-                return this.list?.filter((item) => item.type === 1);
+            client() {
+                return this.$store.state.client;
             },
-            // 活动
+
+            // 活动(还需要匹配相同客户端)
             activities() {
-                return this.list?.filter((item) => item.type === 2);
-            },
-            // 统计
-            events_count: function () {
-                return this.events?.length || 0;
+                return this.list?.filter((item) => {
+                    return item.client == this.client && item.type === 2;
+                });
             },
             activities_count: function () {
                 return this.activities?.length || 0;
+            },
+
+            // 事件
+            events() {
+                return this.list?.filter((item) => {
+                    return item.type === 1;
+                });
+            },
+            events_count: function () {
+                return this.events?.length || 0;
             },
         },
         watch: {

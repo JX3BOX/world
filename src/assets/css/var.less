@@ -1,1 +1,24 @@
 @purple:#8250df;
+
+// 版本
+@origin:#0eb7ce;
+@std : #f0b400;
+
+// 客户端
+.i-client() {
+    font-style: normal;
+    .fz(12px);
+    padding: 1px 5px;
+    .r(3px);
+    // .mr(5px);
+
+    &.std {
+        border: 1px solid @std;
+        color: @std;
+    }
+
+    &.origin {
+        border: 1px solid @origin;
+        color: @origin;
+    }
+}
