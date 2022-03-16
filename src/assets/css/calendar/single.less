@@ -1,5 +1,10 @@
 .m-calendar-single{
     padding:20px;
+
+    .m-actions {
+        display: flex;
+        justify-content: space-between;
+    }
 }
 .m-single-title {
     padding:10px 0;
@@ -45,3 +50,37 @@
     }
 }
 
+.m-today-meta {
+    display: flex;
+    justify-content: right;
+    font-size: 12px;
+    gap: 10px;
+
+    .u-user{
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .u-create-time {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        color: #999;
+    }
+}
+
+.m-reference {
+    .m-reference-item {
+        line-height: 20px;
+        color: #666;
+        .u-index {
+            .mr(5px);
+        }
+        .u-link {
+            text-decoration: none;
+            &:hover {
+                border-bottom: 1px solid #666;
+            }
+        }
+    }
+}
