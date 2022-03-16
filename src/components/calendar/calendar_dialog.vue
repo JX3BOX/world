@@ -111,7 +111,7 @@
         color: "",
         img: "",
         style: "",
-        icon : '',
+        icon: "",
     };
     export default {
         name: "calendar_dialog",
@@ -119,15 +119,17 @@
             "img-upload": img_upload,
         },
         props: ["value", "dateObj", "selected", "mode"],
-        data: () => ({
-            form: {
-                ...Object.assign({}, default_data, this.dateObj),
-            },
-            dateError: "",
-            descError: "",
-            loading: false,
-            predefineColors: calendar_highlights,
-        }),
+        data: function () {
+            return {
+                form: {
+                    ...Object.assign({}, default_data, this.dateObj),
+                },
+                dateError: "",
+                descError: "",
+                loading: false,
+                predefineColors: calendar_highlights,
+            };
+        },
         computed: {
             // 编辑模式
             isEditmode() {
@@ -191,6 +193,8 @@
             // 表单校验
             // =======================
             validate() {
+                if (!this.form) return;
+
                 const { year, month, date, desc } = this.form;
                 if (!year) {
                     this.dateError = "请输入年份";
