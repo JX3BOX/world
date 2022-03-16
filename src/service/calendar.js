@@ -21,9 +21,8 @@ const getCalendar = (params) => {
     return $.get('/api/cms/calendar/archive' + url)
 }
 
-const addCalendar = (params, data) => {
-    const url = genUrl(params);
-
+const addCalendar = (data) => {
+    const url = genUrl(data);
     return $.post('/api/cms/calendar/archive' + url, data)
 }
 

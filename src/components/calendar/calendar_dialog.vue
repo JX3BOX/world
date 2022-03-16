@@ -240,7 +240,7 @@
             // 数据发送
             // =======================
             post() {
-                return addCalendar({ year, month, date }, this.form).then((res) => {
+                return addCalendar(this.form).then((res) => {
                     this.$emit("update", res);
                     this.reset();
                 });
