@@ -21,6 +21,12 @@
                 <el-form-item label="描述" required :error="descError">
                     <el-input type="textarea" v-model="form.desc" :rows="3" placeholder="输入事件描述"></el-input>
                 </el-form-item>
+                <el-form-item label="客户端" required>
+                    <el-radio-group size="small" v-model="form.client">
+                        <el-radio-button label="std">正式服</el-radio-button>
+                        <el-radio-button label="origin">怀旧服</el-radio-button>
+                    </el-radio-group>
+                </el-form-item>
                 <el-form-item label="参考资料">
                     <template v-for="(item, index) in form.link">
                         <div class="m-links" :key="item.id">
@@ -67,8 +73,8 @@
                         <el-input v-model="form.remark" size="medium" placeholder="请输入备注"></el-input>
                     </el-form-item>
                     <el-form-item label="操作">
+                        <el-button icon="el-icon-refresh-left" size="small" @click="recheck" type="warning">复审</el-button>
                         <el-button icon="el-icon-delete" size="small" @click="del" type="danger">删除</el-button>
-                        <el-button icon="el-icon-refresh-left" size="small" @click="recheck" type="primary">复审</el-button>
                     </el-form-item>
                 </template>
             </el-form>
@@ -81,239 +87,240 @@
 </template>
 
 <script>
-import { addCalendar, putCalendar, delCalendar } from "@/service/calendar.js";
-import User from "@jx3box/jx3box-common/js/user.js";
-import img_upload from "./img_upload.vue";
-export default {
-    name: "calendar_dialog",
-    components: {
-        "img-upload": img_upload,
-    },
-    props: {
-        value: {
-            type: Boolean,
-            default: false,
+    import { addCalendar, putCalendar, delCalendar } from "@/service/calendar.js";
+    import User from "@jx3box/jx3box-common/js/user.js";
+    import img_upload from "./img_upload.vue";
+    export default {
+        name: "calendar_dialog",
+        components: {
+            "img-upload": img_upload,
         },
-        dateObj: {
-            type: Object,
-            default: () => {},
-        },
-        selected: {
-            type: Object,
-            default: () => {},
-        },
-    },
-    data: () => ({
-        form: {
-            year: "",
-            month: "",
-            date: "",
-            type: 1,
-            desc: "",
-            link: [],
-
-            // 编辑字段
-            is_top: 0,
-            level: 0,
-            banner: "",
-            bgcolor: "",
-            color: "",
-            img: "",
-            remark: "",
-            style: "",
-        },
-        dateError: "",
-        descError: "",
-        loading: false,
-        predefineColors: [
-            "#ff4500",
-            "#ff8c00",
-            "#ffd700",
-            "#90ee90",
-            "#00ced1",
-            "#1e90ff",
-            "#c71585",
-            "rgba(255, 69, 0, 0.68)",
-            "rgb(255, 120, 0)",
-            "hsv(51, 100, 98)",
-            "hsva(120, 40, 94, 0.5)",
-            "hsl(181, 100%, 37%)",
-            "hsla(209, 100%, 56%, 0.73)",
-            "#c7158577",
-        ],
-    }),
-    computed: {
-        // 标题
-        title() {
-            return this.selected && Object.keys(this.selected).length ? "编辑" : "新增";
-        },
-        // 编辑模式
-        isEdit() {
-            return this.selected && Object.keys(this.selected).length;
-        },
-        maxYear() {
-            return new Date().getFullYear() + 1;
-        },
-        addDisabled() {
-            return this.form?.link?.length >= 5;
-        },
-        isEditor() {
-            return User.isEditor();
-        },
-    },
-    watch: {
-        dateObj: {
-            deep: true,
-            immediate: true,
-            handler(val) {
-                if (Object.keys(val).length) {
-                    this.form = {
-                        ...this.form,
-                        year: val?.year || "",
-                        month: val?.month || "",
-                        date: val?.date || "",
-                    };
-                }
+        props: {
+            value: {
+                type: Boolean,
+                default: false,
+            },
+            dateObj: {
+                type: Object,
+                default: () => {},
+            },
+            selected: {
+                type: Object,
+                default: () => {},
             },
         },
-        value(val) {
-            if (val) {
-                if (this.selected && Object.keys(this.selected).length) {
-                    this.form = this.selected;
-                } else {
-                    this.form = {
-                        ...this.form,
-                        year: this.dateObj?.year || "",
-                        month: this.dateObj?.month || "",
-                        date: this.dateObj?.date || "",
-                    };
-                }
-            }
-        },
-        selected: {
-            deep: true,
-            immediate: true,
-            handler(val) {
-                if (val && Object.keys(val).length) {
-                    this.form = val;
-                }
+        data: () => ({
+            form: {
+                year: "",
+                month: "",
+                date: "",
+                type: 1,
+                desc: "",
+                client : 'std',
+                link: [],
+
+                // 编辑字段
+                is_top: 0,
+                level: 0,
+                banner: "",
+                bgcolor: "",
+                color: "",
+                img: "",
+                remark: "",
+                style: "",
+            },
+            dateError: "",
+            descError: "",
+            loading: false,
+            predefineColors: [
+                "#ff4500",
+                "#ff8c00",
+                "#ffd700",
+                "#90ee90",
+                "#00ced1",
+                "#1e90ff",
+                "#c71585",
+                "rgba(255, 69, 0, 0.68)",
+                "rgb(255, 120, 0)",
+                "hsv(51, 100, 98)",
+                "hsva(120, 40, 94, 0.5)",
+                "hsl(181, 100%, 37%)",
+                "hsla(209, 100%, 56%, 0.73)",
+                "#c7158577",
+            ],
+        }),
+        computed: {
+            // 标题
+            title() {
+                return this.selected && Object.keys(this.selected).length ? "编辑" : "新增";
+            },
+            // 编辑模式
+            isEdit() {
+                return this.selected && Object.keys(this.selected).length;
+            },
+            maxYear() {
+                return new Date().getFullYear() + 1;
+            },
+            addDisabled() {
+                return this.form?.link?.length >= 5;
+            },
+            isEditor() {
+                return User.isEditor();
             },
         },
-    },
-    methods: {
-        addLink() {
-            this.form.link.push({
-                link: "",
-                label: "",
-                id: +new Date(),
-            });
+        watch: {
+            dateObj: {
+                deep: true,
+                immediate: true,
+                handler(val) {
+                    if (Object.keys(val).length) {
+                        this.form = {
+                            ...this.form,
+                            year: val?.year || "",
+                            month: val?.month || "",
+                            date: val?.date || "",
+                        };
+                    }
+                },
+            },
+            value(val) {
+                if (val) {
+                    if (this.selected && Object.keys(this.selected).length) {
+                        this.form = this.selected;
+                    } else {
+                        this.form = {
+                            ...this.form,
+                            year: this.dateObj?.year || "",
+                            month: this.dateObj?.month || "",
+                            date: this.dateObj?.date || "",
+                        };
+                    }
+                }
+            },
+            selected: {
+                deep: true,
+                immediate: true,
+                handler(val) {
+                    if (val && Object.keys(val).length) {
+                        this.form = val;
+                    }
+                },
+            },
         },
-        removeLink(index) {
-            this.form.link.splice(index, 1);
-        },
-        cancel() {
-            this.$emit("input", false);
+        methods: {
+            addLink() {
+                this.form.link.push({
+                    link: "",
+                    label: "",
+                    id: +new Date(),
+                });
+            },
+            removeLink(index) {
+                this.form.link.splice(index, 1);
+            },
+            cancel() {
+                this.$emit("input", false);
 
-            this.form = this.$options.data().form;
+                this.form = this.$options.data().form;
 
-            this.dateError = "";
-            this.descError = "";
-        },
-        validate() {
-            const { year, month, date, desc } = this.form;
-            if (!year) {
-                this.dateError = "请输入年份";
-            } else {
                 this.dateError = "";
-                if (!month) {
-                    this.dateError = "请输入月份";
+                this.descError = "";
+            },
+            validate() {
+                const { year, month, date, desc } = this.form;
+                if (!year) {
+                    this.dateError = "请输入年份";
                 } else {
-                    this.dateError = !date ? "请输入日期" : "";
+                    this.dateError = "";
+                    if (!month) {
+                        this.dateError = "请输入月份";
+                    } else {
+                        this.dateError = !date ? "请输入日期" : "";
+                    }
                 }
-            }
 
-            this.descError = !desc ? "请输入事件描述" : "";
-        },
-        confirm() {
-            this.validate();
-            if (this.descError || this.dateError) return;
-            this.loading = true;
+                this.descError = !desc ? "请输入事件描述" : "";
+            },
+            confirm() {
+                this.validate();
+                if (this.descError || this.dateError) return;
+                this.loading = true;
 
-            const fn = Object.keys(this.selected).length ? this.put : this.post;
+                const fn = Object.keys(this.selected).length ? this.put : this.post;
 
-            fn().then(() => {
-                this.loading = false;
-            });
-        },
-        post() {
-            let { year, month, date, desc, type, link } = this.form;
-            link = link.map((item) => {
-                return {
-                    label: item.label,
-                    link: item.link,
-                };
-            });
-            return addCalendar({ year, month, date }, { desc, type, link })
-                .then(res => {
-                    this.$emit("update", res);
-                    this.cancel();
-                })
-                .catch((err) => {
-                    console.log(err);
+                fn().then(() => {
+                    this.loading = false;
                 });
-        },
-        put() {
-            let { link } = this.form;
-            link = link.map((item) => {
-                return {
-                    label: item.label,
-                    link: item.link,
-                };
-            });
-            return putCalendar(this.selected.id, {
-                ...this.form,
-                link,
-            })
-                .then(res => {
-                    this.$emit("update");
-                    this.cancel();
-                })
-                .catch((err) => {
-                    console.log(err);
+            },
+            post() {
+                let { year, month, date, desc, type, link } = this.form;
+                link = link.map((item) => {
+                    return {
+                        label: item.label,
+                        link: item.link,
+                    };
                 });
-        },
-        // 海报变更
-        bannerChange(banner) {
-            this.form.banner = banner;
-        },
-        // 图片变更
-        imgChange(img) {
-            this.form.img = img;
-        },
-        del() {
-            delCalendar(this.selected.id).then(() => {
-                this.$emit('del', this.selected.id)
-
-                this.$notify({
-                    type: 'success',
-                    title: '操作成功',
-                    message: '状态修改成功'
+                return addCalendar({ year, month, date }, { desc, type, link })
+                    .then((res) => {
+                        this.$emit("update", res);
+                        this.cancel();
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            },
+            put() {
+                let { link } = this.form;
+                link = link.map((item) => {
+                    return {
+                        label: item.label,
+                        link: item.link,
+                    };
+                });
+                return putCalendar(this.selected.id, {
+                    ...this.form,
+                    link,
                 })
-            });
-        },
-        recheck() {
-            putCalendar(this.selected.id, {
-                status: 0
-            }).then(() => {
-                this.$notify({
-                    type: 'success',
-                    title: '操作成功',
-                    message: '状态修改成功'
-                })
+                    .then((res) => {
+                        this.$emit("update");
+                        this.cancel();
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            },
+            // 海报变更
+            bannerChange(banner) {
+                this.form.banner = banner;
+            },
+            // 图片变更
+            imgChange(img) {
+                this.form.img = img;
+            },
+            del() {
+                delCalendar(this.selected.id).then(() => {
+                    this.$emit("del", this.selected.id);
 
-                this.$emit('del', this.selected.id)
-            })
-        }
-    },
-};
+                    this.$notify({
+                        type: "success",
+                        title: "删除成功",
+                        message: "日历记录已删除",
+                    });
+                });
+            },
+            recheck() {
+                putCalendar(this.selected.id, {
+                    status: 0,
+                }).then(() => {
+                    this.$notify({
+                        type: "success",
+                        title: "操作成功",
+                        message: "日历记录已设为待审核",
+                    });
+
+                    this.$emit("del", this.selected.id);
+                });
+            },
+        },
+    };
 </script>

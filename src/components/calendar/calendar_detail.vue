@@ -50,6 +50,7 @@
     import { getCalendar, delCalendar } from "@/service/calendar.js";
     import calendar_dialog from "./calendar_dialog.vue";
     import calendar_detail_item from "./calendar_detail_item.vue";
+    import User from "@jx3box/jx3box-common/js/user.js";
 
     export default {
         name: "calendar-detail",
@@ -132,8 +133,8 @@
                 if (data) {
                     data.desc = `(待审核) ${data.desc}`;
                     data.user_info = {
-                        display_name: localStorage.getItem("name"),
-                        user_avatar: localStorage.getItem("avatar"),
+                        display_name: User.getInfo().name,
+                        user_avatar: User.getInfo().avatar,
                     };
                     this.list.unshift(data);
 
