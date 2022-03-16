@@ -31,14 +31,14 @@
                     <template v-for="(item, index) in form.link">
                         <div class="m-links" :key="item.id">
                             <el-input class="u-link-item" v-model="item.label" placeholder="请输入标题"></el-input>
-                            <el-input class="u-link-item" v-model="item.link" placeholder="请输入链接"></el-input>
+                            <el-input class="u-link-item" v-model="item.url" placeholder="请输入链接"></el-input>
                             <el-button class="u-del-icon" type="text" icon="el-icon-circle-close" @click="removeLink(index)" title="删除参考资料"></el-button>
                         </div>
                     </template>
                     <el-button type="primary" size="small" icon="el-icon-plus" @click="addLink" :disabled="addDisabled">添加</el-button>
                 </el-form-item>
 
-                <template v-if="isEditor && isEdit">
+                <template v-if="isEditor && isEditmode">
                     <el-form-item label="置顶显示">
                         <el-radio-group size="small" v-model="form.is_top">
                             <el-radio-button :label="0">否</el-radio-button>
@@ -64,10 +64,10 @@
                         </div>
                     </el-form-item>
                     <el-form-item label="海报">
-                        <img-upload :data="form.banner" @update="bannerChange"></img-upload>
+                        <img-upload :data="form.banner" filed="banner" @update="setMeta"></img-upload>
                     </el-form-item>
                     <el-form-item label="图片">
-                        <img-upload :data="form.img" @update="imgChange"></img-upload>
+                        <img-upload :data="form.img" filed="img" @update="setMeta"></img-upload>
                     </el-form-item>
                     <el-form-item label="备注">
                         <el-input v-model="form.remark" size="medium" placeholder="请输入备注"></el-input>
@@ -90,142 +90,103 @@
     import { addCalendar, putCalendar, delCalendar } from "@/service/calendar.js";
     import User from "@jx3box/jx3box-common/js/user.js";
     import img_upload from "./img_upload.vue";
+    import calendar_highlights from '@/assets/data/calendar_highlights.json'
+    const default_data = {
+        year: "",
+        month: "",
+        date: "",
+        type: 1,
+        desc: "",
+        client: "std",
+        link: [],
+
+        // 编辑字段
+        is_top: 0,
+        level: 0,
+        banner: "",
+        bgcolor: "",
+        color: "",
+        img: "",
+        remark: "",
+        style: "",
+    };
     export default {
         name: "calendar_dialog",
         components: {
             "img-upload": img_upload,
         },
-        props: {
-            value: {
-                type: Boolean,
-                default: false,
-            },
-            dateObj: {
-                type: Object,
-                default: () => {},
-            },
-            selected: {
-                type: Object,
-                default: () => {},
-            },
-        },
+        props: ["value", "dateObj", "selected", "mode"],
         data: () => ({
             form: {
-                year: "",
-                month: "",
-                date: "",
-                type: 1,
-                desc: "",
-                client : 'std',
-                link: [],
-
-                // 编辑字段
-                is_top: 0,
-                level: 0,
-                banner: "",
-                bgcolor: "",
-                color: "",
-                img: "",
-                remark: "",
-                style: "",
+                ...Object.assign({}, default_data),
             },
             dateError: "",
             descError: "",
             loading: false,
-            predefineColors: [
-                "#ff4500",
-                "#ff8c00",
-                "#ffd700",
-                "#90ee90",
-                "#00ced1",
-                "#1e90ff",
-                "#c71585",
-                "rgba(255, 69, 0, 0.68)",
-                "rgb(255, 120, 0)",
-                "hsv(51, 100, 98)",
-                "hsva(120, 40, 94, 0.5)",
-                "hsl(181, 100%, 37%)",
-                "hsla(209, 100%, 56%, 0.73)",
-                "#c7158577",
-            ],
+            predefineColors: calendar_highlights,
         }),
         computed: {
+            // 编辑模式
+            isEditmode() {
+                return this.mode == "update";
+            },
+
             // 标题
             title() {
-                return this.selected && Object.keys(this.selected).length ? "编辑" : "新增";
+                return this.isEditmode ? "编辑" : "新增";
             },
-            // 编辑模式
-            isEdit() {
-                return this.selected && Object.keys(this.selected).length;
-            },
+
+            // 最大年份
             maxYear() {
                 return new Date().getFullYear() + 1;
             },
+            // 参考资料最大数
             addDisabled() {
-                return this.form?.link?.length >= 5;
+                return this.form?.link?.length >= 10;
             },
+
+            // 编辑权限
             isEditor() {
                 return User.isEditor();
             },
         },
         watch: {
-            dateObj: {
-                deep: true,
-                immediate: true,
-                handler(val) {
-                    if (Object.keys(val).length) {
-                        this.form = {
-                            ...this.form,
-                            year: val?.year || "",
-                            month: val?.month || "",
-                            date: val?.date || "",
-                        };
-                    }
-                },
-            },
-            value(val) {
-                if (val) {
-                    if (this.selected && Object.keys(this.selected).length) {
-                        this.form = this.selected;
-                    } else {
-                        this.form = {
-                            ...this.form,
-                            year: this.dateObj?.year || "",
-                            month: this.dateObj?.month || "",
-                            date: this.dateObj?.date || "",
-                        };
-                    }
-                }
-            },
+            // 更新数据
             selected: {
                 deep: true,
                 immediate: true,
                 handler(val) {
-                    if (val && Object.keys(val).length) {
+                    if (val) {
                         this.form = val;
+                        if (!this.form.link) {
+                            this.form.link = [];
+                            this.form.link.push({
+                                label: "官网新闻",
+                                url: val.link_temp,
+                            });
+                        }
+                    } else {
+                        this.form = Object.assign(this.dateObj, default_data);
                     }
                 },
             },
         },
         methods: {
+            // 链接模块
+            // =======================
             addLink() {
-                this.form.link.push({
-                    link: "",
+                this.form?.link?.push({
+                    url: "",
                     label: "",
                     id: +new Date(),
                 });
             },
             removeLink(index) {
-                this.form.link.splice(index, 1);
+                this.form?.link?.splice(index, 1);
             },
-            cancel() {
-                this.$emit("input", false);
 
-                this.form = this.$options.data().form;
-
-                this.dateError = "";
-                this.descError = "";
-            },
+            // 表单校验
+            // =======================
             validate() {
                 const { year, month, date, desc } = this.form;
                 if (!year) {
@@ -241,61 +202,44 @@
 
                 this.descError = !desc ? "请输入事件描述" : "";
             },
+
+            // 表单操作
+            // =======================
+            reset(){
+                this.$emit("input", false);
+                this.form = ''
+                this.dateError = "";
+                this.descError = "";
+            },
             confirm() {
                 this.validate();
                 if (this.descError || this.dateError) return;
                 this.loading = true;
 
-                const fn = Object.keys(this.selected).length ? this.put : this.post;
+                const fn = this.isEditmode ? this.put : this.post;
 
                 fn().then(() => {
+                    this.reset()
+                }).finally(() => {
                     this.loading = false;
-                });
+                })
             },
+
+            // 数据发送
+            // =======================
             post() {
-                let { year, month, date, desc, type, link } = this.form;
-                link = link.map((item) => {
-                    return {
-                        label: item.label,
-                        link: item.link,
-                    };
-                });
-                return addCalendar({ year, month, date }, { desc, type, link })
+                return addCalendar({ year, month, date }, this.form)
                     .then((res) => {
                         this.$emit("update", res);
-                        this.cancel();
+                        this.reset();
                     })
-                    .catch((err) => {
-                        console.log(err);
-                    });
             },
             put() {
-                let { link } = this.form;
-                link = link.map((item) => {
-                    return {
-                        label: item.label,
-                        link: item.link,
-                    };
-                });
-                return putCalendar(this.selected.id, {
-                    ...this.form,
-                    link,
-                })
+                return putCalendar(this.selected.id, this.form)
                     .then((res) => {
                         this.$emit("update");
-                        this.cancel();
+                        this.reset();
                     })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-            },
-            // 海报变更
-            bannerChange(banner) {
-                this.form.banner = banner;
-            },
-            // 图片变更
-            imgChange(img) {
-                this.form.img = img;
             },
             del() {
                 delCalendar(this.selected.id).then(() => {
@@ -321,6 +265,13 @@
                     this.$emit("del", this.selected.id);
                 });
             },
+
+            // 其它
+            // =======================
+            setMeta({key,val}){
+                this.form[key] = val
+            },
+            
         },
     };
 </script>

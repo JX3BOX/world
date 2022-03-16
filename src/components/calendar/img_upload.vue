@@ -24,7 +24,7 @@ import { showBanner } from "@jx3box/jx3box-common/js/utils";
 
 export default {
     name: "post_banner",
-    props: ["data"],
+    props: ['filed',"data"],
     data() {
         return {
             banner: this.data,
@@ -40,7 +40,10 @@ export default {
             this.banner = newval
         },
         banner: function(newval) {
-            this.$emit("update", newval);
+            this.$emit("update", {
+                key : this.filed,
+                val : newval
+            });
         },
     },
     methods: {

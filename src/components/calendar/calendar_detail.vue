@@ -42,7 +42,7 @@
             </section>
         </main>
 
-        <calendar-dialog v-model="showAdd" :date-obj="dateObj" :selected="selected" @update="update" @del="del"></calendar-dialog>
+        <!-- <calendar-dialog v-model="visible" :dateObj="dateObj" :selected="selected" @update="update" @del="del" :mode="mode"></calendar-dialog> -->
     </div>
 </template>
 
@@ -61,14 +61,18 @@
             },
         },
         components: {
-            "calendar-dialog": calendar_dialog,
+            // "calendar-dialog": calendar_dialog,
             "calendar-detail-item": calendar_detail_item,
         },
         data: () => ({
-            showAdd: false,
+            // 数据列表
             loading: false,
             list: [],
-            selected: {},
+
+            // 数据设置
+            visible: false,
+            selected: "",
+            mode: "",
         }),
         computed: {
             currentDate() {
@@ -126,13 +130,14 @@
             // ======================
             // 添加
             add() {
-                this.selected = {};
-                this.showAdd = true;
+                this.visible = true;
+                this.mode = "create";
             },
             // 编辑
             edit(item) {
+                this.visible = true;
+                this.mode = "update";
                 this.selected = item;
-                this.showAdd = true;
             },
             // 提交
             update(res) {
@@ -152,13 +157,13 @@
                         message: "请耐心等待审核",
                     });
                 }
-                this.showAdd = false;
+                this.visible = false;
             },
             // 删除
             del(id) {
                 delCalendar(id).then(() => {
                     this.list = this.list.filter((record) => record.id !== id);
-                    this.showAdd = false;
+                    this.visible = false;
                 });
             },
         },
