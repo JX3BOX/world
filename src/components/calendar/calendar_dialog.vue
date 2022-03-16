@@ -13,10 +13,28 @@
                     </div>
                 </el-form-item>
                 <el-form-item label="类型" required>
-                    <el-radio-group size="small" v-model="form.type">
-                        <el-radio-button :label="1">事件</el-radio-button>
-                        <el-radio-button :label="2">活动</el-radio-button>
-                    </el-radio-group>
+                    <div class="m-type">
+                        <el-radio-group size="small" v-model="form.type">
+                            <el-radio-button :label="1">事件</el-radio-button>
+                            <el-radio-button :label="2">活动</el-radio-button>
+                        </el-radio-group>
+                        <!-- 仅在活动时显示 START -->
+                        <div class="m-type-icon" v-show="form.type === 2">
+                            <el-input
+                                v-model="form.icon"
+                                placeholder="图标ID"
+                                :minlength="1"
+                                :maxlength="10"
+                                :max="30000"
+                                :min="0"
+                            >
+                                <template slot="prepend">
+                                    <img class="u-icon" :src="iconLink(form.icon)" />
+                                </template>
+                            </el-input>
+                        </div>
+                        <!-- 仅在活动时显示 END -->
+                    </div>
                 </el-form-item>
                 <el-form-item label="描述" required :error="descError">
                     <el-input type="textarea" v-model="form.desc" :rows="3" placeholder="输入事件描述"></el-input>
@@ -29,7 +47,7 @@
                 </el-form-item>
                 <el-form-item label="参考资料">
                     <template v-for="(item, index) in form.link">
-                        <div class="m-links" :key="item.id">
+                        <div class="m-links" :key="item.id || index">
                             <el-input class="u-link-item" v-model="item.label" placeholder="请输入标题"></el-input>
                             <el-input class="u-link-item" v-model="item.url" placeholder="请输入链接"></el-input>
                             <el-button class="u-del-icon" type="text" icon="el-icon-circle-close" @click="removeLink(index)" title="删除参考资料"></el-button>
@@ -91,6 +109,8 @@
     import User from "@jx3box/jx3box-common/js/user.js";
     import img_upload from "./img_upload.vue";
     import calendar_highlights from "@/assets/data/calendar_highlights.json";
+    import { iconLink } from '@jx3box/jx3box-common/js/utils';
+
     const default_data = {
         year: 2022,
         month: 3,
@@ -175,6 +195,17 @@
                     }
                 },
             },
+            // 更新form日期
+            dateObj: {
+                deep: true,
+                handler(val) {
+                    if (val) {
+                        for (const key in val) {
+                            this.form[key] = val[key]
+                        }
+                    }
+                }
+            }
         },
         methods: {
             // 链接模块
@@ -281,6 +312,11 @@
             setMeta({ key, val }) {
                 this.form[key] = val;
             },
+            iconLink,
         },
     };
 </script>
+
+<style lang="less">
+@import "~@/assets/css/calendar/calendar_dialog.less";
+</style>

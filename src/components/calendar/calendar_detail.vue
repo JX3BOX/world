@@ -42,7 +42,7 @@
             </section>
         </main>
 
-        <calendar-dialog v-model="visible" :dateObj="dateObj" :selected="selected" @update="update" @del="del" :mode="mode"></calendar-dialog>
+        <calendar-dialog v-model="visible" :date-obj="dateObj" :selected="selected" @update="update" @del="del" :mode="mode"></calendar-dialog>
     </div>
 </template>
 

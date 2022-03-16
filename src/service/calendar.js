@@ -18,10 +18,9 @@ function getCalendar(params) {
     return $cms().get("/api/cms/calendar/archive" + url);
 }
 
-function addCalendar(params, data) {
-    const url = genUrl(params);
-
-    return $cms().post("/api/cms/calendar/archive" + url, data);
+function addCalendar(data) {
+    const url = genUrl(data);
+    return $cms().post('/api/cms/calendar/archive' + url, data)
 }
 
 function putCalendar(id, data) {
