@@ -136,7 +136,7 @@
             },
             // 提交
             update(res) {
-                let { data } = res?.data;
+                let { data } = res?.data || {};
 
                 if (data) {
                     data.desc = `(待审核) ${data.desc}`;
@@ -152,9 +152,6 @@
                         message: "请耐心等待审核",
                     });
                 }
-                // this.loadData().then(() => {
-                //     this.$emit("update");
-                // });
                 this.showAdd = false;
             },
             // 删除
