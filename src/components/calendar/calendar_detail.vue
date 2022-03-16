@@ -139,12 +139,14 @@
                 let { data } = res?.data || {};
 
                 if (data) {
-                    data.desc = `(待审核) ${data.desc}`;
-                    data.user_info = {
-                        display_name: User.getInfo().name,
-                        user_avatar: User.getInfo().avatar,
-                    };
-                    this.list.unshift(data);
+                    if (this.isSameDate(data, this.dateObj)) {
+                        data.desc = `(待审核) ${data.desc}`;
+                        data.user_info = {
+                            display_name: User.getInfo().name,
+                            user_avatar: User.getInfo().avatar,
+                        };
+                        this.list.unshift(data);
+                    }
 
                     this.$notify({
                         type: "success",
@@ -161,6 +163,10 @@
                     this.showAdd = false;
                 });
             },
+
+            isSameDate(source, target) {
+                return (source.year == target.year && source.month == target.month && source.date == target.date)
+            }
         },
     };
 </script>
