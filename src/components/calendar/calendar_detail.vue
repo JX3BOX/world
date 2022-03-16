@@ -42,7 +42,7 @@
             </section>
         </main>
 
-        <!-- <calendar-dialog v-model="visible" :dateObj="dateObj" :selected="selected" @update="update" @del="del" :mode="mode"></calendar-dialog> -->
+        <calendar-dialog v-model="visible" :dateObj="dateObj" :selected="selected" @update="update" @del="del" :mode="mode"></calendar-dialog>
     </div>
 </template>
 
@@ -61,7 +61,7 @@
             },
         },
         components: {
-            // "calendar-dialog": calendar_dialog,
+            "calendar-dialog": calendar_dialog,
             "calendar-detail-item": calendar_detail_item,
         },
         data: () => ({
@@ -132,6 +132,7 @@
             add() {
                 this.visible = true;
                 this.mode = "create";
+                this.selected = ''
             },
             // 编辑
             edit(item) {

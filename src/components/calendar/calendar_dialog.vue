@@ -90,25 +90,28 @@
     import { addCalendar, putCalendar, delCalendar } from "@/service/calendar.js";
     import User from "@jx3box/jx3box-common/js/user.js";
     import img_upload from "./img_upload.vue";
-    import calendar_highlights from '@/assets/data/calendar_highlights.json'
+    import calendar_highlights from "@/assets/data/calendar_highlights.json";
     const default_data = {
-        year: "",
-        month: "",
-        date: "",
+        year: 2022,
+        month: 3,
+        date: 16,
         type: 1,
         desc: "",
-        client: "std",
+        client: location.href.includes("origin") ? "origin" : "std",
         link: [],
 
         // 编辑字段
         is_top: 0,
         level: 0,
+        remark: "",
+
+        // 海报字段
         banner: "",
         bgcolor: "",
         color: "",
         img: "",
-        remark: "",
         style: "",
+        icon : '',
     };
     export default {
         name: "calendar_dialog",
@@ -118,7 +121,7 @@
         props: ["value", "dateObj", "selected", "mode"],
         data: () => ({
             form: {
-                ...Object.assign({}, default_data),
+                ...Object.assign({}, default_data, this.dateObj),
             },
             dateError: "",
             descError: "",
@@ -166,7 +169,7 @@
                             });
                         }
                     } else {
-                        this.form = Object.assign(this.dateObj, default_data);
+                        this.form = Object.assign({}, default_data, this.dateObj);
                     }
                 },
             },
@@ -205,11 +208,14 @@
 
             // 表单操作
             // =======================
-            reset(){
+            reset() {
                 this.$emit("input", false);
-                this.form = ''
+                this.form = "";
                 this.dateError = "";
                 this.descError = "";
+            },
+            cancel() {
+                this.$emit("input", false);
             },
             confirm() {
                 this.validate();
@@ -218,28 +224,28 @@
 
                 const fn = this.isEditmode ? this.put : this.post;
 
-                fn().then(() => {
-                    this.reset()
-                }).finally(() => {
-                    this.loading = false;
-                })
+                fn()
+                    .then(() => {
+                        this.reset();
+                    })
+                    .finally(() => {
+                        this.loading = false;
+                    });
             },
 
             // 数据发送
             // =======================
             post() {
-                return addCalendar({ year, month, date }, this.form)
-                    .then((res) => {
-                        this.$emit("update", res);
-                        this.reset();
-                    })
+                return addCalendar({ year, month, date }, this.form).then((res) => {
+                    this.$emit("update", res);
+                    this.reset();
+                });
             },
             put() {
-                return putCalendar(this.selected.id, this.form)
-                    .then((res) => {
-                        this.$emit("update");
-                        this.reset();
-                    })
+                return putCalendar(this.selected.id, this.form).then((res) => {
+                    this.$emit("update");
+                    this.reset();
+                });
             },
             del() {
                 delCalendar(this.selected.id).then(() => {
@@ -268,10 +274,9 @@
 
             // 其它
             // =======================
-            setMeta({key,val}){
-                this.form[key] = val
+            setMeta({ key, val }) {
+                this.form[key] = val;
             },
-            
         },
     };
 </script>

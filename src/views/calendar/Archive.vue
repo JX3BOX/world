@@ -35,7 +35,7 @@
             </section>
         </main>
         <aside class="m-calendar-aside">
-            <calendar-detail :date-obj="current" @update="update"></calendar-detail>
+            <calendar-detail :date-obj="current"></calendar-detail>
         </aside>
     </div>
 </template>
@@ -233,9 +233,6 @@ export default {
                 })
             })
         },
-        update() {
-            this.loadCalendar()
-        }
     }
 };
 </script>
