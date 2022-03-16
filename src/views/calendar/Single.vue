@@ -4,7 +4,8 @@
             {{ today }}
             <header class="m-single-title m-history-header"><i :class="today.type == 1 ? 'el-icon-collection-tag' : 'el-icon-s-flag'"></i>{{ today.type == 1 ? "事件" : "活动" }}记录</header>
             <div class="m-today-content">
-                {{ today.desc }}
+                <i class="u-client" :class="today.client">{{ today.client == "std" ? "正式服" : "怀旧服" }}</i
+                >{{ today.desc }}
             </div>
             <div class="m-today-meta">
                 <!-- TODO:作者信息 -->
@@ -52,8 +53,8 @@
             id() {
                 return this.$route.params.id;
             },
-            author(){
-                return this.today.user_id
+            author() {
+                return this.today.user_id;
             },
             params({ today }) {
                 return today
