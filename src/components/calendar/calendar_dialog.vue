@@ -14,13 +14,13 @@
                 </el-form-item>
                 <el-form-item label="类型" required>
                     <div class="m-type">
-                        <el-radio-group size="small" v-model="form.type">
+                        <el-radio-group size="small" v-model.number="form.type">
                             <el-radio-button :label="1">事件</el-radio-button>
                             <el-radio-button :label="2">活动</el-radio-button>
                         </el-radio-group>
                         <!-- 仅在活动时显示 START -->
                         <div class="m-type-icon" v-show="form.type === 2">
-                            <el-input v-model="form.icon" placeholder="图标ID" :minlength="1" :maxlength="10" :max="30000" :min="0">
+                            <el-input size="small" v-model.number="form.icon" placeholder="图标ID" :minlength="1" :maxlength="10" :max="30000" :min="0">
                                 <template slot="prepend">
                                     <img class="u-icon" :src="iconLink(form.icon)" />
                                 </template>
@@ -36,6 +36,7 @@
                     <el-radio-group size="small" v-model="form.client">
                         <el-radio-button label="std">正式服</el-radio-button>
                         <el-radio-button label="origin">怀旧服</el-radio-button>
+                        <el-radio-button label="all" v-if="form.type == 1">双端</el-radio-button>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="参考资料">
@@ -51,13 +52,13 @@
 
                 <template v-if="isEditor && isEditmode">
                     <el-form-item label="置顶显示">
-                        <el-radio-group size="small" v-model="form.is_top">
+                        <el-radio-group size="small" v-model.number="form.is_top">
                             <el-radio-button :label="0">否</el-radio-button>
                             <el-radio-button :label="1">是</el-radio-button>
                         </el-radio-group>
                     </el-form-item>
                     <el-form-item label="重要级别">
-                        <el-input-number v-model="form.level" size="medium"></el-input-number>
+                        <el-input-number v-model.number="form.level" size="medium" :min="0" :max="5"></el-input-number>
                     </el-form-item>
                     <el-form-item label="样式">
                         <div class="m-style">
@@ -98,219 +99,241 @@
 </template>
 
 <script>
-import { addCalendar, putCalendar, delCalendar } from "@/service/calendar.js";
-import User from "@jx3box/jx3box-common/js/user.js";
-import img_upload from "./img_upload.vue";
-import calendar_highlights from "@/assets/data/calendar_highlights.json";
-import { iconLink } from "@jx3box/jx3box-common/js/utils";
+    import { addCalendar, putCalendar, delCalendar, manageCalendar } from "@/service/calendar.js";
+    import User from "@jx3box/jx3box-common/js/user.js";
+    import img_upload from "./img_upload.vue";
+    import calendar_highlights from "@/assets/data/calendar_highlights.json";
+    import { iconLink } from "@jx3box/jx3box-common/js/utils";
 
-const default_data = {
-    year: 2022,
-    month: 3,
-    date: 16,
-    type: 1,
-    desc: "",
-    client: location.href.includes("origin") ? "origin" : "std",
-    link: [],
+    const default_data = {
+        year: 2022,
+        month: 3,
+        date: 16,
+        type: 1,
+        desc: "",
+        client: location.href.includes("origin") ? "origin" : "std",
+        link: [],
 
-    // 编辑字段
-    is_top: 0,
-    level: 0,
-    remark: "",
+        // 编辑字段
+        is_top: 0,
+        level: 0,
+        remark: "",
 
-    // 海报字段
-    banner: "",
-    bgcolor: "",
-    color: "",
-    img: "",
-    style: "",
-    icon: "",
-};
-export default {
-    name: "calendar_dialog",
-    components: {
-        "img-upload": img_upload,
-    },
-    props: ["value", "dateObj", "selected", "mode"],
-    data: function () {
-        return {
-            form: {
-                ...Object.assign({}, default_data, this.dateObj),
+        // 海报字段
+        banner: "",
+        bgcolor: "",
+        color: "",
+        img: "",
+        style: "",
+        icon: 0,
+    };
+    export default {
+        name: "calendar_dialog",
+        components: {
+            "img-upload": img_upload,
+        },
+        props: ["value", "dateObj", "selected", "mode", "isSuper"],
+        data: function () {
+            return {
+                form: {
+                    ...Object.assign({}, default_data, this.dateObj),
+                },
+                dateError: "",
+                descError: "",
+                loading: false,
+                predefineColors: calendar_highlights,
+            };
+        },
+        computed: {
+            // 编辑模式
+            isEditmode() {
+                return this.mode == "update";
             },
-            dateError: "",
-            descError: "",
-            loading: false,
-            predefineColors: calendar_highlights,
-        };
-    },
-    computed: {
-        // 编辑模式
-        isEditmode() {
-            return this.mode == "update";
-        },
 
-        // 标题
-        title() {
-            return this.isEditmode ? "编辑" : "新增";
-        },
+            // 标题
+            title() {
+                return this.isEditmode ? "编辑" : "新增";
+            },
 
-        // 最大年份
-        maxYear() {
-            return new Date().getFullYear() + 1;
-        },
-        // 参考资料最大数
-        addDisabled() {
-            return this.form?.link?.length >= 10;
-        },
+            // 最大年份
+            maxYear() {
+                return new Date().getFullYear() + 1;
+            },
+            // 参考资料最大数
+            addDisabled() {
+                return this.form?.link?.length >= 10;
+            },
 
-        // 编辑权限
-        isEditor() {
-            return User.isEditor();
+            // 编辑权限
+            isEditor() {
+                return User.isEditor();
+            },
         },
-    },
-    watch: {
-        // 更新数据
-        selected: {
-            deep: true,
-            immediate: true,
-            handler(val) {
-                if (val) {
-                    this.form = val;
-                    if (!this.form.link) {
-                        this.form.link = [];
-                        this.form.link.push({
-                            label: "官网新闻",
-                            url: val.link_temp,
-                        });
+        watch: {
+            // 更新数据
+            selected: {
+                deep: true,
+                immediate: true,
+                handler(val) {
+                    if (val) {
+                        this.form = val;
+                        if (!this.form.link) {
+                            this.form.link = [];
+                            this.form.link.push({
+                                label: "官网新闻",
+                                url: val.link_temp,
+                            });
+                        }
+                    } else {
+                        this.form = Object.assign({}, default_data, this.dateObj);
                     }
+                },
+            },
+            // 更新form日期
+            dateObj: {
+                deep: true,
+                handler(val) {
+                    if (val) {
+                        this.form = {
+                            ...this.form,
+                            ...(val || {}),
+                        };
+                    }
+                },
+            },
+        },
+        methods: {
+            // 链接模块
+            // =======================
+            addLink() {
+                this.form?.link?.push({
+                    url: "",
+                    label: "",
+                    id: +new Date(),
+                });
+            },
+            removeLink(index) {
+                this.form?.link?.splice(index, 1);
+            },
+
+            // 表单校验
+            // =======================
+            validate() {
+                if (!this.form) return;
+
+                const { year, month, date, desc } = this.form;
+                if (!year) {
+                    this.dateError = "请输入年份";
                 } else {
-                    this.form = Object.assign({}, default_data, this.dateObj);
+                    this.dateError = "";
+                    if (!month) {
+                        this.dateError = "请输入月份";
+                    } else {
+                        this.dateError = !date ? "请输入日期" : "";
+                    }
                 }
-            },
-        },
-        // 更新form日期
-        dateObj: {
-            deep: true,
-            handler(val) {
-                if (val) {
-                    this.form = {
-                        ...this.form,
-                        ...(val || {}),
-                    };
-                }
-            },
-        },
-    },
-    methods: {
-        // 链接模块
-        // =======================
-        addLink() {
-            this.form?.link?.push({
-                url: "",
-                label: "",
-                id: +new Date(),
-            });
-        },
-        removeLink(index) {
-            this.form?.link?.splice(index, 1);
-        },
 
-        // 表单校验
-        // =======================
-        validate() {
-            if (!this.form) return;
+                this.descError = !desc ? "请输入事件描述" : "";
+            },
 
-            const { year, month, date, desc } = this.form;
-            if (!year) {
-                this.dateError = "请输入年份";
-            } else {
+            // 表单操作
+            // =======================
+            reset() {
+                this.$emit("input", false);
+                this.form = Object.assign({}, default_data, this.dateObj);
                 this.dateError = "";
-                if (!month) {
-                    this.dateError = "请输入月份";
-                } else {
-                    this.dateError = !date ? "请输入日期" : "";
-                }
-            }
+                this.descError = "";
+            },
+            cancel() {
+                this.$emit("input", false);
+            },
+            confirm() {
+                this.validate();
+                if (this.descError || this.dateError) return;
+                this.loading = true;
 
-            this.descError = !desc ? "请输入事件描述" : "";
-        },
+                const fn = this.isEditmode ? this.put : this.post;
 
-        // 表单操作
-        // =======================
-        reset() {
-            this.$emit("input", false);
-            this.form = Object.assign({}, default_data, this.dateObj);
-            this.dateError = "";
-            this.descError = "";
-        },
-        cancel() {
-            this.$emit("input", false);
-        },
-        confirm() {
-            this.validate();
-            if (this.descError || this.dateError) return;
-            this.loading = true;
+                fn()
+                    .then(() => {
+                        this.reset();
+                    })
+                    .finally(() => {
+                        this.loading = false;
+                    });
+            },
 
-            const fn = this.isEditmode ? this.put : this.post;
-
-            fn()
-                .then(() => {
+            // 数据发送
+            // =======================
+            post() {
+                return addCalendar(this.form).then((res) => {
+                    this.$notify({
+                        title: "提交成功",
+                        message: "请耐心等待审核",
+                        type: "success",
+                    });
+                    this.$emit("update", res);
                     this.reset();
-                })
-                .finally(() => {
-                    this.loading = false;
                 });
-        },
+            },
+            put() {
+                let action = this.isSuper ? manageCalendar : putCalendar;
+                return action(this.selected.id, this.form)
+                    .then((res) => {
+                        this.$emit("update");
+                        this.reset();
+                    })
+                    .then(() => {
+                        if (this.isSuper) {
+                            this.$notify({
+                                title: "操作成功",
+                                message: "日历记录更新成功",
+                                type: "success",
+                            });
+                        } else {
+                            this.$notify({
+                                title: "提交成功",
+                                message: "请等待重新审核",
+                                type: "success",
+                            });
+                        }
+                    });
+            },
+            del() {
+                delCalendar(this.selected.id).then(() => {
+                    this.$emit("del", this.selected.id);
 
-        // 数据发送
-        // =======================
-        post() {
-            return addCalendar(this.form).then((res) => {
-                this.$emit("update", res);
-                this.reset();
-            });
-        },
-        put() {
-            return putCalendar(this.selected.id, this.form).then((res) => {
-                this.$emit("update");
-                this.reset();
-            });
-        },
-        del() {
-            delCalendar(this.selected.id).then(() => {
-                this.$emit("del", this.selected.id);
-
-                this.$notify({
-                    type: "success",
-                    title: "删除成功",
-                    message: "日历记录已删除",
+                    this.$notify({
+                        type: "success",
+                        title: "删除成功",
+                        message: "日历记录已删除",
+                    });
                 });
-            });
-        },
-        recheck() {
-            putCalendar(this.selected.id, {
-                status: 0,
-            }).then(() => {
-                this.$notify({
-                    type: "success",
-                    title: "操作成功",
-                    message: "日历记录已设为待审核",
+            },
+            recheck() {
+                manageCalendar(this.selected.id, {
+                    status: 0,
+                }).then(() => {
+                    this.$notify({
+                        type: "success",
+                        title: "操作成功",
+                        message: "日历记录已设为待审核",
+                    });
+
+                    this.$emit("del", this.selected.id);
                 });
+            },
 
-                this.$emit("del", this.selected.id);
-            });
+            // 其它
+            // =======================
+            setMeta({ key, val }) {
+                this.form[key] = val;
+            },
+            iconLink,
         },
-
-        // 其它
-        // =======================
-        setMeta({ key, val }) {
-            this.form[key] = val;
-        },
-        iconLink,
-    },
-};
+    };
 </script>
 
 <style lang="less">
-@import "~@/assets/css/calendar/calendar_dialog.less";
+    @import "~@/assets/css/calendar/calendar_dialog.less";
 </style>

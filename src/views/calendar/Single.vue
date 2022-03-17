@@ -2,11 +2,10 @@
     <div class="m-calendar-single">
         <section class="m-actions">
             <el-button icon="el-icon-arrow-left" @click="goBack" size="small">返回</el-button>
-            <el-button icon="el-icon-setting" type="primary" size="small" @click="manage" v-if="isEditor">管理</el-button>
-            <el-button icon="el-icon-edit" type="primary" size="small" @click="manage" v-else-if="isCreator">编辑</el-button>
+            <el-button icon="el-icon-setting" type="primary" size="small" @click="manage(true)" v-if="isEditor">管理</el-button>
+            <el-button icon="el-icon-edit" type="primary" size="small" @click="manage(false)" v-else-if="isCreator">编辑</el-button>
         </section>
         <section class="m-single-block m-today" v-loading="todayLoading">
-            <!-- {{ today.desc }} -->
             <header class="m-single-title m-history-header"><i :class="today.type == 1 ? 'el-icon-collection-tag' : 'el-icon-s-flag'"></i>{{ today.type == 1 ? "事件" : "活动" }}记录</header>
             <div class="m-today-content">
                 <i class="u-client" :class="today.client">{{ today.client == "std" ? "正式服" : "怀旧服" }}</i
@@ -28,8 +27,14 @@
             <header class="m-single-title m-history-header"><i class="el-icon-connection"></i>参考资料</header>
             <template v-if="references && references.length">
                 <div class="m-reference-item" v-for="(reference, index) in references" :key="index">
-                    <label class="u-index">{{ index + 1 }}.</label>
-                    <a class="u-link" :href="reference.url" target="_blank">{{ reference.label }} <i class="el-icon-link"></i></a>
+                    <a class="u-item u-link" :href="reference.url" target="_blank" v-if="reference.url">
+                        <label class="u-index">{{ index + 1 }}.</label>
+                        <span class="u-label">{{ reference.label }} <i class="el-icon-link"></i></span>
+                    </a>
+                    <span class="u-item" v-else>
+                        <label class="u-index">{{ index + 1 }}.</label>
+                        <span class="u-label">{{ reference.label }}</span>
+                    </span>
                 </div>
             </template>
             <div v-else class="u-null"><i class="el-icon-warning-outline"></i>暂时没有任何参考资料</div>
@@ -41,8 +46,6 @@
                 <el-timeline>
                     <el-timeline-item v-for="(timeline, index) in timelineData" :key="index" :timestamp="index" placement="top">
                         <div class="m-history-item" v-for="item in timeline" :key="item.id">
-                            <!-- <time class="u-time">{{ formatDate(item) }}</time>
-                            <router-link :to="'/detail/' + item.id" class="u-desc">{{ item.desc }} <i class="el-icon-link"></i></router-link> -->
                             <calendar-detail-item :type="item.type" :data="item"></calendar-detail-item>
                         </div>
                     </el-timeline-item>
@@ -54,160 +57,162 @@
 
         <Comment class="m-comment" :id="id" category="calendar" />
 
-        <calendar-dialog v-model="visible" :date-obj="dateObj" :selected="today" mode="update"></calendar-dialog>
+        <calendar-dialog v-model="visible" :date-obj="dateObj" :selected="today" mode="update" :isSuper="isSuper"></calendar-dialog>
     </div>
 </template>
 
 <script>
-import { getDetail, getHistory } from "@/service/calendar.js";
-import { postStat } from "@jx3box/jx3box-common/js/stat";
-import { showAvatar, authorLink } from '@jx3box/jx3box-common/js/utils';
-import { showTime } from '@jx3box/jx3box-common/js/moment';
-import cloneDeep from 'lodash/cloneDeep';
-import User from "@jx3box/jx3box-common/js/user.js";
+    import { getDetail, getHistory } from "@/service/calendar.js";
+    import { postStat } from "@jx3box/jx3box-common/js/stat";
+    import { showAvatar, authorLink } from "@jx3box/jx3box-common/js/utils";
+    import { showTime } from "@jx3box/jx3box-common/js/moment";
+    import cloneDeep from "lodash/cloneDeep";
+    import User from "@jx3box/jx3box-common/js/user.js";
 
-import Comment from "@jx3box/jx3box-comment-ui/src/Comment.vue";
-import calendar_dialog from '@/components/calendar/calendar_dialog.vue';
-import calendar_detail_item from '@/components/calendar/calendar_detail_item.vue';
-export default {
-    name: "SingleCalendar",
-    components: {
-        Comment,
-        'calendar-dialog': calendar_dialog,
-        'calendar-detail-item': calendar_detail_item,
-    },
-    data() {
-        return {
-            today: "",
-            history: [],
-            todayLoading: false,
-            historyLoading: false,
-
-            // 弹窗
-            visible: false
-        };
-    },
-    computed: {
-        id() {
-            return this.$route.params.id;
+    import Comment from "@jx3box/jx3box-comment-ui/src/Comment.vue";
+    import calendar_dialog from "@/components/calendar/calendar_dialog.vue";
+    import calendar_detail_item from "@/components/calendar/calendar_detail_item.vue";
+    export default {
+        name: "SingleCalendar",
+        components: {
+            Comment,
+            "calendar-dialog": calendar_dialog,
+            "calendar-detail-item": calendar_detail_item,
         },
-        author() {
-            return this.today.user_id;
-        },
-        params({ today }) {
-            return today
-                ? {
-                      month: today.month,
-                      date: today.date,
-                  }
-                : "";
-        },
-        dateObj() {
+        data() {
             return {
-                year: this.today.year,
-                month: this.today.month,
-                date: this.today.date,
-            }
-        },
-        references() {
-            let arr = [];
-            const { link, link_temp } = this.today;
+                today: "",
+                history: [],
+                todayLoading: false,
+                historyLoading: false,
 
-            link && link.length && (arr = cloneDeep(link))
-
-            if (link_temp && !arr.some(item => item.url === link_temp)) {
-                arr.push({
-                    label: '官方新闻',
-                    url: link_temp
-                })
-            }
-            return arr
+                // 弹窗
+                visible: false,
+                isSuper : false,
+            };
         },
-        timelineData() {
-            let history;
-            history = this.history?.reduce((acc, obj) => {
-                const key = obj.year;
-                if (!acc[key]) {
-                    acc[key] = []
+        computed: {
+            id() {
+                return this.$route.params.id;
+            },
+            author() {
+                return this.today.user_id;
+            },
+            params({ today }) {
+                return today
+                    ? {
+                          month: today.month,
+                          date: today.date,
+                      }
+                    : "";
+            },
+            dateObj() {
+                return {
+                    year: this.today.year,
+                    month: this.today.month,
+                    date: this.today.date,
+                };
+            },
+            references() {
+                let arr = [];
+                const { link, link_temp } = this.today;
+
+                link && link.length && (arr = cloneDeep(link));
+
+                if (link_temp && !arr.some((item) => item.url === link_temp)) {
+                    arr.push({
+                        label: "官方新闻",
+                        url: link_temp,
+                    });
                 }
-                acc[key].push(obj)
+                return arr;
+            },
+            timelineData() {
+                let history;
+                history = this.history?.reduce((acc, obj) => {
+                    const key = obj.year;
+                    if (!acc[key]) {
+                        acc[key] = [];
+                    }
+                    acc[key].push(obj);
 
-                return acc
-            }, {})
+                    return acc;
+                }, {});
 
-            return history
-        },
-        isEditor() {
-            return User.isEditor()
-        },
-        isCreator() {
-            return this.today.user_id == User.getInfo().uid
-        }
-    },
-    watch: {
-        id: {
-            immediate: true,
-            handler(val) {
-                if (val) {
-                    this.loadData();
-                }
+                return history;
+            },
+            isEditor() {
+                return User.isEditor();
+            },
+            isCreator() {
+                return this.today.user_id == User.getInfo().uid;
             },
         },
-        params: {
-            deep: true,
-            handler(val) {
-                if (val) {
-                    this.loadHistory(val);
-                }
+        watch: {
+            id: {
+                immediate: true,
+                handler(val) {
+                    if (val) {
+                        this.loadData();
+                    }
+                },
+            },
+            params: {
+                deep: true,
+                handler(val) {
+                    if (val) {
+                        this.loadHistory(val);
+                    }
+                },
             },
         },
-    },
-    methods: {
-        // ====== 数据获取 ==========
-        loadData() {
-            this.todayLoading = true;
-            getDetail(this.id)
-                .then((res) => {
-                    this.today = res.data.data;
-                })
-                .finally(() => {
-                    postStat("calendar", this.id);
-                    this.todayLoading = false;
-                });
-        },
-        loadHistory(params) {
-            this.historyLoading = true;
-            getHistory(params, { mode: "all" })
-                .then((res) => {
-                    this.history = (res.data.data || []).reverse();
-                })
-                .finally(() => {
-                    this.historyLoading = false;
-                });
-        },
+        methods: {
+            // ====== 数据获取 ==========
+            loadData() {
+                this.todayLoading = true;
+                getDetail(this.id)
+                    .then((res) => {
+                        this.today = res.data.data;
+                    })
+                    .finally(() => {
+                        postStat("calendar", this.id);
+                        this.todayLoading = false;
+                    });
+            },
+            loadHistory(params) {
+                this.historyLoading = true;
+                getHistory(params, { mode: "all" })
+                    .then((res) => {
+                        this.history = (res.data.data || []).reverse();
+                    })
+                    .finally(() => {
+                        this.historyLoading = false;
+                    });
+            },
 
-        // ========= other ==========
-        goBack() {
-            // 如果存在历史则返回上一个记录，否则返回月历页面
-            history.length ? history.go(-1) : this.$router.push(`/archive/${this.dateObj.year}/${this.dateObj.month}`)
-        },
-        manage() {
-            this.visible = true
-        },
+            // ========= other ==========
+            goBack() {
+                // 如果存在历史则返回上一个记录，否则返回月历页面
+                history.length ? history.go(-1) : this.$router.push(`/archive/${this.dateObj.year}/${this.dateObj.month}`);
+            },
+            manage(isSuper) {
+                this.visible = true;
+                this.isSuper = isSuper
+            },
 
-        // ========= filters =========
-        formatDate({ year, month, date }) {
-            return `${month}月${date}日`;
+            // ========= filters =========
+            formatDate({ year, month, date }) {
+                return `${month}月${date}日`;
+            },
+            showAvatar(val) {
+                return showAvatar(val, 24);
+            },
+            authorLink,
+            showTime,
         },
-        showAvatar(val) {
-            return showAvatar(val, 24)
-        },
-        authorLink,
-        showTime
-    },
-};
+    };
 </script>
 
 <style lang="less">
-@import "~@/assets/css/calendar/single.less";
+    @import "~@/assets/css/calendar/single.less";
 </style>

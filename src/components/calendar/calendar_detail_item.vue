@@ -7,10 +7,12 @@
                 ><img class="u-avatar" :src="showAvatar(data.user_info.user_avatar)" :alt="data.user_info.display_name"
             /></a>
             <!-- 文本 -->
-            <span class="u-desc" :style="descStyle(data)"
-                ><i class="u-client" v-if="data.type == 1" :class="data.client">{{ data.client == "std" ? "正" : "怀" }}</i
-                >{{ data.desc }}</span
-            >
+            <span class="u-desc" :style="descStyle(data)">
+                <i class="u-client" v-if="data.type == 1" :class="data.client">{{ getClientLabel(data.client).slice(0, 1) }}</i>
+                <i class="u-star" v-if="data.is_top">⭐️</i>
+                <!-- <el-rate class="u-star" v-if="data.is_top" :v-model="data.level" disabled> </el-rate> -->
+                {{ data.desc }}
+            </span>
         </div>
 
         <div class="u-actions">
@@ -38,6 +40,7 @@
 <script>
     import { showAvatar, authorLink, iconLink } from "@jx3box/jx3box-common/js/utils";
     import User from "@jx3box/jx3box-common/js/user.js";
+    import { __clients } from "@jx3box/jx3box-common/data/jx3box.json";
     export default {
         name: "CalendarDetailItem",
         props: ["type", "data"],
@@ -76,10 +79,13 @@
                     return item.link_temp ? 1 : 0;
                 }
             },
+            getClientLabel(client = "std") {
+                return __clients[client];
+            },
         },
     };
 </script>
 
 <style lang="less">
-@import "~@/assets/css/calendar/calendar_detail_item.less";
+    @import "~@/assets/css/calendar/calendar_detail_item.less";
 </style>

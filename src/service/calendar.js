@@ -27,6 +27,10 @@ function putCalendar(id, data) {
     return $cms().put(`/api/cms/calendar/${id}`, data);
 }
 
+function manageCalendar(id,data){
+    return $cms().put(`/api/cms/calendar/${id}/manage`, data);
+}
+
 function delCalendar(id) {
     return $cms().delete(`/api/cms/calendar/${id}`);
 }
@@ -42,4 +46,4 @@ function getHistory(params, query) {
     });
 }
 
-export { getCalendar, addCalendar, putCalendar, delCalendar, getDetail, getHistory };
+export { getCalendar, addCalendar, putCalendar, delCalendar, getDetail, getHistory ,manageCalendar};

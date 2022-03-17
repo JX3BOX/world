@@ -42,7 +42,7 @@
             </section>
         </main>
 
-        <calendar-dialog v-model="visible" :date-obj="dateObj" :selected="selected" @update="update" @del="del" :mode="mode"></calendar-dialog>
+        <calendar-dialog v-model="visible" :date-obj="dateObj" :selected="selected" @update="update" @del="del" :mode="mode" :isSuper="true"></calendar-dialog>
     </div>
 </template>
 
@@ -146,22 +146,16 @@ export default {
         // 提交
         update(res) {
             let { data } = res?.data || {};
-
+            console.log(data)
             if (data) {
                 if (this.isSameDate(data, this.dateObj)) {
                     data.desc = `(待审核) ${data.desc}`;
                     data.user_info = {
                         display_name: User.getInfo().name,
-                        user_avatar: User.getInfo().avatar,
+                        user_avatar: User.getInfo().avatar_origin,
                     };
                     this.list.unshift(data);
                 }
-
-                this.$notify({
-                    type: "success",
-                    title: "提交成功",
-                    message: "请耐心等待审核",
-                });
             }
             this.visible = false;
         },
