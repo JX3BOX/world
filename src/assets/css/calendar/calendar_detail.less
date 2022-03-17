@@ -1,3 +1,17 @@
+.m-calendar-detail{
+    overflow-y: auto;
+    height: 100%;
+
+    ::-webkit-scrollbar {
+        background-color: @purple;
+    }
+    
+    /*滚动条中间滑动部分*/
+    ::-webkit-scrollbar-thumb {
+        background-color: @purple;
+    }
+}
+
 .m-calendar-detail-header {
     padding: 5px 15px 10px 15px;
 }
@@ -33,6 +47,7 @@
             color: #999;
             font-style: normal;
             .ml(3px);
+            .fz(12px);
         }
 
         .u-null {

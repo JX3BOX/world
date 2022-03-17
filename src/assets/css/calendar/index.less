@@ -2,25 +2,34 @@
     padding:0;
 }
 
+@aside_width:320px;
 .m-calendar {
-    display: flex;
+    // display: flex;
     // gap: 20px;
     min-height: calc(100vh - @header-height - @bread-height - 80px);
     border-bottom:1px solid #eee;
 }
 
 .m-calendar-main {
-    flex: 1;
+    // flex: 1;
     padding:20px 20px;
+    .mr(@aside_width);
 }
 .m-calendar-aside {
-    width: 320px;
+    position: fixed;
+    right:0;
+    bottom:0;
+    top:@header-height + @bread-height ;
+    width: @aside_width;
     border-left:1px solid #eee;
     background-color:@bg-light;
 }
 @media screen and (min-width:2000px){
     .m-calendar-aside{
-        width:460px;
+        width:@aside_width + 140px;
+    }
+    .m-calendar-main {
+        .mr(@aside_width + 140px);
     }
 }
 

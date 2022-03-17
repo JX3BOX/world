@@ -9,17 +9,14 @@
             <!-- 文本 -->
             <span class="u-desc" :style="descStyle(data)">
                 <i class="u-client" v-if="data.type == 1" :class="data.client">{{ getClientLabel(data.client).slice(0, 1) }}</i>
-                <i class="u-star" v-if="data.is_top">⭐️</i>
-                <!-- <el-rate class="u-star" v-if="data.is_top" :v-model="data.level" disabled> </el-rate> -->
-                {{ data.desc }}
+                <i class="u-star" v-if="data.is_top">⭐️</i>{{ data.desc }}
             </span>
         </div>
 
         <div class="u-actions">
             <span class="u-action u-comment">
                 <i class="u-comment-icon el-icon-chat-dot-round"></i>
-                <span class="u-comment-count">评论</span>
-                <!-- <em class="u-count">({{ data.count || 0 }})</em> -->
+                <span class="u-comment-count">评论<em class="u-count">({{ data.comments_count || 0 }})</em></span>
             </span>
 
             <span class="u-action u-reference">

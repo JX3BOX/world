@@ -224,7 +224,7 @@ export default {
             const { year, month } = this.current;
             getCalendar({ year, month }).then(res => {
                 const data = res.data.data
-                data.forEach(item => {
+                data?.forEach(item => {
                     let { year, month, date } = item;
                     let index = this.dataArr.findIndex(d => d.year === year && d.month === month && d.date === date)
                     if (index) {
