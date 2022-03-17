@@ -77,8 +77,9 @@
                 }
             },
         },
-        filters: {},
-        created: function () {},
-        mounted: function () {},
     };
 </script>
+
+<style lang="less">
+@import "~@/assets/css/calendar/calendar_detail_item.less";
+</style>
