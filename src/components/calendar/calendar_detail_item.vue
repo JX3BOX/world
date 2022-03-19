@@ -4,7 +4,7 @@
             <!-- 图标 -->
             <img v-if="data.type == 2" class="u-icon" :src="iconLink(data.icon)" />
             <a v-else class="u-author" @click.stop target="_blank" :href="authorLink(data.user_id)" :title="`由${data.user_info.display_name}贡献`"
-                ><img class="u-avatar" :src="showAvatar(data.user_info.user_avatar)" :alt="data.user_info.display_name"
+                ><img v-if="data && data.user_info" class="u-avatar" :src="showAvatar(data.user_info.user_avatar)" :alt="data.user_info.display_name"
             /></a>
             <!-- 文本 -->
             <span class="u-desc" :style="descStyle(data)">
