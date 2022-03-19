@@ -12,7 +12,17 @@ function genUrl(params) {
     return url;
 }
 
-function getCalendar(params) {
+function getCalendar(params, client = "std") {
+    let url = genUrl(params);
+
+    return $cms().get("/api/cms/calendar/archive" + url, {
+        params: {
+            client
+        }
+    });
+}
+
+function getDayCalendar(params){
     let url = genUrl(params);
 
     return $cms().get("/api/cms/calendar/archive" + url);
@@ -41,9 +51,14 @@ function getDetail(id) {
 
 function getHistory(params, query) {
     let url = genUrl(params);
-    return $cms().get(`/api/cms/calendar/history/${url}`, {
+    return $cms().get(`/api/cms/calendar/history${url}`, {
         params: query,
     });
 }
 
-export { getCalendar, addCalendar, putCalendar, delCalendar, getDetail, getHistory ,manageCalendar};
+function getCalendarCount(params) {
+    let url = genUrl(params);
+    return $cms().get(`/api/cms/calendar/count${url}`);
+}
+
+export { getCalendar, addCalendar, putCalendar, delCalendar, getDetail, getHistory ,manageCalendar, getCalendarCount, getDayCalendar };

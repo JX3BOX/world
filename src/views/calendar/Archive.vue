@@ -30,6 +30,7 @@
                         :key="index"
                     >
                         {{ item.date }}
+                        <calendar-item :data="item"></calendar-item>
                     </div>
                 </section>
             </section>
@@ -42,13 +43,15 @@
 
 <script>
 import { months, weeks } from "@/assets/data/calendar.json";
-import calendarDetail from "@/components/calendar/calendar_detail.vue";
-import { getCalendar } from '@/service/calendar.js';
+import { getCalendar, getCalendarCount, getDayCalendar } from '@/service/calendar.js';
 
+import calendarDetail from "@/components/calendar/calendar_detail.vue";
+import calendar_item from "@/components/calendar/calendar_item.vue";
 export default {
     name: "Archive",
     components: {
         calendarDetail,
+        "calendar-item": calendar_item
     },
     data: () => ({
         current: {
@@ -83,19 +86,25 @@ export default {
         today() {
             return new Date().getDate();
         },
+        client() {
+            return this.$store.state.client
+        }
     },
     watch: {
         "$route.params": {
             immediate: true,
             handler: function ({ year, month, date }) {
                 this.current = { year: ~~year, month: ~~month, date: ~~date || 1 };
+
+                this.getMonthData()
+                this.loadCalendar()
+
+                this.loadCalendarCount()
             },
         },
     },
     mounted() {
-        this.init();
-        this.dataArr = this.getMonthData();
-        this.loadCalendar()
+        // this.loadCalendar()
     },
     methods: {
         /**
@@ -107,7 +116,7 @@ export default {
 
             this.current.date = 1;
 
-            this.dataArr = this.getMonthData();
+            this.$router.push(`/archive/${this.current.year}/${this.current.month}/${this.current.date}`)
         },
         /**
          * 切换月份
@@ -118,7 +127,7 @@ export default {
 
             this.current.date = 1;
 
-            this.dataArr = this.getMonthData();
+            this.$router.push(`/archive/${this.current.year}/${this.current.month}/${this.current.date}`)
         },
         // 获取指定月份数据
         getMonthData() {
@@ -170,7 +179,7 @@ export default {
                 dataArr.push(nextObj);
             }
 
-            return dataArr;
+            this.dataArr = dataArr;
         },
         // 获取前一个月的年月日信息
         getPreMonth(date, defaultDate = 1) {
@@ -201,7 +210,9 @@ export default {
             this.current.year = year;
             this.current.month = month;
             this.current.date = date;
-            this.dataArr = this.getMonthData();
+
+            this.$router.push(`/archive/${this.current.year}/${this.current.month}/${this.current.date}`)
+            // this.dataArr = this.getMonthData();
         },
         isToday({ year, month, date }) {
             const dateObj = new Date();
@@ -213,26 +224,32 @@ export default {
 
             return current.year === year && current.month === month && current.date === date;
         },
-        // 点击当前日期
-        init() {
-            // const date = new Date();
-            // this.current.year = date.getFullYear();
-            // this.current.month = date.getMonth() + 1;
-            // this.current.date = date.getDate();
-        },
         loadCalendar() {
             const { year, month } = this.current;
-            getCalendar({ year, month }).then(res => {
+            getCalendar({ year, month }, this.client).then(res => {
                 const data = res.data.data
                 data?.forEach(item => {
                     let { year, month, date } = item;
                     let index = this.dataArr.findIndex(d => d.year === year && d.month === month && d.date === date)
+                    
                     if (index) {
                         this.dataArr[index].children.push(item)
                     }
                 })
             })
         },
+        loadCalendarCount() {
+            const { year, month } = this.current;
+            getCalendarCount({ year, month }).then(res => {
+                res.data.forEach(item => {
+                    const date = this.dataArr.find(d => d.year == year && d.month == month && item.date == d.date)
+
+                    if (date) {
+                        this.$set(date, 'count', item.count || 0)
+                    }
+                })
+            })
+        }
     }
 };
 </script>

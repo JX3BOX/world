@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { getCalendar, delCalendar } from "@/service/calendar.js";
+import { getDayCalendar, delCalendar } from "@/service/calendar.js";
 import calendar_dialog from "./calendar_dialog.vue";
 import calendar_detail_item from "./calendar_detail_item.vue";
 import User from "@jx3box/jx3box-common/js/user.js";
@@ -120,7 +120,7 @@ export default {
         // ======================
         loadData() {
             this.loading = true;
-            return getCalendar(this.dateObj)
+            return getDayCalendar(this.dateObj)
                 .then((res) => {
                     this.list = res.data.data;
                 })

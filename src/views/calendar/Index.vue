@@ -3,8 +3,8 @@
         <Header></Header>
         <Breadcrumb name="剑三日历" slug="calendar" :feedbackEnable="true" :crumbEnable="false">
         </Breadcrumb>
-        <LeftSidebar :open="hasSidebar">
-            <Nav />
+        <LeftSidebar :open="true">
+            <Nav :default-expanded-keys="defaultExpandedKeys" :active-key="active" />
         </LeftSidebar>
         <Main :withoutRight="true" :withoutLeft="!hasSidebar">
             <div class="m-main">
@@ -21,7 +21,11 @@ export default {
     name: "App",
     props: [],
     data: function () {
-        return {};
+        return {
+            defaultExpandedKeys: ['calendar'],
+
+            active: ''
+        };
     },
     computed: {
         hasSidebar : function (){
@@ -29,6 +33,20 @@ export default {
         }
     },
     components: { Nav },
+    watch: {
+        "$route.params": {
+            deep: true,
+            immediate: true,
+            handler(val) {
+                if (val) {
+                    const { year, month } = val;
+                    if (year) {
+                        this.active = month ? `${year}_${month}` : year
+                    }
+                }
+            }
+        }
+    },
     mounted: function () {},
 };
 </script>

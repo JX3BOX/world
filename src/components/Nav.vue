@@ -1,15 +1,12 @@
 <template>
     <div class="m-nav">
-        <el-tree :data="tree_data" :props="defaultProps" node-key="key" :default-expanded-keys="['knowledge']" @node-click="clickHandler">
-            <a
-                class="el-tree-node__label"
-                :href="data.href"
-                slot-scope="{data}"
-                :class="{on:isActive(data)}"
-            >
-                <span class="u-name" v-text="data.label"></span>
-                <em v-if="data.count" class="u-count" v-text="`( ${data.count} )`"></em>
-            </a>
+        <el-tree :data="tree_data" :props="defaultProps" node-key="key" :default-expanded-keys="defaultExpandedKeys" @node-click="clickHandler">
+            <template slot-scope="{ data }">
+                <router-link :to="data.href || ''" class="el-tree-node__label" :class="{ on: isActive(data) }">
+                    <span class="u-name" v-text="data.label"></span>
+                    <em v-if="data.count" class="u-count" v-text="`( ${data.count} )`"></em>
+                </router-link>
+            </template>
         </el-tree>
     </div>
 </template>
@@ -17,19 +14,33 @@
 <script>
 import { getKnowledgeMenus } from "@/service/wiki.js";
 import { map, each } from "lodash";
-import {getAppType} from '@jx3box/jx3box-common/js/utils'
+import {getAppType} from '@jx3box/jx3box-common/js/utils';
+import buildClendarNav from '@/utils/buildCalendarNav';
+import { getCalendarCount } from '@/service/calendar';
+
 export default {
     name: "Nav",
-    props: [],
+    props: {
+        defaultExpandedKeys: {
+            type: Array,
+            default: () => ['knowledge']
+        },
+        activeKey: {
+            type: String,
+            default: ''
+        }
+    },
     components: {},
     data: function () {
         return {
             active : 'calendar',
 
             data: {
-                // TODO:构建2019~现在及未来的数据
+                // TODO:构建2009~现在及未来的数据
                 calendar: {
                     label: "日历",
+                    key: 'calendar',
+                    href: '/calendar/',
                     children: [
                         {
                             label: "2022年",
@@ -145,11 +156,20 @@ export default {
             });
         },
     },
-    watch: {},
+    watch: {
+        activeKey: {
+            immediate: true,
+            handler(val) {
+                val && (this.active = val)
+            }
+        }
+    },
     methods: {
         // 数据加载
         init: function () {
             this.loadKnowledge();
+
+            this.data.calendar.children = buildClendarNav({ start: 2009, end: new Date().getFullYear() })
         },
         loadKnowledge: function () {
             // 加载通识子类统计
@@ -170,8 +190,12 @@ export default {
         },
 
         // 交互操作
-        clickHandler : function (data){
+        clickHandler : function (data, node){
             this.active = data.key
+
+            if (data.type === 'calendar' && node.expanded) {
+                this.loadCalendarCount(data.key)
+            }
         },
         isActive : function (data){
             if(data.children){
@@ -179,6 +203,20 @@ export default {
             }else{
                 return this.active == data.key
             }
+        },
+        loadCalendarCount: function (year){
+            getCalendarCount({ year }).then(res => {
+                // console.log(res)
+                const currentYear = this.data.calendar.children.find(child => child.key == year);
+
+                res.data.forEach(item => {
+                    const month = currentYear.children.find(currentMonth => currentMonth.month == item.month);
+
+                    if (month) {
+                        month.count = item.count
+                    }
+                })
+            })
         }
     },
     filters: {},
