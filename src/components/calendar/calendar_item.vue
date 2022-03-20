@@ -4,7 +4,7 @@
             {{ item.desc }}
         </div>
 
-        <div class="u-date-count" v-if="countData">{{ countData.count }}</div>
+        <div class="u-date-count" v-if="countData"><b>{{ countData.count }}</b>条纪事</div>
     </div>
 </template>
 

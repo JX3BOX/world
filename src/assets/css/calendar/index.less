@@ -62,9 +62,18 @@
         .fz(16px);
         // font-family: '楷体';
         font-weight: 300;
+        .pr;
         &.active{
             .bold !important;
-            color:@color-link;
+            color:@pink;
+            &::before{
+                font-weight: normal;
+                content : '~ ✿ ~';
+                // transform: none;
+                .pa;.lt(50%,35px);
+                .ml(-21px);
+                color:#ffa6d2;
+            }
         }
         &:after{
             content : '';

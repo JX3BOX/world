@@ -5,7 +5,12 @@
     .mt(5px);
 
     .u-link {
-        .break;
+        .nobreak;
+        .fz(12px,1.8);
+
+        &::before{
+            content : '+';
+        }
 
         &.is-event {
             color: @purple;
@@ -20,5 +25,18 @@
         .pa;
         right: 0;
         bottom: 0;
+        background-color:@bg-gray;
+        // .size(20px);
+        // .r(100%);
+        .x;
+        .fz(12px,20px);
+        padding:2px 5px;
+        .r(2px);
+        color:#aaa;
+        b{
+            .mr(2px);
+            color:#fba524;
+            font-family: Consolas;
+        }
     }
 }
