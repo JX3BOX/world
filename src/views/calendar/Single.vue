@@ -181,7 +181,7 @@
             },
             loadHistory(params) {
                 this.historyLoading = true;
-                getHistory(params, { mode: "all" })
+                getHistory(params)
                     .then((res) => {
                         this.history = (res.data.data || []).reverse();
                     })
