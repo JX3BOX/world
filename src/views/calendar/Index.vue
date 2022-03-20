@@ -3,7 +3,7 @@
         <Header></Header>
         <Breadcrumb name="剑三日历" slug="calendar" :feedbackEnable="true" :crumbEnable="false">
         </Breadcrumb>
-        <LeftSidebar :open="true">
+        <LeftSidebar :open="hasSidebar">
             <Nav :default-expanded-keys="defaultExpandedKeys" :active-key="active" />
         </LeftSidebar>
         <Main :withoutRight="true" :withoutLeft="!hasSidebar">
