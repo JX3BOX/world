@@ -30,7 +30,7 @@
                         :key="index"
                     >
                         {{ item.date }}
-                        <calendar-item :data="item"></calendar-item>
+                        <calendar-item :data="item" :counts="counts"></calendar-item>
                     </div>
                 </section>
             </section>
@@ -63,6 +63,7 @@ export default {
         weeks,
 
         dataArr: [],
+        counts: []
     }),
     computed: {
         // 禁止下一年
@@ -93,13 +94,14 @@ export default {
     watch: {
         "$route.params": {
             immediate: true,
-            handler: function ({ year, month, date }) {
+            handler: function ({ year, month, date }, oVal) {
                 this.current = { year: ~~year, month: ~~month, date: ~~date || 1 };
 
-                this.getMonthData()
-                this.loadCalendar()
-
-                this.loadCalendarCount()
+                if ((oVal?.year !== year || oVal?.month !== month) || !oVal) {
+                    this.getMonthData()
+                    this.loadCalendar()
+                    this.loadCalendarCount()
+                }
             },
         },
     },
@@ -132,16 +134,19 @@ export default {
         // 获取指定月份数据
         getMonthData() {
             const { year, month } = this.current;
+            let tmpEnd = 8;
             let dataArr = [];
             let daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
             // 闰年
             if ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0) {
                 daysInMonth[1] = 29;
+
+                ([3].includes(month)) && (tmpEnd = 7)
             }
 
             const monthStartWeekday = new Date(year, month - 1, 1).getDay();
-            const monthEndtWeekday = new Date(year, month, 1).getDay() || 7;
+            const monthEndWeekday = new Date(year, month, 1).getDay() || 7;
 
             const preInfo = this.getPreMonth(this.current);
             const nextInfo = this.getNextMonth();
@@ -168,7 +173,7 @@ export default {
                 dataArr.push(itemObj);
             }
 
-            for (let i = 0; i < 8 - monthEndtWeekday; i++) {
+            for (let i = 0; i < tmpEnd - monthEndWeekday; i++) {
                 let nextObj = {
                     type: "next",
                     date: i + 1,
@@ -241,11 +246,11 @@ export default {
         loadCalendarCount() {
             const { year, month } = this.current;
             getCalendarCount({ year, month }).then(res => {
-                res.data.forEach(item => {
-                    const date = this.dataArr.find(d => d.year == year && d.month == month && item.date == d.date)
-
-                    if (date) {
-                        this.$set(date, 'count', item.count || 0)
+                this.counts = res.data.map(item => {
+                    return {
+                        ...item,
+                        month,
+                        year
                     }
                 })
             })

@@ -4,7 +4,7 @@
             {{ item.desc }}
         </div>
 
-        <div class="u-date-count" v-if="data && data.count">{{ data.count }}</div>
+        <div class="u-date-count" v-if="countData">{{ countData.count }}</div>
     </div>
 </template>
 
@@ -16,6 +16,10 @@ export default {
             type: Object,
             default: null,
         },
+        counts: {
+            type: Array,
+            default: () => []
+        }
     },
     computed: {
         links() {
@@ -24,6 +28,10 @@ export default {
 
             return [...events, ...activities];
         },
+        countData() {
+            const { data } = this
+            return this.counts.find(d => d.year === data.year && d.month === data.month && d.date === data.date)
+        }
     },
     methods: {
         linkClassName({ type }) {
