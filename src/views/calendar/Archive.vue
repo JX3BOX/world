@@ -1,6 +1,6 @@
 <template>
     <div class="v-calendar m-calendar">
-        <main class="m-calendar-main">
+        <main class="m-calendar-main" :class="pageSlogan ? pageSlogan.style : ''" :style="topStyle">
             <!-- 年份切换 -->
             <section class="m-calendar-year">
                 <el-button icon="el-icon-arrow-left" size="medium" :disabled="prevDisabled" @click="toggleYear('prev')" class="u-btn"></el-button>
@@ -10,7 +10,7 @@
             <!-- 月份切换 -->
             <section class="m-calendar-month">
                 <!-- TODO:标语调用 -->
-                <div class="u-slogan">烟花三月下扬州</div>
+                <div class="u-slogan">{{ pageSlogan.title }}</div>
                 <el-button-group>
                     <el-button v-for="(item, index) in months" :key="index" size="medium" class="u-month" @click="toggleMonth(index)" :class="{active : current.month - 1 == index}">{{ item }}</el-button>
                 </el-button-group>
@@ -30,7 +30,7 @@
                         :key="index"
                     >
                         {{ item.date }}
-                        <calendar-item :data="item" :counts="counts"></calendar-item>
+                        <calendar-item :data="item" :counts="counts" :slogans="slogans"></calendar-item>
                     </div>
                 </section>
             </section>
@@ -43,7 +43,7 @@
 
 <script>
 import { months, weeks } from "@/assets/data/calendar.json";
-import { getCalendar, getCalendarCount, getDayCalendar } from '@/service/calendar.js';
+import { getCalendar, getCalendarCount, getCalendarSlogans } from '@/service/calendar.js';
 
 import calendarDetail from "@/components/calendar/calendar_detail.vue";
 import calendar_item from "@/components/calendar/calendar_item.vue";
@@ -63,7 +63,8 @@ export default {
         weeks,
 
         dataArr: [],
-        counts: []
+        counts: [],
+        slogans: [],
     }),
     computed: {
         // 禁止下一年
@@ -89,6 +90,16 @@ export default {
         },
         client() {
             return this.$store.state.client
+        },
+        pageSlogan() {
+            const { current } = this;
+            return this.slogans.find(slogan => slogan.year === current.year && slogan.month === current.month && !slogan.date)
+        },
+        topStyle() {
+            return {
+                backgroundColor: this.pageSlogan?.bgcolor,
+                backgroundImage: `url(${this.pageSlogan?.img})`
+            }
         }
     },
     watch: {
@@ -102,6 +113,8 @@ export default {
                     this.loadCalendar()
                     this.loadCalendarCount()
                 }
+
+                this.loadCalendarSlogans()
             },
         },
     },
@@ -253,6 +266,12 @@ export default {
                         year
                     }
                 })
+            })
+        },
+        loadCalendarSlogans() {
+            const { year, month } = this.current;
+            getCalendarSlogans({ year, month }).then(res => {
+                this.slogans = res.data
             })
         }
     }

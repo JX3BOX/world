@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :visible="value" @close="cancel">
+    <el-dialog :visible="value" @close="cancel" append-to-body>
         <template v-slot:title>
             <header>{{ title }}</header>
         </template>

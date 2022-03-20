@@ -61,4 +61,9 @@ function getCalendarCount(params) {
     return $cms().get(`/api/cms/calendar/count${url}`);
 }
 
-export { getCalendar, addCalendar, putCalendar, delCalendar, getDetail, getHistory ,manageCalendar, getCalendarCount, getDayCalendar };
+function getCalendarSlogans(params){
+    let url = genUrl(params);
+    return $cms().get(`/api/cms/calendar/slogan${url}`);
+}
+
+export { getCalendar, addCalendar, putCalendar, delCalendar, getDetail, getHistory ,manageCalendar, getCalendarCount, getDayCalendar, getCalendarSlogans };

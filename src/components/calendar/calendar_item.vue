@@ -1,5 +1,5 @@
 <template>
-    <div class="m-calendar-item">
+    <div class="m-calendar-item" :class="slogan ? slogan.style : ''" :style="sloganStyle">
         <div class="u-link" :class="linkClassName(item)" v-for="item in links" :key="item.id">
             {{ item.desc }}
         </div>
@@ -19,6 +19,10 @@ export default {
         counts: {
             type: Array,
             default: () => []
+        },
+        slogans: {
+            type: Array,
+            default: () => []
         }
     },
     computed: {
@@ -31,6 +35,16 @@ export default {
         countData() {
             const { data } = this
             return this.counts.find(d => d.year === data.year && d.month === data.month && d.date === data.date)
+        },
+        slogan() {
+            const { data } = this
+            return this.slogans.find(d => d.year === data.year && d.month === data.month && d.date === data.date)
+        },
+        sloganStyle() {
+            return {
+                backgroundColor: this.slogan?.bgcolor,
+                backgroundImage: `url(${this.slogan?.img})`
+            }
         }
     },
     methods: {
