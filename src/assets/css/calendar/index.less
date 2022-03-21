@@ -36,6 +36,11 @@
     }
 }
 
+.m-calendar-header{
+    display: flex;
+    justify-content: space-between;
+}
+
 .m-calendar-year {
     display: flex;
     align-items: center;
@@ -51,12 +56,15 @@
 
     .u-btn{
         border:none;
+        background:none;
     }
 }
 
 .m-calendar-month {
+    // background-color:rgba(255,255,255,0.1);
     text-align: center;
     .mt(20px);
+    padding:10px 0;
 
     .u-month {
         width: 120px;
@@ -65,26 +73,28 @@
         .fz(16px);
         // font-family: '楷体';
         font-weight: 300;
+        padding:0;
+
         .pr;
         &.active{
             .bold !important;
             color:@pink;
-            &::before{
-                font-weight: normal;
-                content : '~ ✿ ~';
-                // transform: none;
-                .pa;.lt(50%,35px);
-                .ml(-21px);
-                color:#ffa6d2;
-            }
+            // &::before{
+            //     font-weight: normal;
+            //     content : '~ ✿ ~';
+            //     // transform: none;
+            //     .pa;.lt(50%,35px);
+            //     .ml(-21px);
+            //     color:#ffa6d2;
+            // }
         }
         &:after{
             content : '';
             .db;
-            height:30px;
+            height:20px;
             border-right: 1px solid #ddd;
             transform: skew(-20deg);
-            .pr;top:-20px;left:20px;
+            .pa;top:0px;left:100%;
         }
         &:last-child::after{
             .none;
@@ -100,7 +110,15 @@
 }
 
 .m-calendar-slogan{
-    .none;
+    // .none;
+    a{
+        .db;
+    }
+    img{
+        .auto(x);
+        .db;
+        .h(70px);
+    }
 }
 
 .m-calendar-content {
@@ -122,10 +140,12 @@
 }
 
 .m-calendar-date {
+    box-sizing: border-box;
     width: 100%;
     display: flex;
     flex-flow: row wrap;
-    .mt(20px);
+    // .pt(20px);
+    background-color:rgba(255,255,255,0.99);
 
     border-top:1px solid #eee;
     border-left:1px solid #eee;
@@ -134,6 +154,7 @@
         flex: 0 0 14.285%;
         height: 160px;
         box-sizing: border-box;
+        padding:10px;
         // display: flex;
         // align-items: center;
         // justify-content: center;

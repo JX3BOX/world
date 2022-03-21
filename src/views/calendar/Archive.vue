@@ -1,21 +1,46 @@
 <template>
     <div class="v-calendar m-calendar">
         <main class="m-calendar-main" :class="getSloganMeta('style')" :style="topStyle">
-            <!-- 年份切换 -->
-            <section class="m-calendar-year">
-                <el-button icon="el-icon-arrow-left" size="medium" :disabled="prevDisabled" @click="toggleYear('prev')" class="u-btn"></el-button>
-                <span class="u-year">{{ current.year }}</span>
-                <el-button icon="el-icon-arrow-right" size="medium" :disabled="nextDisabled" @click="toggleYear('next')" class="u-btn"></el-button>
-            </section>
-            <!-- 月份切换 -->
-            <section class="m-calendar-month">
-                <div class="m-calendar-slogan">
-                    <a :href="getSloganMeta('url')" target="_blank"><img :src="getSloganMeta('banner')"></a>
+            <div class="m-calendar-header">
+                <div class="u-time">
+                    <!-- 年份切换 -->
+                    <section class="m-calendar-year">
+                        <el-button
+                            icon="el-icon-arrow-left"
+                            size="medium"
+                            :disabled="prevDisabled"
+                            @click="toggleYear('prev')"
+                            class="u-btn"
+                        ></el-button>
+                        <span class="u-year">{{ current.year }}</span>
+                        <el-button
+                            icon="el-icon-arrow-right"
+                            size="medium"
+                            :disabled="nextDisabled"
+                            @click="toggleYear('next')"
+                            class="u-btn"
+                        ></el-button>
+                    </section>
+                    <!-- 月份切换 -->
+                    <!-- <section class="m-calendar-month">
+                        <el-button-group>
+                            <el-button
+                                v-for="(item, index) in months"
+                                :key="index"
+                                size="medium"
+                                class="u-month"
+                                @click="toggleMonth(index)"
+                                :class="{ active: current.month - 1 == index }"
+                                >{{ item }}</el-button
+                            >
+                        </el-button-group>
+                    </section> -->
                 </div>
-                <el-button-group>
-                    <el-button v-for="(item, index) in months" :key="index" size="medium" class="u-month" @click="toggleMonth(index)" :class="{active : current.month - 1 == index}">{{ item }}</el-button>
-                </el-button-group>
-            </section>
+                <!-- 中央海报 -->
+                <div class="u-slogan m-calendar-slogan">
+                    <a :href="getSloganMeta('url')" target="_blank"><img :src="getSloganMeta('banner')" /></a>
+                </div>
+            </div>
             <section class="m-calendar-content">
                 <section class="m-calendar-week">
                     <div class="u-week" v-for="week in weeks" :key="week">
@@ -27,7 +52,11 @@
                         v-for="(item, index) in dataArr"
                         class="u-date"
                         @click.prevent="dateClick(item)"
-                        :class="[{ 'u-other': ['pre', 'next'].includes(item.type) }, { 'u-today': isToday(item) }, { 'u-current': isCurrent(item) }]"
+                        :class="[
+                            { 'u-other': ['pre', 'next'].includes(item.type) },
+                            { 'u-today': isToday(item) },
+                            { 'u-current': isCurrent(item) },
+                        ]"
                         :key="index"
                     >
                         {{ item.date }}
@@ -44,7 +73,7 @@
 
 <script>
 import { months, weeks } from "@/assets/data/calendar.json";
-import { getCalendar, getCalendarCount, getCalendarSlogans } from '@/service/calendar.js';
+import { getCalendar, getCalendarCount, getCalendarSlogans } from "@/service/calendar.js";
 
 import calendarDetail from "@/components/calendar/calendar_detail.vue";
 import calendar_item from "@/components/calendar/calendar_item.vue";
@@ -52,7 +81,7 @@ export default {
     name: "Archive",
     components: {
         calendarDetail,
-        "calendar-item": calendar_item
+        "calendar-item": calendar_item,
     },
     data: () => ({
         current: {
@@ -90,17 +119,19 @@ export default {
             return new Date().getDate();
         },
         client() {
-            return this.$store.state.client
+            return this.$store.state.client;
         },
         pageSlogan() {
             const { current } = this;
-            return this.slogans.find(slogan => slogan.year === current.year && slogan.month === current.month && !slogan.date)
+            return this.slogans.find(
+                (slogan) => slogan.year === current.year && slogan.month === current.month && !slogan.date
+            );
         },
         topStyle() {
             return {
                 backgroundColor: this.pageSlogan?.bgcolor,
-                backgroundImage: `url(${this.pageSlogan?.img})`
-            }
+                backgroundImage: `url(${this.pageSlogan?.img})`,
+            };
         },
     },
     watch: {
@@ -109,13 +140,13 @@ export default {
             handler: function ({ year, month, date }, oVal) {
                 this.current = { year: ~~year, month: ~~month, date: ~~date || 1 };
 
-                if ((oVal?.year !== year || oVal?.month !== month) || !oVal) {
-                    this.getMonthData()
-                    this.loadCalendar()
-                    this.loadCalendarCount()
+                if (oVal?.year !== year || oVal?.month !== month || !oVal) {
+                    this.getMonthData();
+                    this.loadCalendar();
+                    this.loadCalendarCount();
                 }
 
-                this.loadCalendarSlogans()
+                this.loadCalendarSlogans();
             },
         },
     },
@@ -132,7 +163,7 @@ export default {
 
             this.current.date = 1;
 
-            this.$router.push(`/archive/${this.current.year}/${this.current.month}/${this.current.date}`)
+            this.$router.push(`/archive/${this.current.year}/${this.current.month}/${this.current.date}`);
         },
         /**
          * 切换月份
@@ -143,7 +174,7 @@ export default {
 
             this.current.date = 1;
 
-            this.$router.push(`/archive/${this.current.year}/${this.current.month}/${this.current.date}`)
+            this.$router.push(`/archive/${this.current.year}/${this.current.month}/${this.current.date}`);
         },
         // 获取指定月份数据
         getMonthData() {
@@ -156,7 +187,7 @@ export default {
             if ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0) {
                 daysInMonth[1] = 29;
 
-                ([3].includes(month)) && (tmpEnd = 7)
+                [3].includes(month) && (tmpEnd = 7);
             }
 
             const monthStartWeekday = new Date(year, month - 1, 1).getDay();
@@ -171,7 +202,7 @@ export default {
                     date: daysInMonth[preInfo.month - 1] - (monthStartWeekday - i - 2),
                     month: preInfo.month,
                     year: preInfo.year,
-                    children: []
+                    children: [],
                 };
                 dataArr.push(preObj);
             }
@@ -182,7 +213,7 @@ export default {
                     date: i + 1,
                     month,
                     year,
-                    children: []
+                    children: [],
                 };
                 dataArr.push(itemObj);
             }
@@ -193,7 +224,7 @@ export default {
                     date: i + 1,
                     month: nextInfo.month,
                     year: nextInfo.year,
-                    children: []
+                    children: [],
                 };
                 dataArr.push(nextObj);
             }
@@ -230,7 +261,7 @@ export default {
             this.current.month = month;
             this.current.date = date;
 
-            this.$router.push(`/archive/${this.current.year}/${this.current.month}/${this.current.date}`)
+            this.$router.push(`/archive/${this.current.year}/${this.current.month}/${this.current.date}`);
             // this.dataArr = this.getMonthData();
         },
         isToday({ year, month, date }) {
@@ -247,41 +278,41 @@ export default {
         // 数据加载
         loadCalendar() {
             const { year, month } = this.current;
-            getCalendar({ year, month }, this.client).then(res => {
-                const data = res.data.data
-                data?.forEach(item => {
+            getCalendar({ year, month }, this.client).then((res) => {
+                const data = res.data.data;
+                data?.forEach((item) => {
                     let { year, month, date } = item;
-                    let index = this.dataArr.findIndex(d => d.year === year && d.month === month && d.date === date)
+                    let index = this.dataArr.findIndex((d) => d.year === year && d.month === month && d.date === date);
 
                     if (index) {
-                        this.dataArr[index].children.push(item)
+                        this.dataArr[index].children.push(item);
                     }
-                })
-            })
+                });
+            });
         },
         loadCalendarCount() {
             const { year, month } = this.current;
-            getCalendarCount({ year, month }).then(res => {
-                this.counts = res.data.map(item => {
+            getCalendarCount({ year, month }).then((res) => {
+                this.counts = res.data.map((item) => {
                     return {
                         ...item,
                         month,
-                        year
-                    }
-                })
-            })
+                        year,
+                    };
+                });
+            });
         },
         loadCalendarSlogans() {
             const { year, month } = this.current;
-            getCalendarSlogans({ year, month }).then(res => {
-                this.slogans = res.data
-            })
+            getCalendarSlogans({ year, month }).then((res) => {
+                this.slogans = res.data;
+            });
         },
 
         // 过滤
-        getSloganMeta(key){
-            return this.pageSlogan?.[key]
-        }
-    }
+        getSloganMeta(key) {
+            return this.pageSlogan?.[key];
+        },
+    },
 };
 </script>
