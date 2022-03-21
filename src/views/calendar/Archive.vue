@@ -1,6 +1,6 @@
 <template>
     <div class="v-calendar m-calendar">
-        <main class="m-calendar-main" :class="pageSlogan ? pageSlogan.style : ''" :style="topStyle">
+        <main class="m-calendar-main" :class="getSloganMeta('style')" :style="topStyle">
             <!-- 年份切换 -->
             <section class="m-calendar-year">
                 <el-button icon="el-icon-arrow-left" size="medium" :disabled="prevDisabled" @click="toggleYear('prev')" class="u-btn"></el-button>
@@ -9,8 +9,9 @@
             </section>
             <!-- 月份切换 -->
             <section class="m-calendar-month">
-                <!-- TODO:标语调用 -->
-                <div class="u-slogan">{{ pageSlogan.title }}</div>
+                <div class="m-calendar-slogan">
+                    <a :href="getSloganMeta('url')" target="_blank"><img :src="getSloganMeta('banner')"></a>
+                </div>
                 <el-button-group>
                     <el-button v-for="(item, index) in months" :key="index" size="medium" class="u-month" @click="toggleMonth(index)" :class="{active : current.month - 1 == index}">{{ item }}</el-button>
                 </el-button-group>
@@ -100,7 +101,7 @@ export default {
                 backgroundColor: this.pageSlogan?.bgcolor,
                 backgroundImage: `url(${this.pageSlogan?.img})`
             }
-        }
+        },
     },
     watch: {
         "$route.params": {
@@ -242,6 +243,8 @@ export default {
 
             return current.year === year && current.month === month && current.date === date;
         },
+
+        // 数据加载
         loadCalendar() {
             const { year, month } = this.current;
             getCalendar({ year, month }, this.client).then(res => {
@@ -249,7 +252,7 @@ export default {
                 data?.forEach(item => {
                     let { year, month, date } = item;
                     let index = this.dataArr.findIndex(d => d.year === year && d.month === month && d.date === date)
-                    
+
                     if (index) {
                         this.dataArr[index].children.push(item)
                     }
@@ -273,6 +276,11 @@ export default {
             getCalendarSlogans({ year, month }).then(res => {
                 this.slogans = res.data
             })
+        },
+
+        // 过滤
+        getSloganMeta(key){
+            return this.pageSlogan?.[key]
         }
     }
 };
