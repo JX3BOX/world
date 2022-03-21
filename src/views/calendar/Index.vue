@@ -10,7 +10,7 @@
             <div class="m-main">
                 <router-view />
             </div>
-            <Footer></Footer>
+            <Footer :class="routeName"></Footer>
         </Main>
     </div>
 </template>
@@ -30,6 +30,9 @@ export default {
     computed: {
         hasSidebar : function (){
             return this.$route.meta.sidebar
+        },
+        routeName : function (){
+            return this.$route.name
         }
     },
     components: { Nav },

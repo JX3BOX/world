@@ -27,11 +27,17 @@
     border-left:1px solid #eee;
     background-color:@bg-light;
 }
+.c-footer.archive{
+    .mr(@aside_width);
+}
 @media screen and (min-width:2000px){
     .m-calendar-aside{
         width:@aside_width + 140px;
     }
     .m-calendar-main {
+        .mr(@aside_width + 140px);
+    }
+    .c-footer.archive{
         .mr(@aside_width + 140px);
     }
 }
