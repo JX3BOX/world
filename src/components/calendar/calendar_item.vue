@@ -1,5 +1,6 @@
 <template>
     <div class="m-calendar-item" :class="slogan ? slogan.style : ''" :style="sloganStyle">
+        <span class="u-date-text">{{ data.date }}</span>
         <div class="u-link" :class="linkClassName(item)" v-for="item in links" :key="item.id">
             {{ item.desc }}
         </div>

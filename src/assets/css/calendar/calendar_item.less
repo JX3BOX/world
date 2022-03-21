@@ -1,11 +1,15 @@
 .m-calendar-item {
     font-size: 12px;
-    height: calc(100% - 36px);
+    height: 100%;
     .pr;
-    .mt(5px);
 
     background-position: center;
     background-repeat: no-repeat;
+
+    .u-date-text {
+        .ml(5px);
+        .mt(5px);
+    }
 
     .u-link {
         .nobreak;
@@ -18,7 +22,7 @@
         &.is-event {
             color: @purple;
         }
-    
+
         &.is-activity {
             color: @pink;
         }
@@ -26,11 +30,9 @@
 
     .u-date-count {
         .pa;
-        right: 0;
-        bottom: 0;
+        right: 5px;
+        bottom: 12px;
         background-color:@bg-gray;
-        // .size(20px);
-        // .r(100%);
         .x;
         .fz(12px,20px);
         padding:2px 5px;
