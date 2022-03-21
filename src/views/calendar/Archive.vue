@@ -1,22 +1,35 @@
 <template>
     <div class="v-calendar m-calendar">
         <main class="m-calendar-main" :class="getSloganMeta('style')" :style="topStyle">
-            <!-- 年份切换 -->
-            <section class="m-calendar-year">
-                <el-button icon="el-icon-arrow-left" size="medium" :disabled="prevDisabled" @click="toggleYear('prev')" class="u-btn"></el-button>
-                <span class="u-year">{{ current.year }}</span>
-                <el-button icon="el-icon-arrow-right" size="medium" :disabled="nextDisabled" @click="toggleYear('next')" class="u-btn"></el-button>
-            </section>
-            <!-- 月份切换 -->
-            <section class="m-calendar-month">
-                <div class="m-calendar-slogan">
-                    <a :href="getSloganMeta('url')" target="_blank"><img :src="getSloganMeta('banner')">{{ getSloganMeta('banner') }}</a>
+            <div class="m-calendar-header">
+                <div class="u-time">
+                    <!-- 年份切换 -->
+                    <section class="m-calendar-year">
+                        <el-button
+                            icon="el-icon-arrow-left"
+                            size="medium"
+                            :disabled="prevDisabled"
+                            @click="toggleYear('prev')"
+                            class="u-btn"
+                        ></el-button>
+                        <span class="u-year">{{ current.year }}</span>
+                        <el-button
+                            icon="el-icon-arrow-right"
+                            size="medium"
+                            :disabled="nextDisabled"
+                            @click="toggleYear('next')"
+                            class="u-btn"
+                        ></el-button>
+                    </section>
+                    <!-- 月份切换 -->
+                    <section class="m-calendar-month">
+                    </section>
                 </div>
                 <!-- 中央海报 -->
                 <div class="u-slogan m-calendar-slogan">
                     <a :href="getSloganMeta('url')" target="_blank"><img :src="getSloganMeta('banner')" /></a>
                 </div>
-            </section>
+            </div>
             <section class="m-calendar-content">
                 <section class="m-calendar-week">
                     <div class="u-week" v-for="week in weeks" :key="week">
