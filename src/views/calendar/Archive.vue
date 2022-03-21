@@ -11,6 +11,7 @@
                             :disabled="prevDisabled"
                             @click="toggleYear('prev')"
                             class="u-btn"
+                            title="上一年"
                         ></el-button>
                         <span class="u-year">{{ current.year }}</span>
                         <el-button
@@ -19,10 +20,28 @@
                             :disabled="nextDisabled"
                             @click="toggleYear('next')"
                             class="u-btn"
+                            title="下一年"
                         ></el-button>
                     </section>
                     <!-- 月份切换 -->
-                    <section class="m-calendar-month">
+                    <section class="m-calendar-year m-calendar-month">
+                        <el-button
+                            icon="el-icon-arrow-left"
+                            size="medium"
+                            :disabled="prevDisabled"
+                            @click="toggleMonth('prev')"
+                            class="u-btn"
+                            title="上一月"
+                        ></el-button>
+                        <span class="u-year u-month-text">{{ current.month }}</span>
+                        <el-button
+                            icon="el-icon-arrow-right"
+                            size="medium"
+                            :disabled="nextDisabled"
+                            @click="toggleMonth('next')"
+                            class="u-btn"
+                            title="下一月"
+                        ></el-button>
                     </section>
                 </div>
                 <!-- 中央海报 -->
@@ -47,6 +66,7 @@
                             { 'u-current': isCurrent(item) },
                         ]"
                         :key="index"
+                        :style="index === 0 ? firstDayStyle : ''"
                     >
                         <calendar-item :data="item" :counts="counts" :slogans="slogans"></calendar-item>
                     </div>
@@ -79,6 +99,7 @@ export default {
         },
         months,
         weeks,
+        monthStartWeekday: 0,
 
         dataArr: [],
         counts: [],
@@ -121,6 +142,11 @@ export default {
                 backgroundImage: `url(${this.pageSlogan?.img})`,
             };
         },
+        firstDayStyle() {
+            return {
+                marginLeft: 14.285 * (this.monthStartWeekday - 1) + '%'
+            }
+        }
     },
     watch: {
         "$route.params": {
@@ -138,9 +164,6 @@ export default {
             },
         },
     },
-    mounted() {
-        // this.loadCalendar()
-    },
     methods: {
         /**
          * 切换年份
@@ -155,10 +178,24 @@ export default {
         },
         /**
          * 切换月份
-         * @param {number} num
+         * @param {String}} action next 下一月 prev 上一月
          */
-        toggleMonth(num) {
-            this.current.month = num + 1;
+        toggleMonth(action) {
+            if (action === 'prev') {
+                if (this.current.month === 1) {
+                    this.current.year -= 1
+                    this.current.month = 12
+                } else {
+                    this.current.month -= 1
+                }
+            } else {
+                if (this.current.month === 12) {
+                    this.current.year += 1
+                    this.current.month = 1
+                } else {
+                    this.current.month += 1
+                }
+            }
 
             this.current.date = 1;
 
@@ -179,21 +216,7 @@ export default {
             }
 
             const monthStartWeekday = new Date(year, month - 1, 1).getDay();
-            const monthEndWeekday = new Date(year, month, 1).getDay() || 7;
-
-            const preInfo = this.getPreMonth(this.current);
-            const nextInfo = this.getNextMonth();
-
-            for (let i = 0; i < monthStartWeekday - 1; i++) {
-                let preObj = {
-                    type: "pre",
-                    date: daysInMonth[preInfo.month - 1] - (monthStartWeekday - i - 2),
-                    month: preInfo.month,
-                    year: preInfo.year,
-                    children: [],
-                };
-                dataArr.push(preObj);
-            }
+            this.monthStartWeekday = monthStartWeekday
 
             for (let i = 0; i < daysInMonth[month - 1]; i++) {
                 let itemObj = {
@@ -206,43 +229,7 @@ export default {
                 dataArr.push(itemObj);
             }
 
-            for (let i = 0; i < tmpEnd - monthEndWeekday; i++) {
-                let nextObj = {
-                    type: "next",
-                    date: i + 1,
-                    month: nextInfo.month,
-                    year: nextInfo.year,
-                    children: [],
-                };
-                dataArr.push(nextObj);
-            }
-
             this.dataArr = dataArr;
-        },
-        // 获取前一个月的年月日信息
-        getPreMonth(date, defaultDate = 1) {
-            let { year, month } = date || this.current;
-
-            if (month === 1) {
-                year -= 1;
-                month = 12;
-            } else {
-                month -= 1;
-            }
-
-            return { year, month, date: defaultDate };
-        },
-        // 获取后一个月的年月日信息
-        getNextMonth(defaultDate = 1) {
-            let { year, month } = this.current;
-            if (month === 12) {
-                year += 1;
-                month = 1;
-            } else {
-                month += 1;
-            }
-
-            return { year, month, date: defaultDate };
         },
         dateClick({ date, month, year }) {
             this.current.year = year;
@@ -250,7 +237,6 @@ export default {
             this.current.date = date;
 
             this.$router.push(`/archive/${this.current.year}/${this.current.month}/${this.current.date}`);
-            // this.dataArr = this.getMonthData();
         },
         isToday({ year, month, date }) {
             const dateObj = new Date();
