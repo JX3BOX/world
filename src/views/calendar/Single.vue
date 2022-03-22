@@ -129,6 +129,7 @@
             },
             timelineData() {
                 let history;
+                // 将同一年份的记录归档至同一数组内
                 history = this.history?.reduce((acc, obj) => {
                     const key = obj.year;
                     if (!acc[key]) {
@@ -142,6 +143,7 @@
                 return history;
             },
             timelineKeys() {
+                // 倒序历史记录年份 大 -> 小
                 return Object.keys(this.timelineData || {}).map(year => parseInt(year, 10)).sort((a, b) => b - a)
             },
             isEditor() {
