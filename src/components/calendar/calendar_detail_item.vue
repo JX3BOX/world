@@ -9,7 +9,7 @@
             <!-- 文本 -->
             <span class="u-desc" :style="descStyle(data)">
                 <i class="u-client" v-if="data.type == 1" :class="data.client">{{ getClientLabel(data.client).slice(0, 1) }}</i>
-                <i class="u-star" v-if="data.is_top">⭐️</i>{{ data.desc }}
+                <i class="u-star" v-if="!!data.is_top">⭐️</i>{{ data.desc }}
             </span>
         </div>
 

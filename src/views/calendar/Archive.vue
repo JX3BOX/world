@@ -13,7 +13,7 @@
                             class="u-btn"
                             title="上一年"
                         ></el-button>
-                        <span class="u-year">{{ current.year }}</span>
+                        <span class="u-year" :style="{color:getSloganMeta('color')}">{{ current.year }}</span>
                         <el-button
                             icon="el-icon-arrow-right"
                             size="medium"
@@ -33,7 +33,7 @@
                             class="u-btn"
                             title="上一月"
                         ></el-button>
-                        <span class="u-year u-month-text">{{ current.month }}</span>
+                        <span class="u-year u-month-text" :style="{color:getSloganMeta('color')}">{{ current.month }}</span>
                         <el-button
                             icon="el-icon-arrow-right"
                             size="medium"
@@ -67,7 +67,7 @@
                         ]"
                         :key="index"
                     >
-                        <calendar-item :data="item" :counts="counts" :slogans="slogans"></calendar-item>
+                        <calendar-item :data="item" :counts="counts" :slogans="slogans" :pageSlogan="pageSlogan" :isToday="isToday(item)"></calendar-item>
                     </div>
                 </section>
             </section>

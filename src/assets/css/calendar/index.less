@@ -1,52 +1,58 @@
-.m-main{
-    padding:0;
+.m-main {
+    padding: 0;
 }
 
-@aside_width:320px;
+@aside_width: 320px;
 .m-calendar {
     // display: flex;
     // gap: 20px;
-    min-height: calc(100vh - @header-height - @bread-height - 80px);
-    border-bottom:1px solid #eee;
+
+    border-bottom: 1px solid #eee;
+    box-sizing: border-box;
 }
 
 .m-calendar-main {
     // flex: 1;
-    padding:20px 20px;
+    padding: 20px 20px;
     .mr(@aside_width);
 
-    background-position: center top;
+    background-position: right bottom;
     background-repeat: no-repeat;
+    background-size: cover;
+
+    height: calc(100vh - @header-height - @bread-height);
+    box-sizing: border-box;
 }
 .m-calendar-aside {
     position: fixed;
-    right:0;
-    bottom:0;
-    top:@header-height + @bread-height ;
+    right: 0;
+    bottom: 0;
+    top: @header-height + @bread-height;
     width: @aside_width;
-    border-left:1px solid #eee;
-    background-color:@bg-light;
+    border-left: 1px solid #eee;
+    background-color: @bg-light;
 }
-.c-footer.archive{
+.c-footer.archive {
     .mr(@aside_width);
+    .none;
 }
-@media screen and (min-width:2000px){
-    .m-calendar-aside{
-        width:@aside_width + 140px;
+@media screen and (min-width: 2000px) {
+    .m-calendar-aside {
+        width: @aside_width + 140px;
     }
     .m-calendar-main {
         .mr(@aside_width + 140px);
     }
-    .c-footer.archive{
+    .c-footer.archive {
         .mr(@aside_width + 140px);
     }
 }
 
-.m-calendar-header{
+.m-calendar-header {
     display: flex;
     justify-content: space-between;
 
-    .u-time{
+    .u-time {
         display: flex;
     }
 }
@@ -56,50 +62,52 @@
     align-items: center;
     justify-content: center;
 
-    background-color:rgba(255,255,255,.4);
+    background-color: rgba(255, 255, 255, 0.4);
     .r(4px);
 
     .u-year {
-        margin: 0 20px;
-        .fz(62px);
+        // margin: 0 20px;
+        .fz(42px);
         .bold;
         letter-spacing: 2px;
-        font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+        font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
     }
 
-    .u-btn{
-        border:none;
-        background:none;
+    .u-btn {
+        border: none;
+        background: none;
     }
 }
 
 .m-calendar-month {
     // background-color:rgba(255,255,255,0.1);
     text-align: center;
-    padding:10px 0;
+    padding: 10px 0;
 
     .u-month {
         width: 120px;
-        background:none;
-        border:none;
+        background: none;
+        border: none;
         .fz(16px);
         font-weight: 300;
-        padding:0;
+        padding: 0;
 
         .pr;
-        &.active{
+        &.active {
             .bold !important;
-            color:@pink;
+            color: @pink;
         }
-        &:after{
-            content : '';
+        &:after {
+            content: "";
             .db;
-            height:20px;
+            height: 20px;
             border-right: 1px solid #ddd;
             transform: skew(-20deg);
-            .pa;top:0px;left:100%;
+            .pa;
+            top: 0px;
+            left: 100%;
         }
-        &:last-child::after{
+        &:last-child::after {
             .none;
         }
     }
@@ -116,12 +124,12 @@
     // }
 }
 
-.m-calendar-slogan{
+.m-calendar-slogan {
     // .none;
-    a{
+    a {
         .db;
     }
-    img{
+    img {
         .auto(x);
         .db;
         .h(70px);
@@ -135,15 +143,18 @@
 
 .m-calendar-week {
     display: flex;
+    background-color: #e5e5e5;
+    background-color: @bg-light;
+    border: 1px solid #eee;
+    border-bottom: none;
 
     .u-week {
         flex: 1;
         text-align: center;
-        color:#888;
+        color: #888;
     }
 
-    background-color:@bg-light;
-    padding:10px 10px;
+    padding: 12px 10px;
 }
 
 .m-calendar-date {
@@ -151,13 +162,13 @@
     width: 100%;
     display: flex;
     flex-flow: row wrap;
-    background-color:rgba(255,255,255,0.99);
+    background-color: rgba(255, 255, 255, 0.99);
     border-top: 1px solid #eee;
     border-left: 1px solid #eee;
 
     .u-date {
         flex: 0 0 14.285%;
-        // .fl;.w(14.285%);
+        overflow: hidden;
 
         height: 160px;
         box-sizing: border-box;
@@ -170,7 +181,7 @@
         }
 
         &.u-other {
-            color: #ccc;
+            color: #ede5da;
         }
 
         &.u-current {
@@ -178,8 +189,13 @@
         }
 
         &.u-today {
-            color: @pink;
-            .bold;
+            // color: @pink;
+            .u-date-text {
+                .bold;
+                .r(50%);
+                .size(24px);
+                .x;
+            }
         }
     }
 }

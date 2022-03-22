@@ -4,12 +4,21 @@
     .pr;
     box-sizing: border-box;
     padding:10px;
+    .break;
 
-    background-position: center;
+    background-position: right top;
     background-repeat: no-repeat;
 
     .u-date-text {
-        .ml(5px);
+        .fz(14px,24px);
+        font-weight: 700;
+        font-family: 'Roboto';
+        .db;
+        .mt(3px);
+        .ml(3px);
+    }
+
+    .u-links{
         .mt(5px);
     }
 
@@ -21,13 +30,13 @@
             content: "+";
         }
 
-        &.is-event {
-            color: @purple;
-        }
+        // &.is-event {
+        //     color: @purple;
+        // }
 
-        &.is-activity {
-            color: @pink;
-        }
+        // &.is-activity {
+        //     color: @pink;
+        // }
     }
 
     .u-date-count {

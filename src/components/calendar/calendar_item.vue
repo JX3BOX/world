@@ -1,20 +1,26 @@
 <template>
     <div class="m-calendar-item" :class="slogan ? slogan.style : ''" :style="sloganStyle">
-        <span class="u-date-text">{{ data.date }}</span>
-        <template v-if="data.type === 'normal'">
-            <div class="u-link" :class="linkClassName(item)" v-for="item in links" :key="item.id">
+        <span
+            class="u-date-text"
+            :style="{ backgroundColor: isToday && pageSlogan.color, color: isToday && pageSlogan.color && '#fff' }"
+            >{{ data.date }}</span
+        >
+        <div v-if="data.type === 'normal'" class="u-links">
+            <div
+                class="u-link"
+                :class="linkClassName(item)"
+                :style="{ backgroudColor: item.bgcolor }"
+                v-for="item in links"
+                :key="item.id"
+            >
                 {{ item.desc }}
             </div>
-        </template>
-        <template v-else>
-            <div class="u-nothing">...</div>
-        </template>
-
-            <div class="u-date-count" v-if="countData">
-                <b>{{ countData.count }}</b
-                >条纪事
-            </div>
-        <!-- </div> -->
+        </div>
+        <div class="u-nothing" v-else>...</div>
+        <div class="u-date-count" v-if="countData">
+            <b>{{ countData.count }}</b
+            >条纪事
+        </div>
     </div>
 </template>
 
@@ -34,13 +40,20 @@ export default {
             type: Array,
             default: () => [],
         },
+        pageSlogan: {
+            type: Object,
+            default: () => {},
+        },
+        isToday: {
+            type: Boolean,
+        },
     },
     computed: {
         links() {
             const events = this.data?.children.filter((child) => child.type == 1);
             const activities = this.data?.children.filter((child) => child.type == 2);
 
-            return [...events, ...activities];
+            return [...events, ...activities].slice(0, 5);
         },
         countData() {
             const { data } = this;

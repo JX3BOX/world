@@ -98,9 +98,9 @@
                     <el-form-item label="重要级别">
                         <el-input-number v-model.number="form.level" size="medium" :min="0" :max="5"></el-input-number>
                     </el-form-item>
-                    <!-- <el-form-item label="样式">
+                    <el-form-item label="样式">
                         <div class="m-style">
-                            <el-select v-model="form.style" size="medium" placeholder="请选择样式"></el-select>
+                            <!-- <el-select v-model="form.style" size="medium" placeholder="请选择样式"></el-select> -->
                             <div class="m-color-item">
                                 <label class="u-label">背景色</label>
                                 <span class="u-color-value" v-show="form.bgcolor">【{{ form.bgcolor }}】</span>
@@ -113,10 +113,10 @@
                             </div>
                         </div>
                     </el-form-item>
-                    <el-form-item label="海报">
+                    <!-- <el-form-item label="海报">
                         <img-upload :data="form.banner" filed="banner" @update="setMeta"></img-upload>
-                    </el-form-item>
-                    <el-form-item label="图片">
+                    </el-form-item> -->
+                    <!-- <el-form-item label="图片">
                         <img-upload :data="form.img" filed="img" @update="setMeta"></img-upload>
                     </el-form-item> -->
                     <el-form-item label="备注">
