@@ -10,10 +10,10 @@
                 class="u-link"
                 :class="linkClassName(item)"
                 :style="{
-                    backgroundColor: item.bgcolor || 'rgba(255,255,255,0.6)',
-                    color: item.bgcolor ? '#fff' : item.color,
-                    fontWeight: !item.bgcolor && item.color && 'bold',
+                    color: item.bgcolor && '#fff',
+                    //fontWeight: !item.bgcolor && item.color && 'bold',
                     backgroundImage: `url(${resolveImagePath(item.img)})`,
+                    backgroundColor: item.bgcolor || 'rgba(255,255,255,0.6)',
                 }"
                 v-for="item in links"
                 :key="item.id"
