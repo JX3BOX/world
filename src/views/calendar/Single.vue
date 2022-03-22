@@ -44,8 +44,8 @@
             <header class="m-single-title m-history-header"><i class="el-icon-date"></i>那年今日</header>
             <div class="m-history-content">
                 <el-timeline>
-                    <el-timeline-item v-for="(timeline, index) in timelineData" :key="index" :timestamp="index" placement="top">
-                        <div class="m-history-item" v-for="item in timeline" :key="item.id">
+                    <el-timeline-item v-for="key in timelineKeys" :key="key" :timestamp="String(key)" placement="top">
+                        <div class="m-history-item" v-for="item in timelineData[key]" :key="item.id">
                             <calendar-detail-item :type="item.type" :data="item"></calendar-detail-item>
                         </div>
                     </el-timeline-item>
@@ -140,6 +140,9 @@
                 }, {});
 
                 return history;
+            },
+            timelineKeys() {
+                return Object.keys(this.timelineData || {}).map(year => parseInt(year, 10)).sort((a, b) => b - a)
             },
             isEditor() {
                 return User.isEditor();

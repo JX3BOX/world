@@ -1,10 +1,14 @@
 <template>
     <div class="m-calendar-item" :class="slogan ? slogan.style : ''" :style="sloganStyle">
-        <!-- <div class="u-item"> -->
-            <span class="u-date-text">{{ data.date }}</span>
+        <span class="u-date-text">{{ data.date }}</span>
+        <template v-if="data.type === 'normal'">
             <div class="u-link" :class="linkClassName(item)" v-for="item in links" :key="item.id">
                 {{ item.desc }}
             </div>
+        </template>
+        <template v-else>
+            <div class="u-nothing">...</div>
+        </template>
 
             <div class="u-date-count" v-if="countData">
                 <b>{{ countData.count }}</b
