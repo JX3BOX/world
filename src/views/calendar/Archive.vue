@@ -128,6 +128,7 @@ export default {
         client() {
             return this.$store.state.client;
         },
+        // 页面slogan
         pageSlogan() {
             const { current } = this;
             return this.slogans.find(
@@ -175,6 +176,7 @@ export default {
          */
         toggleMonth(action) {
             if (action === 'prev') {
+                // 如果当前月份为1月
                 if (this.current.month === 1) {
                     this.current.year -= 1
                     this.current.month = 12
@@ -182,6 +184,7 @@ export default {
                     this.current.month -= 1
                 }
             } else {
+                // 如果当前月份为12月
                 if (this.current.month === 12) {
                     this.current.year += 1
                     this.current.month = 1
@@ -278,11 +281,13 @@ export default {
 
             this.$router.push(`/archive/${this.current.year}/${this.current.month}/${this.current.date}`);
         },
+        // 判断是否为今日
         isToday({ year, month, date }) {
             const dateObj = new Date();
 
             return dateObj.getFullYear() === year && dateObj.getMonth() + 1 === month && dateObj.getDate() === date;
         },
+        // 当前选定的日期
         isCurrent({ year, month, date }) {
             const { current } = this;
 
@@ -304,6 +309,7 @@ export default {
                 });
             });
         },
+        // 获取当前年月的统计数据
         loadCalendarCount() {
             const { year, month } = this.current;
             getCalendarCount({ year, month }).then((res) => {
@@ -316,6 +322,7 @@ export default {
                 });
             });
         },
+        // 获取当前年月的海报信息
         loadCalendarSlogans() {
             const { year, month } = this.current;
             getCalendarSlogans({ year, month }).then((res) => {
