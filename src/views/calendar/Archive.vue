@@ -144,7 +144,8 @@ export default {
         },
         firstDayStyle() {
             return {
-                marginLeft: 14.285 * (this.monthStartWeekday - 1) + '%'
+                marginLeft: this.monthStartWeekday > 0 ? 14.285 * (this.monthStartWeekday - 1) + '%' :
+                    14.285 * 6 + '%'
             }
         }
     },
