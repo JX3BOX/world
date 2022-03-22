@@ -7,9 +7,10 @@
                 ><img v-if="data && data.user_info" class="u-avatar" :src="showAvatar(data.user_info.user_avatar)" :alt="data.user_info.display_name"
             /></a>
             <!-- 文本 -->
-            <span class="u-desc" :style="descStyle(data)">
+            <span class="u-desc">
                 <i class="u-client" v-if="data.type == 1" :class="data.client">{{ getClientLabel(data.client).slice(0, 1) }}</i>
-                <i class="u-star" v-if="!!data.is_top">⭐️</i>{{ data.desc }}
+                <i class="u-star" v-if="!!data.is_top">⭐️</i>
+                <span :style="descStyle(data)">{{ data.desc }}</span>
             </span>
         </div>
 

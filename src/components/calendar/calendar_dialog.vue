@@ -61,6 +61,9 @@
                 <el-form-item label="描述" required :error="descError">
                     <el-input type="textarea" v-model="form.desc" :rows="3" placeholder="输入事件描述"></el-input>
                 </el-form-item>
+                <el-form-item label="简述">
+                    <el-input type="input" v-model="form.title" placeholder="输入简述（非必填）"></el-input>
+                </el-form-item>
                 <el-form-item label="客户端" required>
                     <el-radio-group size="small" v-model="form.client">
                         <el-radio-button label="std">正式服</el-radio-button>
@@ -116,9 +119,9 @@
                     <!-- <el-form-item label="海报">
                         <img-upload :data="form.banner" filed="banner" @update="setMeta"></img-upload>
                     </el-form-item> -->
-                    <!-- <el-form-item label="图片">
+                    <el-form-item label="图片">
                         <img-upload :data="form.img" filed="img" @update="setMeta"></img-upload>
-                    </el-form-item> -->
+                    </el-form-item>
                     <el-form-item label="备注">
                         <el-input v-model="form.remark" size="medium" placeholder="请输入备注"></el-input>
                     </el-form-item>
@@ -141,7 +144,7 @@
 <script>
 import { addCalendar, putCalendar, delCalendar, manageCalendar } from "@/service/calendar.js";
 import User from "@jx3box/jx3box-common/js/user.js";
-// import img_upload from "./img_upload.vue";
+import img_upload from "./img_upload.vue";
 import calendar_highlights from "@/assets/data/calendar_highlights.json";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 
@@ -170,7 +173,7 @@ const default_data = {
 export default {
     name: "calendar_dialog",
     components: {
-        // "img-upload": img_upload,
+        "img-upload": img_upload,
     },
     props: ["value", "dateObj", "selected", "mode", "isSuper"],
     data: function () {

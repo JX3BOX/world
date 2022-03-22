@@ -46,7 +46,7 @@
                 </div>
                 <!-- 中央海报 -->
                 <div class="u-slogan m-calendar-slogan">
-                    <a :href="getSloganMeta('url')" target="_blank"><img :src="getSloganMeta('banner')" /></a>
+                    <a :href="getSloganMeta('url')" target="_blank" :title="getSloganMeta('title')"><img :src="getSloganMeta('banner')" /></a>
                 </div>
             </div>
             <section class="m-calendar-content">

@@ -8,6 +8,7 @@
 
     background-position: right top;
     background-repeat: no-repeat;
+    background-size:contain;
 
     .u-date-text {
         .fz(14px,24px);
@@ -24,11 +25,14 @@
 
     .u-link {
         .nobreak;
-        .fz(12px,1.8);
+        .fz(12px,22px);
+        padding:0 5px;
+        .r(4px);
+        .mb(5px);
 
-        &::before {
-            content: "+";
-        }
+        // &::before {
+        //     content: "+";
+        // }
 
         // &.is-event {
         //     color: @purple;
@@ -43,7 +47,8 @@
         .pa;
         right: 8px;
         bottom: 8px;
-        background-color: @bg-gray;
+        // background-color: @bg-gray;
+        background-color:rgba(237,243,245,.47);
         .x;
         .fz(12px,20px);
         padding: 2px 5px;
