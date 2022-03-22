@@ -9,7 +9,12 @@
             <div
                 class="u-link"
                 :class="linkClassName(item)"
-                :style="{ backgroundColor: item.bgcolor || 'rgba(255,255,255,0.6)', color: item.bgcolor ? '#fff' : '#333' }"
+                :style="{
+                    backgroundColor: item.bgcolor || 'rgba(255,255,255,0.6)',
+                    color: item.bgcolor ? '#fff' : item.color,
+                    fontWeight: !item.bgcolor && item.color && 'bold',
+                    backgroundImage: `url(${resolveImagePath(item.img)})`,
+                }"
                 v-for="item in links"
                 :key="item.id"
             >
@@ -25,6 +30,7 @@
 </template>
 
 <script>
+import { resolveImagePath } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "calendar-item",
     props: {
@@ -66,12 +72,12 @@ export default {
         sloganStyle() {
             return {
                 backgroundColor: this.slogan?.bgcolor,
-                backgroundImage: `url(${this.slogan?.img})`,
+                backgroundImage: `url(${resolveImagePath(this.slogan?.img)})`,
             };
         },
-        themeColor(){
-            return this.pageSlogan?.color
-        }
+        themeColor() {
+            return this.pageSlogan?.color;
+        },
     },
     methods: {
         linkClassName({ type }) {
@@ -80,6 +86,7 @@ export default {
             }
             return "is-activity";
         },
+        resolveImagePath,
     },
 };
 </script>

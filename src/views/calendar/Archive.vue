@@ -46,7 +46,7 @@
                 </div>
                 <!-- 中央海报 -->
                 <div class="u-slogan m-calendar-slogan">
-                    <a :href="getSloganMeta('url')" target="_blank" :title="getSloganMeta('title')"><img :src="getSloganMeta('banner')" /></a>
+                    <a :href="getSloganMeta('url')" target="_blank" :title="getSloganMeta('title')"><img :src="resolveImagePath(getSloganMeta('banner'))" /></a>
                 </div>
             </div>
             <section class="m-calendar-content">
@@ -84,6 +84,7 @@ import { getCalendar, getCalendarCount, getCalendarSlogans } from "@/service/cal
 
 import calendarDetail from "@/components/calendar/calendar_detail.vue";
 import calendar_item from "@/components/calendar/calendar_item.vue";
+import {resolveImagePath} from '@jx3box/jx3box-common/js/utils'
 export default {
     name: "Archive",
     components: {
@@ -138,7 +139,7 @@ export default {
         topStyle() {
             return {
                 backgroundColor: this.pageSlogan?.bgcolor,
-                backgroundImage: `url(${this.pageSlogan?.img})`,
+                backgroundImage: `url(${resolveImagePath(this.pageSlogan?.img)})`,
             };
         },
     },
@@ -334,6 +335,7 @@ export default {
         getSloganMeta(key) {
             return this.pageSlogan?.[key];
         },
+        resolveImagePath,
     },
 };
 </script>

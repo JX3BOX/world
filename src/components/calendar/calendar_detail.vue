@@ -25,7 +25,7 @@
             </section>
 
             <!-- 事件 -->
-            <section class="m-content-part" v-if="events && events.length">
+            <section class="m-content-part">
                 <div class="u-part-header">
                     <el-divider content-position="left"
                         ><i class="el-icon-collection-tag"></i> 事件<span class="u-count">({{ events_count }})</span></el-divider
