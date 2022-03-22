@@ -54,44 +54,44 @@
                     },
 
                     // TODO:关联书籍接口
-                    book: {
-                        label: "书籍",
-                        key: "book",
-                        children: [
-                            {
-                                label: "杂集",
-                            },
-                            {
-                                label: "道学",
-                            },
-                            {
-                                label: "佛学",
-                            },
-                        ],
-                    },
+                    // book: {
+                    //     label: "书籍",
+                    //     key: "book",
+                    //     children: [
+                    //         {
+                    //             label: "杂集",
+                    //         },
+                    //         {
+                    //             label: "道学",
+                    //         },
+                    //         {
+                    //             label: "佛学",
+                    //         },
+                    //     ],
+                    // },
 
                     // TODO:关联接口
-                    reputation: {
-                        label: "声望",
-                        children: [
-                            {
-                                label: "江湖门派",
-                            },
-                            {
-                                label: "江湖势力",
-                            },
-                        ],
-                    },
+                    // reputation: {
+                    //     label: "声望",
+                    //     children: [
+                    //         {
+                    //             label: "江湖门派",
+                    //         },
+                    //         {
+                    //             label: "江湖势力",
+                    //         },
+                    //     ],
+                    // },
 
                     // TODO:关联接口
-                    quest: {
-                        label: "任务",
-                        children: [
-                            {
-                                label: "xx系列",
-                            },
-                        ],
-                    },
+                    // quest: {
+                    //     label: "任务",
+                    //     children: [
+                    //         {
+                    //             label: "xx系列",
+                    //         },
+                    //     ],
+                    // },
 
                     knowledge: {
                         label: "通识",
