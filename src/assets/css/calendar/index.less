@@ -76,7 +76,6 @@
 .m-calendar-month {
     // background-color:rgba(255,255,255,0.1);
     text-align: center;
-    .mt(20px);
     padding:10px 0;
 
     .u-month {
@@ -84,7 +83,6 @@
         background:none;
         border:none;
         .fz(16px);
-        // font-family: '楷体';
         font-weight: 300;
         padding:0;
 
@@ -92,14 +90,6 @@
         &.active{
             .bold !important;
             color:@pink;
-            // &::before{
-            //     font-weight: normal;
-            //     content : '~ ✿ ~';
-            //     // transform: none;
-            //     .pa;.lt(50%,35px);
-            //     .ml(-21px);
-            //     color:#ffa6d2;
-            // }
         }
         &:after{
             content : '';
@@ -112,6 +102,10 @@
         &:last-child::after{
             .none;
         }
+    }
+
+    .u-month-text {
+        width: 78px;
     }
 
     // .u-slogan{
