@@ -66,7 +66,6 @@
                             { 'u-current': isCurrent(item) },
                         ]"
                         :key="index"
-                        :style="index === 0 ? firstDayStyle : ''"
                     >
                         <calendar-item :data="item" :counts="counts" :slogans="slogans"></calendar-item>
                     </div>
@@ -99,7 +98,6 @@ export default {
         },
         months,
         weeks,
-        monthStartWeekday: 0,
 
         dataArr: [],
         counts: [],
@@ -142,12 +140,6 @@ export default {
                 backgroundImage: `url(${this.pageSlogan?.img})`,
             };
         },
-        firstDayStyle() {
-            return {
-                marginLeft: this.monthStartWeekday > 0 ? 14.285 * (this.monthStartWeekday - 1) + '%' :
-                    14.285 * 6 + '%'
-            }
-        }
     },
     watch: {
         "$route.params": {
@@ -205,19 +197,30 @@ export default {
         // 获取指定月份数据
         getMonthData() {
             const { year, month } = this.current;
-            let tmpEnd = 8;
             let dataArr = [];
             let daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
             // 闰年
             if ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0) {
                 daysInMonth[1] = 29;
-
-                [3].includes(month) && (tmpEnd = 7);
             }
 
-            const monthStartWeekday = new Date(year, month - 1, 1).getDay();
-            this.monthStartWeekday = monthStartWeekday
+            const monthStartWeekday = new Date(year, month - 1, 1).getDay() || 7;
+            const monthEndWeekday = new Date(year, month, 1).getDay() || 7;
+
+            const preInfo = this.getPreMonth(this.current);
+            const nextInfo = this.getNextMonth();
+
+            for (let i = 0; i < monthStartWeekday - 1; i++) {
+                let preObj = {
+                    type: "pre",
+                    date: daysInMonth[preInfo.month - 1] - (monthStartWeekday - i - 2),
+                    month: preInfo.month,
+                    year: preInfo.year,
+                    children: [],
+                };
+                dataArr.push(preObj);
+            }
 
             for (let i = 0; i < daysInMonth[month - 1]; i++) {
                 let itemObj = {
@@ -230,7 +233,43 @@ export default {
                 dataArr.push(itemObj);
             }
 
+            for (let i = 0; i < 8 - monthEndWeekday; i++) {
+                let nextObj = {
+                    type: "next",
+                    date: i + 1,
+                    month: nextInfo.month,
+                    year: nextInfo.year,
+                    children: [],
+                };
+                dataArr.push(nextObj);
+            }
+
             this.dataArr = dataArr;
+        },
+        // 获取前一个月的年月日信息
+        getPreMonth(date, defaultDate = 1) {
+            let { year, month } = date || this.current;
+
+            if (month === 1) {
+                year -= 1;
+                month = 12;
+            } else {
+                month -= 1;
+            }
+
+            return { year, month, date: defaultDate };
+        },
+        // 获取后一个月的年月日信息
+        getNextMonth(defaultDate = 1) {
+            let { year, month } = this.current;
+            if (month === 12) {
+                year += 1;
+                month = 1;
+            } else {
+                month += 1;
+            }
+
+            return { year, month, date: defaultDate };
         },
         dateClick({ date, month, year }) {
             this.current.year = year;
