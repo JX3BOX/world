@@ -1,11 +1,16 @@
 <template>
     <div class="m-calendar-item" :class="slogan ? slogan.style : ''" :style="sloganStyle">
-        <span class="u-date-text">{{ data.date }}</span>
-        <div class="u-link" :class="linkClassName(item)" v-for="item in links" :key="item.id">
-            {{ item.desc }}
-        </div>
+        <!-- <div class="u-item"> -->
+            <span class="u-date-text">{{ data.date }}</span>
+            <div class="u-link" :class="linkClassName(item)" v-for="item in links" :key="item.id">
+                {{ item.desc }}
+            </div>
 
-        <div class="u-date-count" v-if="countData"><b>{{ countData.count }}</b>条纪事</div>
+            <div class="u-date-count" v-if="countData">
+                <b>{{ countData.count }}</b
+                >条纪事
+            </div>
+        <!-- </div> -->
     </div>
 </template>
 
@@ -19,12 +24,12 @@ export default {
         },
         counts: {
             type: Array,
-            default: () => []
+            default: () => [],
         },
         slogans: {
             type: Array,
-            default: () => []
-        }
+            default: () => [],
+        },
     },
     computed: {
         links() {
@@ -34,19 +39,19 @@ export default {
             return [...events, ...activities];
         },
         countData() {
-            const { data } = this
-            return this.counts.find(d => d.year === data.year && d.month === data.month && d.date === data.date)
+            const { data } = this;
+            return this.counts.find((d) => d.year === data.year && d.month === data.month && d.date === data.date);
         },
         slogan() {
-            const { data } = this
-            return this.slogans.find(d => d.year === data.year && d.month === data.month && d.date === data.date)
+            const { data } = this;
+            return this.slogans.find((d) => d.year === data.year && d.month === data.month && d.date === data.date);
         },
         sloganStyle() {
             return {
                 backgroundColor: this.slogan?.bgcolor,
-                backgroundImage: `url(${this.slogan?.img})`
-            }
-        }
+                backgroundImage: `url(${this.slogan?.img})`,
+            };
+        },
     },
     methods: {
         linkClassName({ type }) {
