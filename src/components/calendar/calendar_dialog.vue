@@ -61,9 +61,6 @@
                 <el-form-item label="描述" required :error="descError">
                     <el-input type="textarea" v-model="form.desc" :rows="3" placeholder="输入事件描述"></el-input>
                 </el-form-item>
-                <el-form-item label="简述">
-                    <el-input type="input" v-model="form.title" placeholder="输入简述（非必填）"></el-input>
-                </el-form-item>
                 <el-form-item label="客户端" required>
                     <el-radio-group size="small" v-model="form.client">
                         <el-radio-button label="std">正式服</el-radio-button>
@@ -92,11 +89,14 @@
 
                 <template v-if="isEditor && isEditmode">
                     <el-divider><i class="el-icon-coordinate"></i> 管理设置</el-divider>
-                    <el-form-item label="置顶显示">
+                    <el-form-item label="格子显示">
                         <el-radio-group size="small" v-model.number="form.is_top">
                             <el-radio-button :label="0">否</el-radio-button>
                             <el-radio-button :label="1">是</el-radio-button>
                         </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="格子简述" v-if="form.is_top">
+                        <el-input type="input" v-model="form.title" placeholder="输入简述（非必填）"></el-input>
                     </el-form-item>
                     <el-form-item label="重要级别">
                         <el-input-number v-model.number="form.level" size="medium" :min="0" :max="5"></el-input-number>
