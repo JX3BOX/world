@@ -53,7 +53,7 @@
             </div>
         </section>
 
-        <Thx :postId="id" postType="calendar" :userId="author" :adminBoxcoinEnable="true" :userBoxcoinEnable="true" />
+        <Thx :postId="id" postType="calendar" :postTitle="favTitle" :userId="author" :adminBoxcoinEnable="true" :userBoxcoinEnable="true" />
 
         <Comment class="m-comment" :id="id" category="calendar" />
 
@@ -152,6 +152,9 @@
             isCreator() {
                 return this.today.user_id == User.getInfo().uid;
             },
+            favTitle(){
+                return this.today.desc?.slice(0,20) + '...'
+            }
         },
         watch: {
             id: {
