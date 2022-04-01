@@ -9,6 +9,11 @@
         <main class="m-calendar-detail-content">
             <!-- 日常+周常活动 -->
             <section class="m-content-part" v-if="client == 'std'">
+                <div class="u-part-header">
+                    <el-divider content-position="left"
+                        ><i class="el-icon-date"></i> 日常</el-divider
+                    >
+                </div>
                 <daily-activity :date="date"></daily-activity>
             </section>
 

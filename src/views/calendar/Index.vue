@@ -55,7 +55,6 @@ export default {
     mounted: function () {
         if (User.isLogin()) {
             getProfile().then(res => {
-                console.log(res)
                 if (res?.data?.data) {
                     this.$store.commit('SET_STATE', {
                         key: 'server',

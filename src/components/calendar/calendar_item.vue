@@ -1,5 +1,5 @@
 <template>
-    <div class="m-calendar-item" :class="slogan ? slogan.style : ''" :style="sloganStyle">
+    <div class="m-calendar-item" :class="slogan ? slogan.style : ''" :style="sloganStyle" :key="uiKey">
         <span
             class="u-date-text"
             :style="{ backgroundColor: isToday && themeColor, color: isToday && themeColor && '#fff' }"
@@ -78,6 +78,9 @@ export default {
         themeColor() {
             return this.pageSlogan?.color;
         },
+        uiKey : function (){
+            return this.data?.year + this.data?.month + this.data?.date
+        }
     },
     methods: {
         linkClassName({ type }) {
