@@ -17,6 +17,8 @@
 
 <script>
 import Nav from "@/components/Nav.vue";
+import User from '@jx3box/jx3box-common/js/user';
+import { getProfile } from "@/service/calendar.js";
 export default {
     name: "App",
     props: [],
@@ -50,7 +52,19 @@ export default {
             }
         }
     },
-    mounted: function () {},
+    mounted: function () {
+        if (User.isLogin()) {
+            getProfile().then(res => {
+                console.log(res)
+                if (res?.data?.data) {
+                    this.$store.commit('SET_STATE', {
+                        key: 'server',
+                        value: res.data.data.jx3_server
+                    })
+                }
+            })
+        }
+    },
 };
 </script>
 

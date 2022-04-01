@@ -7,6 +7,10 @@
         </header>
 
         <main class="m-calendar-detail-content">
+            <!-- 日常+周常活动 -->
+            <section>
+                <daily-activity :date="date"></daily-activity>
+            </section>
             <!-- 活动 -->
             <section class="m-content-part">
                 <div class="u-part-header">
@@ -48,9 +52,11 @@
 
 <script>
 import { getDayCalendar, delCalendar } from "@/service/calendar.js";
+import User from "@jx3box/jx3box-common/js/user.js";
+
 import calendar_dialog from "./calendar_dialog.vue";
 import calendar_detail_item from "./calendar_detail_item.vue";
-import User from "@jx3box/jx3box-common/js/user.js";
+import daily_activity from "./daily_activity.vue";
 
 export default {
     name: "calendar-detail",
@@ -63,6 +69,7 @@ export default {
     components: {
         "calendar-dialog": calendar_dialog,
         "calendar-detail-item": calendar_detail_item,
+        "daily-activity": daily_activity,
     },
     data: () => ({
         // 数据列表
@@ -92,7 +99,6 @@ export default {
         activities_count: function () {
             return this.activities?.length || 0;
         },
-
         // 事件
         events() {
             return this.list?.filter((item) => {
@@ -101,6 +107,10 @@ export default {
         },
         events_count: function () {
             return this.events?.length || 0;
+        },
+        date: function () {
+            const { year, month, date } = this.dateObj;
+            return `${year}-${month}-${date}`;
         },
     },
     watch: {
@@ -146,7 +156,6 @@ export default {
         // 提交
         update(res) {
             let { data } = res?.data || {};
-            console.log(data)
             if (data) {
                 if (this.isSameDate(data, this.dateObj)) {
                     data.desc = `(待审核) ${data.desc}`;

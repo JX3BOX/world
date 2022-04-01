@@ -62,162 +62,162 @@
 </template>
 
 <script>
-    import { getDetail, getHistory } from "@/service/calendar.js";
-    import { postStat } from "@jx3box/jx3box-common/js/stat";
-    import { showAvatar, authorLink } from "@jx3box/jx3box-common/js/utils";
-    import { showTime } from "@jx3box/jx3box-common/js/moment";
-    import cloneDeep from "lodash/cloneDeep";
-    import User from "@jx3box/jx3box-common/js/user.js";
+import { getDetail, getHistory } from "@/service/calendar.js";
+import { postStat } from "@jx3box/jx3box-common/js/stat";
+import { showAvatar, authorLink } from "@jx3box/jx3box-common/js/utils";
+import { showTime } from "@jx3box/jx3box-common/js/moment";
+import cloneDeep from "lodash/cloneDeep";
+import User from "@jx3box/jx3box-common/js/user.js";
 
-    import Comment from "@jx3box/jx3box-comment-ui/src/Comment.vue";
-    import calendar_dialog from "@/components/calendar/calendar_dialog.vue";
-    import calendar_detail_item from "@/components/calendar/calendar_detail_item.vue";
-    export default {
-        name: "SingleCalendar",
-        components: {
-            Comment,
-            "calendar-dialog": calendar_dialog,
-            "calendar-detail-item": calendar_detail_item,
+import Comment from "@jx3box/jx3box-comment-ui/src/Comment.vue";
+import calendar_dialog from "@/components/calendar/calendar_dialog.vue";
+import calendar_detail_item from "@/components/calendar/calendar_detail_item.vue";
+export default {
+    name: "SingleCalendar",
+    components: {
+        Comment,
+        "calendar-dialog": calendar_dialog,
+        "calendar-detail-item": calendar_detail_item,
+    },
+    data() {
+        return {
+            today: "",
+            history: [],
+            todayLoading: false,
+            historyLoading: false,
+
+            // 弹窗
+            visible: false,
+            isSuper : false,
+        };
+    },
+    computed: {
+        id() {
+            return this.$route.params.id;
         },
-        data() {
+        author() {
+            return this.today.user_id;
+        },
+        params({ today }) {
+            return today
+                ? {
+                        month: today.month,
+                        date: today.date,
+                    }
+                : "";
+        },
+        dateObj() {
             return {
-                today: "",
-                history: [],
-                todayLoading: false,
-                historyLoading: false,
-
-                // 弹窗
-                visible: false,
-                isSuper : false,
+                year: this.today.year,
+                month: this.today.month,
+                date: this.today.date,
             };
         },
-        computed: {
-            id() {
-                return this.$route.params.id;
-            },
-            author() {
-                return this.today.user_id;
-            },
-            params({ today }) {
-                return today
-                    ? {
-                          month: today.month,
-                          date: today.date,
-                      }
-                    : "";
-            },
-            dateObj() {
-                return {
-                    year: this.today.year,
-                    month: this.today.month,
-                    date: this.today.date,
-                };
-            },
-            references() {
-                let arr = [];
-                const { link, link_temp } = this.today;
+        references() {
+            let arr = [];
+            const { link, link_temp } = this.today;
 
-                link && link.length && (arr = cloneDeep(link));
+            link && link.length && (arr = cloneDeep(link));
 
-                if (link_temp && !arr.some((item) => item.url === link_temp)) {
-                    arr.push({
-                        label: "官方新闻",
-                        url: link_temp,
-                    });
+            if (link_temp && !arr.some((item) => item.url === link_temp)) {
+                arr.push({
+                    label: "官方新闻",
+                    url: link_temp,
+                });
+            }
+            return arr;
+        },
+        timelineData() {
+            let history;
+            // 将同一年份的记录归档至同一数组内
+            history = this.history?.reduce((acc, obj) => {
+                const key = obj.year;
+                if (!acc[key]) {
+                    acc[key] = [];
                 }
-                return arr;
-            },
-            timelineData() {
-                let history;
-                // 将同一年份的记录归档至同一数组内
-                history = this.history?.reduce((acc, obj) => {
-                    const key = obj.year;
-                    if (!acc[key]) {
-                        acc[key] = [];
-                    }
-                    acc[key].push(obj);
+                acc[key].push(obj);
 
-                    return acc;
-                }, {});
+                return acc;
+            }, {});
 
-                return history;
-            },
-            timelineKeys() {
-                // 倒序历史记录年份 大 -> 小
-                return Object.keys(this.timelineData || {}).map(year => parseInt(year, 10)).sort((a, b) => b - a)
-            },
-            isEditor() {
-                return User.isEditor();
-            },
-            isCreator() {
-                return this.today.user_id == User.getInfo().uid;
+            return history;
+        },
+        timelineKeys() {
+            // 倒序历史记录年份 大 -> 小
+            return Object.keys(this.timelineData || {}).map(year => parseInt(year, 10)).sort((a, b) => b - a)
+        },
+        isEditor() {
+            return User.isEditor();
+        },
+        isCreator() {
+            return this.today.user_id == User.getInfo().uid;
+        },
+    },
+    watch: {
+        id: {
+            immediate: true,
+            handler(val) {
+                if (val) {
+                    this.loadData();
+                }
             },
         },
-        watch: {
-            id: {
-                immediate: true,
-                handler(val) {
-                    if (val) {
-                        this.loadData();
-                    }
-                },
-            },
-            params: {
-                deep: true,
-                handler(val) {
-                    if (val) {
-                        this.loadHistory(val);
-                    }
-                },
+        params: {
+            deep: true,
+            handler(val) {
+                if (val) {
+                    this.loadHistory(val);
+                }
             },
         },
-        methods: {
-            // ====== 数据获取 ==========
-            loadData() {
-                this.todayLoading = true;
-                getDetail(this.id)
-                    .then((res) => {
-                        this.today = res.data.data;
-                    })
-                    .finally(() => {
-                        postStat("calendar", this.id);
-                        this.todayLoading = false;
-                    });
-            },
-            loadHistory(params) {
-                this.historyLoading = true;
-                getHistory(params)
-                    .then((res) => {
-                        this.history = (res.data.data || []).reverse();
-                    })
-                    .finally(() => {
-                        this.historyLoading = false;
-                    });
-            },
-
-            // ========= other ==========
-            goBack() {
-                // 如果存在历史则返回上一个记录，否则返回月历页面
-                history.length ? history.go(-1) : this.$router.push(`/archive/${this.dateObj.year}/${this.dateObj.month}`);
-            },
-            manage(isSuper) {
-                this.visible = true;
-                this.isSuper = isSuper
-            },
-
-            // ========= filters =========
-            formatDate({ year, month, date }) {
-                return `${month}月${date}日`;
-            },
-            showAvatar(val) {
-                return showAvatar(val, 24);
-            },
-            authorLink,
-            showTime,
+    },
+    methods: {
+        // ====== 数据获取 ==========
+        loadData() {
+            this.todayLoading = true;
+            getDetail(this.id)
+                .then((res) => {
+                    this.today = res.data.data;
+                })
+                .finally(() => {
+                    postStat("calendar", this.id);
+                    this.todayLoading = false;
+                });
         },
-    };
+        loadHistory(params) {
+            this.historyLoading = true;
+            getHistory(params)
+                .then((res) => {
+                    this.history = (res.data.data || []).reverse();
+                })
+                .finally(() => {
+                    this.historyLoading = false;
+                });
+        },
+
+        // ========= other ==========
+        goBack() {
+            // 如果存在历史则返回上一个记录，否则返回月历页面
+            history.length ? history.go(-1) : this.$router.push(`/archive/${this.dateObj.year}/${this.dateObj.month}`);
+        },
+        manage(isSuper) {
+            this.visible = true;
+            this.isSuper = isSuper
+        },
+
+        // ========= filters =========
+        formatDate({ year, month, date }) {
+            return `${month}月${date}日`;
+        },
+        showAvatar(val) {
+            return showAvatar(val, 24);
+        },
+        authorLink,
+        showTime,
+    },
+};
 </script>
 
 <style lang="less">
-    @import "~@/assets/css/calendar/single.less";
+@import "~@/assets/css/calendar/single.less";
 </style>

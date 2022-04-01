@@ -1,5 +1,6 @@
 import { $cms } from "@jx3box/jx3box-common/js/https";
 
+// 拼接年月日url
 function genUrl(params) {
     const { year, month, date } = params;
 
@@ -12,58 +13,77 @@ function genUrl(params) {
     return url;
 }
 
+// 获取日历列表
 function getCalendar(params, client = "std") {
     let url = genUrl(params);
 
     return $cms().get("/api/cms/calendar/archive" + url, {
         params: {
-            client
-        }
+            client,
+        },
     });
 }
 
-function getDayCalendar(params){
+// 获取单日详情
+function getDayCalendar(params) {
     let url = genUrl(params);
 
     return $cms().get("/api/cms/calendar/archive" + url);
 }
-
+// 新增日历
 function addCalendar(data) {
     const url = genUrl(data);
-    return $cms().post('/api/cms/calendar/archive' + url, data)
+    return $cms().post("/api/cms/calendar/archive" + url, data);
 }
-
+// 修改日历
 function putCalendar(id, data) {
     return $cms().put(`/api/cms/calendar/${id}`, data);
 }
-
-function manageCalendar(id,data){
+// 管理日历
+function manageCalendar(id, data) {
     return $cms().put(`/api/cms/calendar/${id}/manage`, data);
 }
-
+// 删除日历
 function delCalendar(id) {
     return $cms().delete(`/api/cms/calendar/${id}`);
 }
-
+// 获取对应id的日历详情
 function getDetail(id) {
     return $cms().get(`/api/cms/calendar/${id}`);
 }
-
+// 那年今日
 function getHistory(params, query) {
     let url = genUrl(params);
     return $cms().get(`/api/cms/calendar/history${url}`, {
         params: query,
     });
 }
-
+// 获取日历计数
 function getCalendarCount(params) {
     let url = genUrl(params);
     return $cms().get(`/api/cms/calendar/count${url}`);
 }
-
-function getCalendarSlogans(params){
+// 获取海报信息
+function getCalendarSlogans(params) {
     let url = genUrl(params);
     return $cms().get(`/api/cms/calendar/slogan${url}`);
 }
 
-export { getCalendar, addCalendar, putCalendar, delCalendar, getDetail, getHistory ,manageCalendar, getCalendarCount, getDayCalendar, getCalendarSlogans };
+// 获取用户信息
+function getProfile() {
+    return $cms().get("/api/cms/user/my/profile");
+}
+
+export {
+    getCalendar,
+    addCalendar,
+    putCalendar,
+    delCalendar,
+    getDetail,
+    getHistory,
+    manageCalendar,
+    getCalendarCount,
+    getDayCalendar,
+    getCalendarSlogans,
+    getProfile,
+};
