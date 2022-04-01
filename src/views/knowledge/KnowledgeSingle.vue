@@ -19,7 +19,7 @@
 				</template>
 				<template slot="body">
 					<Article :content="content" />
-					<Thx class="m-thx" slot="single-append" :postId="id" postType="knowledge" :userId="author_id" :adminBoxcoinEnable="isRevision" :userBoxcoinEnable="isRevision" mode="wiki" />
+					<Thx class="m-thx" slot="single-append" :postId="id" postType="knowledge" :postTitle="title" :userId="author_id" :adminBoxcoinEnable="isRevision" :userBoxcoinEnable="isRevision" mode="wiki" />
 				</template>
 			</WikiPanel>
 
@@ -99,7 +99,7 @@ export default {
 		getPostData() {
 			this.loading = true;
 			getKnowledgePost(this.$route.params.post_id)
-				.then((res) => { 
+				.then((res) => {
 					this.data = res;
 					if (this.data.source) this.data.source.post = this.data.post;
 				})

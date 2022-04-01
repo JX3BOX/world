@@ -53,7 +53,7 @@
             </div>
         </section>
 
-        <Thx :postId="id" postType="calendar" :userId="author" :adminBoxcoinEnable="true" :userBoxcoinEnable="true" />
+        <Thx :postId="id" postType="calendar" :postTitle="favTitle" :userId="author" :adminBoxcoinEnable="true" :userBoxcoinEnable="true" />
 
         <Comment class="m-comment" :id="id" category="calendar" />
 
@@ -161,6 +161,9 @@ export default {
                     this.loadData();
                 }
             },
+            favTitle(){
+                return this.today.desc?.slice(0,20) + '...'
+            }
         },
         params: {
             deep: true,
