@@ -31,14 +31,14 @@ export default {
     computed: {
         // 园宅会赛显示text
         furnitureCategory: function (){
-            return this.furniture?.find(item => item.subtype === 'category')
+            return this.furniture?.find(item => item?.subtype === 'category')
         },
         // 园宅会赛类型
         furnitureProperty: function (){
-            return this.furniture?.find(item => item.subtype === 'property')
+            return this.furniture?.find(item => item?.subtype === 'property')
         },
         furnitureNextMatch: function (){
-            return this.furniture?.find(item => item.subtype === 'next_match')
+            return this.furniture?.find(item => item?.subtype === 'next_match')
             // return ''
         },
         nextMatch: function (){

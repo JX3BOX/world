@@ -8,9 +8,10 @@
 
         <main class="m-calendar-detail-content">
             <!-- 日常+周常活动 -->
-            <section>
+            <section class="m-content-part" v-if="client == 'std'">
                 <daily-activity :date="date"></daily-activity>
             </section>
+
             <!-- 活动 -->
             <section class="m-content-part">
                 <div class="u-part-header">
