@@ -84,7 +84,8 @@ export default {
                     getFurniture(params).then((res) => {
                         this.setFurniture(res)
 
-                        if (res.data?.data?.length) {
+                        // 当家园会赛数据不存在时，不存储
+                        if (res.data?.data?.length && res.data.data.every(item => item)) {
                             sessionStorage.setItem('furniture', JSON.stringify(res))
                         }
                     });

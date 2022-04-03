@@ -152,7 +152,10 @@ export default {
         isCreator() {
             return this.today.user_id == User.getInfo().uid;
         },
-    },
+        favTitle(){
+            return this.today.desc?.slice(0,20) + '...'
+        }
+},
     watch: {
         id: {
             immediate: true,
@@ -161,9 +164,6 @@ export default {
                     this.loadData();
                 }
             },
-            favTitle(){
-                return this.today.desc?.slice(0,20) + '...'
-            }
         },
         params: {
             deep: true,
@@ -201,7 +201,7 @@ export default {
         // ========= other ==========
         goBack() {
             // 如果存在历史则返回上一个记录，否则返回月历页面
-            history.length ? history.go(-1) : this.$router.push(`/archive/${this.dateObj.year}/${this.dateObj.month}`);
+            history.length > 1 ? history.back() : this.$router.push(`/archive/${this.dateObj.year}/${this.dateObj.month}`);
         },
         manage(isSuper) {
             this.visible = true;
