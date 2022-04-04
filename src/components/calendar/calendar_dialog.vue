@@ -59,7 +59,7 @@
                     </div>
                 </el-form-item>
                 <el-form-item label="描述" required :error="descError">
-                    <el-input type="textarea" v-model="form.desc" :rows="3" placeholder="输入事件描述"></el-input>
+                    <el-input type="textarea" v-model="form.desc" :rows="8" placeholder="输入事件描述" ></el-input>
                 </el-form-item>
                 <el-form-item label="客户端" required>
                     <el-radio-group size="small" v-model="form.client">
