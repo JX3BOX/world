@@ -5,7 +5,7 @@
             <td>园宅会赛</td>
             <td>{{ furnitureProperty && furnitureProperty.content }}</td>
             <td class="u-furniture">
-                <a class="u-pet" href="/furniture?match=1" target="_blank">{{ furnitureCategory && furnitureCategory.content }}</a>
+                <a class="u-pet" href="/furniture?match=1" target="_blank">{{ formatContent(furnitureCategory && furnitureCategory.content) }}</a>
             </td>
         </tr>
     </el-tooltip>
@@ -96,7 +96,10 @@ export default {
             }
         },
         nl2br(str) {
-            return str.replace(/\\n|\n/g, '<br>').replace('+', '');
+            return this.formatContent(str.replace(/\\n|\n/g, '<br>'))
+        },
+        formatContent(str) {
+            return str.replace('+', '')
         }
     },
 }
