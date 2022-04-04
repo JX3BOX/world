@@ -98,18 +98,18 @@ export default {
 
         // 活动(还需要匹配相同客户端)
         activities() {
-            return this.list?.filter((item) => {
+            return this.list && this.list?.filter((item) => {
                 return item.client == this.client && item.type === 2;
-            });
+            }) || [];
         },
         activities_count: function () {
             return this.activities?.length || 0;
         },
         // 事件
         events() {
-            return this.list?.filter((item) => {
+            return this.list && this.list?.filter((item) => {
                 return item.type === 1;
-            });
+            }) || [];
         },
         events_count: function () {
             return this.events?.length || 0;
@@ -177,7 +177,7 @@ export default {
         // 删除
         del(id) {
             delCalendar(id).then(() => {
-                this.list = this.list.filter((record) => record.id !== id);
+                this.list = this.list?.filter((record) => record.id !== id) || [];
                 this.visible = false;
             });
         },

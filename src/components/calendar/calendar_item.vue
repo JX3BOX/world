@@ -56,8 +56,8 @@ export default {
     },
     computed: {
         links() {
-            const events = this.data?.children.filter((child) => child.type == 1);
-            const activities = this.data?.children.filter((child) => child.type == 2);
+            const events = this.data?.children.filter((child) => child.type == 1) || [];
+            const activities = this.data?.children.filter((child) => child.type == 2) || [];
 
             return [...events, ...activities].slice(0, 3);
         },

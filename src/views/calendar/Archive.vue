@@ -299,7 +299,7 @@ export default {
         loadCalendar() {
             const { year, month } = this.current;
             getCalendar({ year, month }, this.client).then((res) => {
-                const data = res.data.data;
+                const data = res.data.data || [];
                 data?.forEach((item) => {
                     let { year, month, date } = item;
                     let index = this.dataArr.findIndex((d) => d.year === year && d.month === month && d.date === date);

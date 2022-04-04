@@ -96,7 +96,7 @@ export default {
             }
         },
         nl2br(str) {
-            return str.replace(/\\n/g, '<br>');
+            return str.replace(/\\n|\n/g, '<br>').replace('+', '');
         }
     },
 }
