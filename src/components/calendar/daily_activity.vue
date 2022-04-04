@@ -17,7 +17,7 @@
                     </tr>
                     <meirentu v-if="today && client === 'std'"></meirentu>
                     <lucky-pet :date="date" :client="client"></lucky-pet>
-                    <furniture :date="date" :client="client"></furniture>
+                    <furniture v-if="isCurrentWeek" :date="date" :client="client"></furniture>
                 </tbody>
             </table>
         </div>
@@ -28,10 +28,12 @@
 import { getDaily } from "@/service/spider";
 import dayjs from 'dayjs';
 import isToday from 'dayjs/plugin/isToday';
+import isoWeek from 'dayjs/plugin/isoWeek';
 import meirentu from './meirentu';
 import luckyPet from './lucky_pet';
 import furniture from './furniture';
 
+dayjs.extend(isoWeek);
 dayjs.extend(isToday);
 export default {
     name: "daily-activity",
@@ -58,6 +60,12 @@ export default {
         today: function() {
             return dayjs(this.date).isToday();
         },
+        isCurrentWeek() {
+            let week = dayjs(this.date).isoWeek();
+            let currentWeek = dayjs().isoWeek();
+
+            return week === currentWeek;
+        }
     },
     watch: {
         date: {
@@ -65,7 +73,7 @@ export default {
             handler() {
                 (this.client === 'std') && this.loadDaily();
             }
-        }
+        },
     },
     methods: {
         // =========== 数据获取==========
