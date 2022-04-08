@@ -22,9 +22,7 @@
                             class="u-btn"
                             title="下一年"
                         ></el-button>
-                    </section>
-                    <!-- 月份切换 -->
-                    <section class="m-calendar-year m-calendar-month">
+                        <!-- 月份切换 -->
                         <el-button
                             icon="el-icon-arrow-left"
                             size="medium"
