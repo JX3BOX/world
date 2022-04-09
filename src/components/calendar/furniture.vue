@@ -28,6 +28,11 @@ export default {
             default: 'std'
         }
     },
+    data() {
+        return {
+            furniture: []
+        }
+    },
     computed: {
         // 园宅会赛显示text
         furnitureCategory: function (){
