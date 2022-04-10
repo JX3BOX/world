@@ -1,5 +1,5 @@
-.c-main{
-    height:calc(100vh - @header-height - @bread-height);
+.c-main {
+    height: calc(100vh - @header-height - @bread-height);
 }
 .m-main {
     padding: 0;
@@ -29,7 +29,6 @@
 
     box-sizing: border-box;
     height: 100%;
-
 }
 .m-calendar-aside {
     // position: fixed;
@@ -65,7 +64,23 @@
     justify-content: space-between;
 
     .u-time {
-        display: flex;
+        .flex;
+        align-items: center;
+    }
+    .m-calendar-year {
+        .lh(70px);
+        .el-button + .el-button{
+            margin: 0
+        }
+    }
+    .u-contribute {
+        .ml(20px);
+        .pointer;
+        .color(#ffffffcc,#fff);
+        font-weight: 700;
+        i {
+            .mr(5px);
+        }
     }
 }
 

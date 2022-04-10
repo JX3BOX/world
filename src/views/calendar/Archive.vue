@@ -5,42 +5,15 @@
                 <div class="u-time">
                     <!-- 年份切换 -->
                     <section class="m-calendar-year">
-                        <el-button
-                            icon="el-icon-arrow-left"
-                            size="medium"
-                            :disabled="prevDisabled"
-                            @click="toggleYear('prev')"
-                            class="u-btn"
-                            title="上一年"
-                        ></el-button>
+                        <el-button icon="el-icon-arrow-left" size="medium" :disabled="prevDisabled" @click="toggleYear('prev')" class="u-btn" title="上一年"></el-button>
                         <span class="u-year" :style="{color:getSloganMeta('color')}">{{ current.year }}</span>
-                        <el-button
-                            icon="el-icon-arrow-right"
-                            size="medium"
-                            :disabled="nextDisabled"
-                            @click="toggleYear('next')"
-                            class="u-btn"
-                            title="下一年"
-                        ></el-button>
+                        <el-button icon="el-icon-arrow-right" size="medium" :disabled="nextDisabled" @click="toggleYear('next')" class="u-btn" title="下一年"></el-button>
                         <!-- 月份切换 -->
-                        <el-button
-                            icon="el-icon-arrow-left"
-                            size="medium"
-                            :disabled="prevDisabled"
-                            @click="toggleMonth('prev')"
-                            class="u-btn"
-                            title="上一月"
-                        ></el-button>
+                        <el-button icon="el-icon-arrow-left" size="medium" :disabled="prevDisabled" @click="toggleMonth('prev')" class="u-btn" title="上一月"></el-button>
                         <span class="u-year u-month-text" :style="{color:getSloganMeta('color')}">{{ current.month }}</span>
-                        <el-button
-                            icon="el-icon-arrow-right"
-                            size="medium"
-                            :disabled="nextDisabled"
-                            @click="toggleMonth('next')"
-                            class="u-btn"
-                            title="下一月"
-                        ></el-button>
+                        <el-button icon="el-icon-arrow-right" size="medium" :disabled="nextDisabled" @click="toggleMonth('next')" class="u-btn" title="下一月"></el-button>
                     </section>
+                    <span class="u-contribute" @click="show_rank = true"><i class="el-icon-s-data"></i>剑三日历贡献排行榜</span>
                 </div>
                 <!-- 中央海报 -->
                 <div class="u-slogan m-calendar-slogan">
@@ -54,17 +27,11 @@
                     </div>
                 </section>
                 <section class="m-calendar-date">
-                    <div
-                        v-for="(item, index) in dataArr"
-                        class="u-date"
-                        @click.prevent="dateClick(item)"
-                        :class="[
+                    <div v-for="(item, index) in dataArr" class="u-date" @click.prevent="dateClick(item)" :class="[
                             { 'u-other': ['pre', 'next'].includes(item.type) },
                             { 'u-today': isToday(item) },
                             { 'u-current': isCurrent(item) },
-                        ]"
-                        :key="index"
-                    >
+                        ]" :key="index">
                         <calendar-item :data="item" :counts="counts" :slogans="slogans" :pageSlogan="pageSlogan" :isToday="isToday(item)"></calendar-item>
                     </div>
                 </section>
@@ -73,6 +40,7 @@
         <aside class="m-calendar-aside">
             <calendar-detail :date-obj="current"></calendar-detail>
         </aside>
+        <calendar-rank v-if="show_rank" :show="show_rank" @calendarRank="calendarRank" />
     </div>
 </template>
 
@@ -82,12 +50,14 @@ import { getCalendar, getCalendarCount, getCalendarSlogans } from "@/service/cal
 
 import calendarDetail from "@/components/calendar/calendar_detail.vue";
 import calendar_item from "@/components/calendar/calendar_item.vue";
-import {resolveImagePath} from '@jx3box/jx3box-common/js/utils'
+import calendar_rank from "@/components/calendar/calendar_rank.vue";
+import { resolveImagePath } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "Archive",
     components: {
         calendarDetail,
         "calendar-item": calendar_item,
+        "calendar-rank": calendar_rank,
     },
     data: () => ({
         current: {
@@ -101,6 +71,7 @@ export default {
         dataArr: [],
         counts: [],
         slogans: [],
+        show_rank: false,
     }),
     computed: {
         // 禁止下一年
@@ -174,21 +145,21 @@ export default {
          * @param {String}} action next 下一月 prev 上一月
          */
         toggleMonth(action) {
-            if (action === 'prev') {
+            if (action === "prev") {
                 // 如果当前月份为1月
                 if (this.current.month === 1) {
-                    this.current.year -= 1
-                    this.current.month = 12
+                    this.current.year -= 1;
+                    this.current.month = 12;
                 } else {
-                    this.current.month -= 1
+                    this.current.month -= 1;
                 }
             } else {
                 // 如果当前月份为12月
                 if (this.current.month === 12) {
-                    this.current.year += 1
-                    this.current.month = 1
+                    this.current.year += 1;
+                    this.current.month = 1;
                 } else {
-                    this.current.month += 1
+                    this.current.month += 1;
                 }
             }
 
@@ -334,6 +305,12 @@ export default {
             return this.pageSlogan?.[key];
         },
         resolveImagePath,
+
+        // 排行榜信息
+        calendarRank(data) {
+            console.log(data)
+            this.show_rank = false;
+        },
     },
 };
 </script>
