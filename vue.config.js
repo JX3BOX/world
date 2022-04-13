@@ -2,7 +2,7 @@ const path = require("path");
 const pkg = require("./package.json");
 const { JX3BOX, SEO } = require("@jx3box/jx3box-common");
 const Setting = require("./setting.json");
-
+require('events').EventEmitter.defaultMaxListeners = 0
 module.exports = {
 	//❤️ Multiple pages ~
 	pages: {
@@ -23,6 +23,12 @@ module.exports = {
 	//❤️ Porxy ~
 	devServer: {
 		proxy: {
+            "/api/calendar": {
+				target: "https://helper.jx3box.com",
+				onProxyReq: function (request) {
+					request.setHeader("origin", "");
+				},
+			},
 			"/api/knowledges": {
 				target: "https://helper.jx3box.com",
 				onProxyReq: function (request) {

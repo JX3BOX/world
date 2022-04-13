@@ -1,4 +1,4 @@
-import { $cms } from "@jx3box/jx3box-common/js/https";
+import { $cms, $helper } from "@jx3box/jx3box-common/js/https";
 
 // 拼接年月日url
 function genUrl(params) {
@@ -23,7 +23,14 @@ function getCalendar(params, client = "std") {
         },
     });
 }
-
+// 获取日历排行榜
+function getCalendarRank(params) {
+    return $helper().get("api/calendar/rank", { params });
+}
+// 获取日历排行榜日期区间
+function getRankDate() {
+    return $cms().get("/api/cms/config", { params: { subtype: "calendar" } });
+}
 // 获取单日详情
 function getDayCalendar(params) {
     let url = genUrl(params);
@@ -75,6 +82,8 @@ function getProfile() {
 }
 
 export {
+    getCalendarRank,
+    getRankDate,
     getCalendar,
     addCalendar,
     putCalendar,

@@ -13,7 +13,7 @@
                         <span class="u-year u-month-text" :style="{color:getSloganMeta('color')}">{{ current.month }}</span>
                         <el-button icon="el-icon-arrow-right" size="medium" :disabled="nextDisabled" @click="toggleMonth('next')" class="u-btn" title="下一月"></el-button>
                     </section>
-                    <span class="u-contribute" @click="show_rank = true"><i class="el-icon-s-data"></i>剑三日历贡献排行榜</span>
+                    <span v-if="has_rank" class="u-contribute" @click="getRankList"><i class="el-icon-s-data"></i>剑三日历贡献排行榜</span>
                 </div>
                 <!-- 中央海报 -->
                 <div class="u-slogan m-calendar-slogan">
@@ -40,14 +40,13 @@
         <aside class="m-calendar-aside">
             <calendar-detail :date-obj="current"></calendar-detail>
         </aside>
-        <calendar-rank v-if="show_rank" :show="show_rank" @calendarRank="calendarRank" />
+        <calendar-rank :list="rank_list" :date="rank_params" @calendarRank="calendarRank" />
     </div>
 </template>
 
 <script>
 import { months, weeks } from "@/assets/data/calendar.json";
-import { getCalendar, getCalendarCount, getCalendarSlogans } from "@/service/calendar.js";
-
+import { getCalendar, getCalendarCount, getCalendarSlogans, getCalendarRank, getRankDate } from "@/service/calendar.js";
 import calendarDetail from "@/components/calendar/calendar_detail.vue";
 import calendar_item from "@/components/calendar/calendar_item.vue";
 import calendar_rank from "@/components/calendar/calendar_rank.vue";
@@ -71,7 +70,8 @@ export default {
         dataArr: [],
         counts: [],
         slogans: [],
-        show_rank: false,
+        has_rank: false,
+        rank_list: [],
     }),
     computed: {
         // 禁止下一年
@@ -308,9 +308,38 @@ export default {
 
         // 排行榜信息
         calendarRank(data) {
-            console.log(data)
+            console.log(data);
             this.show_rank = false;
         },
+        // 是否有排行榜数据
+        hasRank() {
+            getRankDate().then((res) => {
+                if (!res.data.data) return;
+
+                let data = {};
+                res.data.data.forEach((item) => {
+                    if (item.key == "calendar_rank_start") data.start = item.val;
+                    if (item.key == "calendar_rank_end") data.end = item.val;
+                });
+                if (data.start && data.end) this.has_rank = true;
+                this.rank_params = data;
+            });
+        },
+        // 获取排行榜
+        getRankList() {
+            getCalendarRank(this.rank_params).then((res) => {
+                if (!res.data.data) return;
+                this.rank_list = res.data.data.sort(this.sortBy("user_id"));
+            });
+        },
+        sortBy(i) {
+            return function (a, b) {
+                return a[i] - b[i];
+            };
+        },
+    },
+    created() {
+        this.hasRank();
     },
 };
 </script>
