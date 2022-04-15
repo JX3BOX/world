@@ -40,7 +40,7 @@
         <aside class="m-calendar-aside">
             <calendar-detail :date-obj="current"></calendar-detail>
         </aside>
-        <calendar-rank :list="rank_list" :date="rank_params" @calendarRank="calendarRank" />
+        <calendar-rank v-if="rank_show" :data="rank_data" @calendarRank="calendarRank" />
     </div>
 </template>
 
@@ -70,7 +70,9 @@ export default {
         dataArr: [],
         counts: [],
         slogans: [],
+
         has_rank: false,
+        rank_show: false,
         rank_list: [],
         rank_params: "",
     }),
@@ -110,6 +112,14 @@ export default {
             return {
                 backgroundColor: this.pageSlogan?.bgcolor,
                 backgroundImage: `url(${resolveImagePath(this.pageSlogan?.img)})`,
+            };
+        },
+        // 贡献榜传值
+        rank_data() {
+            return {
+                list: this.rank_list,
+                date: this.rank_params,
+                show: this.rank_show,
             };
         },
     },
@@ -309,8 +319,7 @@ export default {
 
         // 排行榜信息
         calendarRank(data) {
-            console.log(data);
-            this.show_rank = false;
+            this.rank_show = data;
         },
         // 是否有排行榜数据
         hasRank() {
@@ -327,13 +336,15 @@ export default {
             });
         },
         // 获取排行榜
-        getRankList() {
-            getCalendarRank(this.rank_params).then((res) => {
-                if (!res.data.data) return;
-                this.rank_list = res.data.data.list.sort((a, b) => {
-                    return b.count - a.count;
+        getRankList() { 
+            this.rank_show = true;
+            if (!this.rank_list.length)
+                getCalendarRank(this.rank_params).then((res) => {
+                    if (!res.data.data) return;
+                    this.rank_list = res.data.data.list.sort((a, b) => {
+                        return b.count - a.count;
+                    });
                 });
-            });
         },
     },
     created() {

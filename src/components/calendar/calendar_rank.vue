@@ -16,24 +16,24 @@
 import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
 export default {
     name: "calendarRank",
-    props: ["list", "date"],
+    props: ["data"],
     data: function () {
-        return {
-            show: false,
-        };
+        return {};
     },
-    computed: {},
-    watch: {
-        list: {
-            immediate: true,
-            handler: function (val) {
-                val.length ? (this.show = true) : "";
-            },
+    computed: {
+        list() {
+            return this.data.list;
+        },
+        date() {
+            return this.data.date;
+        },
+        show() {
+            return this.data.show;
         },
     },
     methods: {
         handleClose() {
-            this.show = false;
+            this.$emit("calendarRank", false);
         },
         rankImg(id) {
             return `${__imgPath}image/other/rank_${id}.png`;
