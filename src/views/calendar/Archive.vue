@@ -72,6 +72,7 @@ export default {
         slogans: [],
         has_rank: false,
         rank_list: [],
+        rank_params: "",
     }),
     computed: {
         // 禁止下一年
@@ -329,13 +330,10 @@ export default {
         getRankList() {
             getCalendarRank(this.rank_params).then((res) => {
                 if (!res.data.data) return;
-                this.rank_list = res.data.data.sort(this.sortBy("user_id"));
+                this.rank_list = res.data.data.list.sort((a, b) => {
+                    return b.count - a.count;
+                });
             });
-        },
-        sortBy(i) {
-            return function (a, b) {
-                return a[i] - b[i];
-            };
         },
     },
     created() {
