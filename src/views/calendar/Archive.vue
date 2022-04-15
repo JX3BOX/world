@@ -336,14 +336,12 @@ export default {
             });
         },
         // 获取排行榜
-        getRankList() { 
+        getRankList() {
             this.rank_show = true;
             if (!this.rank_list.length)
                 getCalendarRank(this.rank_params).then((res) => {
                     if (!res.data.data) return;
-                    this.rank_list = res.data.data.list.sort((a, b) => {
-                        return b.count - a.count;
-                    });
+                    this.rank_list = res.data.data.list;
                 });
         },
     },
