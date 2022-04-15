@@ -5,7 +5,7 @@
         <ul class="m-list">
             <li v-for="(item,index) in list" :key="index">
                 <span class="u-number"> <img :src="rankImg(index+1)" alt="" srcset="" v-if="index <3"><span v-else>{{index+1}}</span> </span>
-                <img class="u-avatar" :src="item.user.user_avatar" :alt="item.user.display_name">
+                <img class="u-avatar" :src="item.user.user_avatar || avatar" :alt="item.user.display_name">
                 <span class="u-name">{{item.user.display_name}}</span>
                 <span class="u-num"><b>{{item.count}} </b>条</span>
             </li>
@@ -29,6 +29,9 @@ export default {
         },
         show() {
             return this.data.show;
+        },
+        avatar() {
+            return `${__imgPath}image/other/avatar.png`;
         },
     },
     methods: {
