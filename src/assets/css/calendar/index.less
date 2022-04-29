@@ -1,25 +1,27 @@
 .c-main {
-    height: calc(100vh - @header-height - @bread-height);
+    min-height: calc(100vh - @header-height - @bread-height);
 }
 .m-main {
     padding: 0;
     overflow-x: auto;
     height: 100%;
+    min-width: 1680px;
 }
 
 @aside_width: 320px;
 .m-calendar {
-    display: flex;
+    // display: flex;
     // gap: 20px;
 
     border-bottom: 1px solid #eee;
     box-sizing: border-box;
-    min-width: 1440px;
     height: 100%;
+    padding-right: @aside_width;
 }
 
 .m-calendar-main {
-    flex: 1;
+    background-color:@bg-black;
+    // flex: 1;
     padding: 20px 20px;
     // .mr(@aside_width);
 
@@ -42,6 +44,8 @@
     border-left: 1px solid #eee;
     background-color: @bg-light;
     height: 100%;
+    .pf;
+    .rt(0,@header-height + @bread-height);
 }
 .c-footer.archive {
     .none;
