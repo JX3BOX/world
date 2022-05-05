@@ -19,7 +19,7 @@
                 </template>
                 <template slot="body">
                     <Article :content="content" />
-                    <Thx class="m-thx" slot="single-append" :postId="id" postType="knowledge" :postTitle="title" :userId="author_id" :adminBoxcoinEnable="true" :userBoxcoinEnable="true" mode="wiki" />
+                    <Thx class="m-thx" :postId="id" postType="knowledge" :postTitle="title" :userId="author_id" :adminBoxcoinEnable="true" :userBoxcoinEnable="true" mode="wiki" :authors="authors" :key="'item-thx-' + id" />
                 </template>
             </WikiPanel>
 
@@ -82,6 +82,22 @@ export default {
         content: function () {
             return this.data?.post?.content;
         },
+        authors: function () {
+            if (!this.isRevision) {
+                return (
+                    this.data?.users
+                        ?.filter((user) => user.id)
+                        ?.map((user) => {
+                            return {
+                                user_id: user.id,
+                                user_avatar: user.avatar,
+                                display_name: user.nickname,
+                            };
+                        }) || []
+                );
+            }
+            return [];
+        },
     },
     methods: {
         getData() {
@@ -115,7 +131,6 @@ export default {
     },
     created: function () {
         this.getData(this.id);
-        console.log(this.isRevision);
     },
     watch: {
         "$route.params.post_id": {
