@@ -7,7 +7,7 @@
                 <li v-for="(item,index) in list" :key="index">
                     <span class="u-number"> <img :src="rankImg(index+1)" alt="" srcset="" v-if="index <3"><span v-else>{{index+1}}</span> </span>
                     <img class="u-avatar" :src="item.user.user_avatar || avatar" :alt="item.user.display_name">
-                    <span class="u-name">{{item.user.display_name}}</span>
+                    <a :href="`${author}${item.user_id}`" target="_blank" class="u-name">{{item.user.display_name}}</a>
                     <span class="u-num"><b>{{item.count}} </b>条</span>
                 </li>
             </ul>
@@ -16,11 +16,10 @@
 
 </template>
 <script>
-import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
+import { __imgPath, __Root } from "@jx3box/jx3box-common/data/jx3box.json";
 import { getCalendarRank, getRankDate } from "@/service/calendar.js";
 export default {
     name: "calendarRank",
-    props: [""],
     data: function () {
         return {
             list: [],
@@ -32,6 +31,9 @@ export default {
     computed: {
         avatar() {
             return `${__imgPath}image/other/avatar.png`;
+        },
+        author() {
+            return `${__Root}author/`;
         },
     },
     methods: {
@@ -57,6 +59,7 @@ export default {
                         getCalendarRank(this.date).then((res) => {
                             if (!res.data.data) return;
                             this.list = res.data.data.list;
+                            console.log(this.list);
                         });
                 })
                 .finally(() => {
