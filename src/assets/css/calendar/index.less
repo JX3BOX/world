@@ -22,7 +22,7 @@
     background-color:@bg-black;
     flex: 1;
     padding: 20px 20px;
-    // .mr(@aside_width);
+    .mr(@aside_width);
 
     background-position: right bottom;
     background-repeat: no-repeat;
@@ -33,10 +33,10 @@
     min-height: calc(100vh - @header-height - @bread-height);
 }
 .m-calendar-aside {
-    // position: fixed;
-    // right: 0;
-    // bottom: 0;
-    // top: @header-height + @bread-height;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    top: @header-height + @bread-height;
     flex-basis: @aside_width;
     flex-shrink: 0;
     flex-grow: 0;
@@ -60,9 +60,9 @@
         width: @aside_width + 140px;
         flex-basis: @aside_width + 140px;
     }
-    // .m-calendar-main {
-    //     .mr(@aside_width + 140px);
-    // }
+    .m-calendar-main {
+        .mr(@aside_width + 140px);
+    }
     // .c-footer.archive {
     //     .mr(@aside_width + 140px);
     // }

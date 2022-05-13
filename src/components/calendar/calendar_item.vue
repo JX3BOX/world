@@ -20,6 +20,20 @@
             >
                 {{ item.title || item.desc }}
             </div>
+
+            <div
+                class="u-link"
+                :style="{
+                    color: item.bgcolor && '#fff',
+                    backgroundImage: `url(${resolveImagePath(item.img)})`,
+                    backgroundColor: item.bgcolor || 'rgba(255,255,255,0.6)',
+                }"
+                v-for="item in raids"
+                :key="item.id"
+                @click.stop="handleRaidClick(item)"
+            >
+                {{ `${item.raid_info && item.raid_info.name} - ${formatTime(item.raid_info)} - ${item.name || '未知'}` }}
+            </div>
         </div>
         <div class="u-nothing" v-else>...</div>
         <div class="u-date-count" v-if="countData">
@@ -31,6 +45,7 @@
 
 <script>
 import { resolveImagePath } from "@jx3box/jx3box-common/js/utils";
+import dayjs from 'dayjs';
 export default {
     name: "calendar-item",
     props: {
@@ -80,6 +95,9 @@ export default {
         },
         uiKey : function (){
             return this.data?.year + this.data?.month + this.data?.date
+        },
+        raids() {
+            return this.data?.raids || []
         }
     },
     methods: {
@@ -90,6 +108,22 @@ export default {
             return "is-activity";
         },
         resolveImagePath,
+        /**
+         * @description 格式化时间
+         * @param {Object} item
+         * @returns {String}
+         */
+        formatTime({ start_time: time }) {
+            return time && dayjs(time).format('HH:mm') || '';
+        },
+        /**
+         * @description 处理活动点击事件
+         * @param {Object} item
+         */
+        handleRaidClick(item) {
+            const url = location.origin + '/team/raid/' + item.id;
+            window.open(url, '_blank');
+        },
     },
 };
 </script>

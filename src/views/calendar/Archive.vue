@@ -47,10 +47,13 @@
 <script>
 import { months, weeks } from "@/assets/data/calendar.json";
 import { getCalendar, getCalendarCount, getCalendarSlogans } from "@/service/calendar.js";
+import dayjs from 'dayjs'
+import { getMyTeamRaid } from "@/service/team.js";
 import calendarDetail from "@/components/calendar/calendar_detail.vue";
 import calendar_item from "@/components/calendar/calendar_item.vue";
 import calendar_rank from "@/components/calendar/calendar_rank.vue";
 import { resolveImagePath } from "@jx3box/jx3box-common/js/utils";
+import User from '@jx3box/jx3box-common/js/user'
 export default {
     name: "Archive",
     components: {
@@ -191,6 +194,7 @@ export default {
                     month: preInfo.month,
                     year: preInfo.year,
                     children: [],
+                    raids: []
                 };
                 dataArr.push(preObj);
             }
@@ -202,6 +206,7 @@ export default {
                     month,
                     year,
                     children: [],
+                    raids: []
                 };
                 dataArr.push(itemObj);
             }
@@ -213,6 +218,7 @@ export default {
                     month: nextInfo.month,
                     year: nextInfo.year,
                     children: [],
+                    raids: []
                 };
                 dataArr.push(nextObj);
             }
@@ -273,10 +279,12 @@ export default {
                     let { year, month, date } = item;
                     let index = this.dataArr.findIndex((d) => d.year === year && d.month === month && d.date === date);
 
-                    if (index) {
+                    if (index > -1) {
                         this.dataArr[index].children.push(item);
                     }
                 });
+                // 需要用户登录才请求
+                if (User.isLogin()) this.loadMyTeamRaid()
             });
         },
         // 获取当前年月的统计数据
@@ -299,7 +307,34 @@ export default {
                 this.slogans = res.data;
             });
         },
+        // 获取当前年月的团队活动信息
+        loadMyTeamRaid() {
+            const { year, month } = this.current;
 
+            const params = {
+                start_time: dayjs(`${year}-${month}-01`).startOf("month").format("YYYY-MM-DD"),
+                end_time: dayjs(`${year}-${month}-01`).endOf("month").format("YYYY-MM-DD"),
+            }
+
+            getMyTeamRaid(params).then(res => {
+                res.data.data.map(item => {
+                    return {
+                        ...item,
+                        month: dayjs(item?.raid_info?.start_time).month() + 1,
+                        year: dayjs(item?.raid_info?.start_time).year(),
+                        date: dayjs(item?.raid_info?.start_time).date(),
+                    }
+                }).forEach((item) => {
+                    let { year, month, date } = item;
+                    let index = this.dataArr.findIndex((d) => d.year === year && d.month === month && d.date === date);
+
+                    if (index > -1) {
+                        this.dataArr[index].raids.push(item);
+                    }
+                });
+            })
+
+        },
         // 过滤
         getSloganMeta(key) {
             return this.pageSlogan?.[key];
