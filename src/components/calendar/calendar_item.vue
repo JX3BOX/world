@@ -26,13 +26,14 @@
                 :style="{
                     color: item.bgcolor && '#fff',
                     backgroundImage: `url(${resolveImagePath(item.img)})`,
-                    backgroundColor: item.bgcolor || 'rgba(255,255,255,0.6)',
+                    backgroundColor: item.bgcolor || '#e6f0fb',
                 }"
                 v-for="item in raids"
                 :key="item.id"
                 @click.stop="handleRaidClick(item)"
+                :title="formatRaidInfo(item)"
             >
-                {{ `${item.raid_info && item.raid_info.name} - ${formatTime(item.raid_info)} - ${item.name || '未知'}` }}
+                <img :src="raidIcon" width="10" alt="团队">{{ formatRaidInfo(item) }}
             </div>
         </div>
         <div class="u-nothing" v-else>...</div>
@@ -45,7 +46,8 @@
 
 <script>
 import { resolveImagePath } from "@jx3box/jx3box-common/js/utils";
-import dayjs from 'dayjs';
+import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
+import dayjs from "dayjs";
 export default {
     name: "calendar-item",
     props: {
@@ -93,11 +95,14 @@ export default {
         themeColor() {
             return this.pageSlogan?.color;
         },
-        uiKey : function (){
-            return this.data?.year + this.data?.month + this.data?.date
+        uiKey: function () {
+            return this.data?.year + this.data?.month + this.data?.date;
         },
         raids() {
-            return this.data?.raids || []
+            return this.data?.raids || [];
+        },
+        raidIcon() {
+            return `${__imgPath}/image/box/team.svg`;
         }
     },
     methods: {
@@ -114,15 +119,23 @@ export default {
          * @returns {String}
          */
         formatTime({ start_time: time }) {
-            return time && dayjs(time).format('HH:mm') || '';
+            return (time && dayjs(time).format("HH:mm")) || "";
         },
         /**
          * @description 处理活动点击事件
          * @param {Object} item
          */
         handleRaidClick(item) {
-            const url = location.origin + '/team/raid/' + item.id;
-            window.open(url, '_blank');
+            const url = location.origin + "/team/raid/" + item.id;
+            window.open(url, "_blank");
+        },
+        /**
+         * @description 格式化raid
+         * @param {Object} item
+         */
+        formatRaidInfo(item) {
+            const { raid_info } = item;
+            return `${raid_info && raid_info.name}@${raid_info && raid_info.team_name}-${this.formatTime(raid_info)}`;
         },
     },
 };
