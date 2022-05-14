@@ -13,7 +13,7 @@
                         <span class="u-year u-month-text" :style="{color:getSloganMeta('color')}">{{ current.month }}</span>
                         <el-button icon="el-icon-arrow-right" size="medium" :disabled="nextDisabled" @click="toggleMonth('next')" class="u-btn" title="下一月"></el-button>
                     </section>
-                    <span class="u-contribute" @click="rank_show = true"><i class="el-icon-s-data"></i>剑三日历贡献排行榜</span>
+                    <!-- <span class="u-contribute" @click="rank_show = true"><i class="el-icon-s-data"></i>剑三日历贡献排行榜</span> -->
                 </div>
                 <!-- 中央海报 -->
                 <div class="u-slogan m-calendar-slogan">
@@ -40,7 +40,7 @@
         <aside class="m-calendar-aside">
             <calendar-detail :date-obj="current"></calendar-detail>
         </aside>
-        <calendar-rank v-if="rank_show" @calendarRank="rank_show = false" />
+        <!-- <calendar-rank v-if="rank_show" @calendarRank="rank_show = false" /> -->
     </div>
 </template>
 
@@ -51,7 +51,7 @@ import dayjs from 'dayjs'
 import { getMyTeamRaid } from "@/service/team.js";
 import calendarDetail from "@/components/calendar/calendar_detail.vue";
 import calendar_item from "@/components/calendar/calendar_item.vue";
-import calendar_rank from "@/components/calendar/calendar_rank.vue";
+// import calendar_rank from "@/components/calendar/calendar_rank.vue";
 import { resolveImagePath } from "@jx3box/jx3box-common/js/utils";
 import User from '@jx3box/jx3box-common/js/user'
 export default {
@@ -59,7 +59,7 @@ export default {
     components: {
         calendarDetail,
         "calendar-item": calendar_item,
-        "calendar-rank": calendar_rank,
+        // "calendar-rank": calendar_rank,
     },
     data: () => ({
         current: {
