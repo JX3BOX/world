@@ -142,10 +142,10 @@ export default {
          */
         formatRaidInfo(item) {
             const { raid_info } = item;
-            return `${raid_info && raid_info.name}@${raid_info && raid_info.team_name}-${this.formatTime(raid_info)}`;
+            return `${raid_info?.name} - ${this.formatTime(raid_info)}`;
         },
         showTeamLogo(url) {
-            return (url && getThumbnail(url, 22)) || "";
+            return (url && getThumbnail(url, 44)) || "";
         },
     },
 };
