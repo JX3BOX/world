@@ -22,7 +22,7 @@
             </div>
 
             <div
-                class="u-link"
+                class="u-link u-raid-item"
                 :style="{
                     color: item.bgcolor && '#fff',
                     backgroundImage: `url(${resolveImagePath(item.img)})`,
@@ -33,7 +33,14 @@
                 @click.stop="handleRaidClick(item)"
                 :title="formatRaidInfo(item)"
             >
-                <img :src="raidIcon" width="10" alt="团队">{{ formatRaidInfo(item) }}
+                <img
+                    v-if="item.raid_team_info"
+                    class="u-team-logo"
+                    :src="showTeamLogo(item.raid_team_info.logo) || defaultTeamLogo"
+                    width="22"
+                    alt="团队"
+                />
+                <span class="u-raid-info">{{ formatRaidInfo(item) }}</span>
             </div>
         </div>
         <div class="u-nothing" v-else>...</div>
@@ -45,7 +52,7 @@
 </template>
 
 <script>
-import { resolveImagePath } from "@jx3box/jx3box-common/js/utils";
+import { resolveImagePath, getThumbnail } from "@jx3box/jx3box-common/js/utils";
 import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
 import dayjs from "dayjs";
 export default {
@@ -101,9 +108,9 @@ export default {
         raids() {
             return this.data?.raids || [];
         },
-        raidIcon() {
-            return `${__imgPath}/image/box/team.svg`;
-        }
+        defaultTeamLogo() {
+            return require("../../assets/img/team_logo_null.svg");
+        },
     },
     methods: {
         linkClassName({ type }) {
@@ -136,6 +143,9 @@ export default {
         formatRaidInfo(item) {
             const { raid_info } = item;
             return `${raid_info && raid_info.name}@${raid_info && raid_info.team_name}-${this.formatTime(raid_info)}`;
+        },
+        showTeamLogo(url) {
+            return (url && getThumbnail(url, 22)) || "";
         },
     },
 };
