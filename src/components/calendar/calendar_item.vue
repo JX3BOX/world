@@ -148,7 +148,7 @@ export default {
             return `${raid_info && raid_info.name}@${raid_info && raid_info.team_name}`;
         },
         showTeamLogo(url) {
-            return (url && getThumbnail(url, 22)) || "";
+            return (url && getThumbnail(url, 44)) || "";
         },
     },
 };
