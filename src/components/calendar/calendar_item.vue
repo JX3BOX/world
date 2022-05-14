@@ -33,14 +33,17 @@
                 @click.stop="handleRaidClick(item)"
                 :title="formatRaidInfo(item)"
             >
-                <img
-                    v-if="item.raid_team_info"
-                    class="u-team-logo"
-                    :src="showTeamLogo(item.raid_team_info.logo) || defaultTeamLogo"
-                    width="22"
-                    alt="团队"
-                />
-                <span class="u-raid-info">{{ formatRaidInfo(item) }}</span>
+                <div class="u-raid-info">
+                    <span class="u-raid-time">{{ formatTime(item.raid_info) }} -</span>
+                    <img
+                        v-if="item.raid_team_info"
+                        class="u-team-logo"
+                        :src="showTeamLogo(item.raid_team_info.logo) || defaultTeamLogo"
+                        width="22"
+                        alt="团队"
+                    />
+                    {{ formatRaidInfo(item) }}
+                </div>
             </div>
         </div>
         <div class="u-nothing" v-else>...</div>
@@ -142,7 +145,7 @@ export default {
          */
         formatRaidInfo(item) {
             const { raid_info } = item;
-            return `${raid_info && raid_info.name}@${raid_info && raid_info.team_name}-${this.formatTime(raid_info)}`;
+            return `${raid_info && raid_info.name}@${raid_info && raid_info.team_name}`;
         },
         showTeamLogo(url) {
             return (url && getThumbnail(url, 22)) || "";
