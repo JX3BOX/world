@@ -136,7 +136,7 @@ export default {
          * @param {Object} item
          */
         handleRaidClick(item) {
-            const url = location.origin + "/team/raid/" + item.id;
+            const url = location.origin + "/team/raid/" + item.raid_info.id;
             window.open(url, "_blank");
         },
         /**
