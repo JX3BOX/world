@@ -34,7 +34,6 @@
                 :title="formatRaidInfo(item)"
             >
                 <div class="u-raid-info">
-                    <span class="u-raid-time">{{ formatTime(item.raid_info) }} -</span>
                     <img
                         v-if="item.raid_team_info"
                         class="u-team-logo"
@@ -42,6 +41,7 @@
                         width="22"
                         alt="团队"
                     />
+                    <span class="u-raid-time">{{ formatTime(item.raid_info) }} -</span>
                     {{ formatRaidInfo(item) }}
                 </div>
             </div>
