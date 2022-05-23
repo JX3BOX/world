@@ -40,16 +40,18 @@ export default {
 </script>
 <style lang="less" scoped>
 .m-jargon {
-    .flex;
+    // .flex;
     .r(5px);
     .fz(14px);
-    flex-wrap: wrap;
+    // flex-wrap: wrap;
     background-color: #fafbfc;
     padding: 10px 20px 0 20px;
     border: 1px solid #eee;
+    display: grid;
+    grid-template-columns: repeat(8,1fr);
+    overflow: hidden;
     .u-jargon {
         .flex;
-        .w(100%/8);
         .mb(10px);
         flex-shrink: 0;
         align-items: center;
@@ -61,6 +63,11 @@ export default {
         i {
             .mr(2px);
         }
+    }
+}
+@media screen and (max-width:@phone){
+    .m-jargon{
+        grid-template-columns: repeat(3,1fr);
     }
 }
 </style>
