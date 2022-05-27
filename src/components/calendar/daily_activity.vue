@@ -79,7 +79,14 @@ export default {
         // =========== 数据获取==========
         // 获取每日活动
         loadDaily() {
-            getDaily({ date: this.date }).then(res => {
+            let date = dayjs(this.date).format('YYYY-MM-DD');
+            if (this.today) {
+                const hour = dayjs().hour();
+                if (0 <= hour < 7) {
+                    date = dayjs(date).subtract(1, 'day').format('YYYY-MM-DD');
+                }
+            }
+            getDaily({ date }).then(res => {
                 let list = res.data.data || [];
                 this.daily = list.map(item => {
                     return {
