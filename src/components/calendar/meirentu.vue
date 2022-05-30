@@ -2,7 +2,7 @@
     <tr>
         <td>美人图</td>
         <td :title="server">
-            <el-select v-model="server" placeholder="区服" size="mini" class="u-select-meirentu">
+            <el-select v-model="server" placeholder="区服" size="mini" class="u-select-meirentu" @change="serverChange">
                 <el-option v-for="item in servers" :key="item" :label="item" :value="item"></el-option>
             </el-select>
         </td>
@@ -23,7 +23,7 @@ export default {
     data() {
         return {
             servers,
-            server: "蝶恋花",
+            server: "",
             meirentu: null,
         }
     },
@@ -33,15 +33,13 @@ export default {
         },
     },
     watch: {
-        'my_server': function(val) {
-            val && (this.server = val);
-        },
-        server: {
+        'my_server': {
             immediate: true,
-            handler(val) {
-                val && this.loadMeirentu();
+            handler: function(val) {
+                this.server = val || servers[0];
+                this.loadMeirentu();
             }
-        },
+        }
     },
     methods: {
         // 获取美人图
@@ -50,6 +48,9 @@ export default {
                 this.meirentu = res.data.data;
             })
         },
+        serverChange() {
+            if (this.server) this.loadMeirentu()
+        }
     }
 }
 </script>
