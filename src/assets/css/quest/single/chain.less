@@ -1,0 +1,27 @@
+.quest-name {
+    display: inline-block;
+
+    & .quest-link.current {
+        color: #c01f3a;
+    }
+
+    & .quest-link:not(.current) {
+        color: #8b4dff;
+    }
+}
+
+.branch>.quest-name:not(:last-of-type)::after {
+    content: '|';
+}
+
+.list .quest-name:not(:last-of-type)::after {
+    content: '-';
+}
+
+.quest-name .all:not(:last-of-type)::after{
+    content: '&';
+}
+
+.quest-name .one:not(:last-of-type)::after{
+    content: '|';
+}

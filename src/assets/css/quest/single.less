@@ -1,0 +1,122 @@
+.quest {
+    @media screen and (min-width: 768px) {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        column-gap: 14px;
+
+        .comment {
+            grid-column-start: span 2;
+        }
+    }
+
+    .info {
+        padding: .75rem;
+
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+
+            .name {
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                .mr(10px);
+                .fz(18px);
+                font-weight: bold;
+
+                img {
+                    .size(30px);
+                    margin-right: 4px;
+                    margin-left: 8px;
+                }
+
+                .difficulty {
+                    color: #909399;
+                }
+            }
+
+            .id {
+                .fz(14px);
+                color: #909399;
+            }
+        }
+
+        .tag-list {
+            &>span {
+                background-color: white;
+                color: #3d454d;
+                margin-right: 12px;
+                display: inline-flex;
+                align-items: center;
+
+                img {
+                    margin-bottom: 2px;
+                }
+            }
+        }
+
+        .start,
+        .end {
+            margin: 0.4rem 0;
+            .flex;
+            align-items: center;
+
+            &>span:first-of-type {
+                margin-right: 4px;
+            }
+
+            .id {
+                .ml(.75rem);
+                .fz(14px);
+                color: #909399;
+            }
+        }
+
+        .desc,
+        .target {
+            white-space: pre-line;
+            line-height: 1.5rem;
+        }
+
+        .target {
+            margin-top: 2rem;
+
+            .sub-target {
+                color: gray;
+                margin: 0.25rem 0;
+                text-indent: 2.3rem;
+                .flex;
+                align-items: center;
+            }
+
+            .sub-target:last-of-type {
+                margin-bottom: 2rem;
+            }
+        }
+    }
+
+    .quest-map {
+        .flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .reward {
+        margin-top: 2rem;
+
+        &>p {
+            margin-bottom: 4px;
+        }
+
+        .list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    .quest-comment,
+    .m-wiki-post-panel,
+    .m-wiki-post-empty {
+        grid-column: span 3;
+    }
+}

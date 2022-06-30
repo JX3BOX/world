@@ -1,0 +1,65 @@
+.quest-card {
+    border-radius: 16px;
+    border: 1px solid #d7dae2;
+    margin: 8px 0;
+    min-height: 120px;
+    white-space: pre-line;
+    column-gap: 8px;
+    .pointer;
+    text-align: center;
+
+    &:hover {
+        border: 1px solid #909399;
+    }
+
+    &>div:nth-of-type(2) {
+        span:first-of-type {
+            .flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 4px;
+            width: 100%;
+            font-weight: bold;
+            font-size: 16px;
+
+            img.quest-school {
+                .size(30px);
+                .mt(-6px);
+                margin-left: 8px;
+            }
+        }
+
+        span {
+            width: 100%;
+            color: #909399;
+            font-size: 14px;
+            font-weight: normal;
+            display: inline-block;
+            text-align: center;
+        }
+    }
+
+    &>div:nth-of-type(4) {
+        padding: 0 16px;
+    }
+
+    &>div:first-of-type {
+        padding: 0 16px;
+    }
+
+    &>div:last-of-type {
+        width: 100%;
+        text-align: left;
+    }
+
+    .item-reward {
+        .mt(4px);
+        .mb(4px);
+        .flex;
+        align-items: flex-start;
+
+        &>span {
+            .mr(4px);
+        }
+    }
+}

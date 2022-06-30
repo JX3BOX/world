@@ -1,0 +1,99 @@
+.m-quest {
+    .flex;
+    flex-direction: column;
+    align-items: center;
+
+    .u-logo {
+        .size(160px);
+        margin: 5rem 0 0 0;
+    }
+
+    .u-title {
+        font-size: 3rem;
+        font-weight: bolder;
+        letter-spacing: 0.45rem;
+        margin-top: 0;
+        color: #909399;
+    }
+
+    .u-input {
+        .flex;
+        width: 760px;
+        align-items: center;
+        .mb(1.75rem);
+
+        .el-checkbox {
+            .ml(20px);
+        }
+
+        .el-input-group--append .el-input__inner {
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+        }
+
+        .el-input-group__append {
+            text-align: center;
+            width: 64px;
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+    }
+
+    .u-desc {
+        width: 760px;
+        color: #909399;
+        .mb(12rem);
+    }
+
+    .u-recommand {
+        margin-top: 4rem;
+        width: 760px;
+
+        .title {
+            color: #909399;
+            border-bottom: solid 1px #EBEEF5;
+            padding-bottom: 0.35rem;
+        }
+
+        .list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            column-gap: 1rem;
+            row-gap: .5rem;
+            margin-bottom: 10rem;
+
+            .item {
+                .flex;
+                .pointer;
+                padding: 6px;
+                background-color: #fafafa;
+                font-size: 0.8rem;
+                border-radius: 4px;
+                border: 1px solid #dcdfe6;
+                border-left: 4px solid #409EFF;
+
+                .icon {
+                    .size(48px);
+                    .mr(16px);
+                }
+
+                .content {
+                    display: inline-block;
+                    flex-grow: 1;
+                    .flex;
+                    flex-direction: column;
+                    justify-content: center;
+
+                    p {
+                        margin: 0;
+
+                        &.class {
+                            color: #909399;
+                            margin-top: .25rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

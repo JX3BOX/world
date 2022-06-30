@@ -1,0 +1,101 @@
+.item {
+    .item-div {
+        display: flex;
+        align-items: center;
+
+        .item-name {
+            .pl(8px);
+            font-size: 15px;
+        }
+    }
+
+    .item-icon {
+        .pointer;
+        display: inline-block;
+        position: relative;
+        .size(36px);
+
+        .border,
+        .border-quest {
+            .pa;
+            top: 0;
+            left: 0;
+            .w(100%);
+            .h(100%);
+            box-sizing: border-box;
+            background-size: contain;
+            .z(2);
+        }
+
+        .border-quest {
+            .z(3);
+        }
+
+        .item-count {
+            .pa;
+            bottom: 0;
+            right: 0;
+            text-shadow: black 0 0 2px;
+            .color(#fff);
+            font-weight: bold;
+            .z(4);
+        }
+    }
+}
+
+.e-jx3-item-q0 {
+    color: rgb(167, 167, 167);
+
+    &:hover {
+        color: rgb(167, 167, 167, 0.88);
+    }
+}
+
+.e-jx3-item-q1 {
+    color: rgb(6, 191, 204);
+
+    &:hover {
+        color: rgba(6, 191, 204, 0.88);
+    }
+}
+
+.e-jx3-item-q2 {
+    color: rgb(0, 210, 75);
+
+    &:hover {
+        color: rgba(0, 210, 75, 0.88);
+    }
+}
+
+.e-jx3-item-q3 {
+    color: rgb(0, 126, 255);
+
+    &:hover {
+        color: rgba(0, 126, 255, 0.88);
+    }
+}
+
+.e-jx3-item-q4 {
+    color: rgb(254, 45, 254);
+
+    &:hover {
+        color: rgba(254, 45, 254, 0.88);
+    }
+}
+
+.e-jx3-item-q5 {
+    color: rgb(255, 165, 0);
+
+    &:hover {
+        color: rgba(255, 165, 0, 0.88);
+    }
+}
+
+.item-icon-popup {
+    min-width: initial;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+    transform: translateY(-10px);
+}

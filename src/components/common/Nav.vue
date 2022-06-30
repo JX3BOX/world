@@ -110,6 +110,21 @@ export default {
                     path: "/",
                     children: [],
                 },
+                quest: {
+                    label: "任务",
+                    key: "quest",
+                    app: "quest",
+                    path: "/",
+                    children: [
+                        {
+                            label: "xx系列",
+                            key: "tmp",
+                            app: "tmp",
+                            path: "/",
+                            children: [],
+                        },
+                    ],
+                },
             },
             defaultProps: {
                 children: "children",

@@ -59,7 +59,6 @@ export default {
                         getCalendarRank(this.date).then((res) => {
                             if (!res.data.data) return;
                             this.list = res.data.data.list;
-                            console.log(this.list);
                         });
                 })
                 .finally(() => {

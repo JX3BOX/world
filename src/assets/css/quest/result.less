@@ -1,0 +1,38 @@
+.search-result {
+    .u-input {
+        .mb(24px);
+        .flex;
+        align-items: center;
+
+        &>.el-input {
+            margin-right: 1.75rem;
+        }
+    }
+
+    .quest-card,
+    .result-head {
+        font-size: 14px;
+        display: grid;
+        grid-template-columns: 1fr 2fr 0.8fr 3fr 3fr;
+        justify-items: center;
+        align-items: center;
+        color: #909399;
+    }
+
+    .quest-card.current {
+        border: 2px solid #909399;
+
+        &:hover {
+            border: 3px solid #909399;
+        }
+    }
+
+    .result-head {
+        font-weight: bold;
+        height: 2rem;
+        margin-bottom: 32px;
+        border-bottom: 1px solid #d7dae2;
+        column-gap: 8px;
+
+    }
+}
