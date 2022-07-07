@@ -168,14 +168,15 @@ import PointFilter from "@/components/quest/single/point_filter.vue";
 import ItemIcon from "@/components/quest/item_icon.vue";
 
 import { postStat, getStat } from "@jx3box/jx3box-common/js/stat.js";
+import { wiki } from "@jx3box/jx3box-common/js/wiki.js";
 import { getAppIcon } from "@jx3box/jx3box-common/js/utils";
 import questFont from "@/assets/data/questFont.json";
 
 import { publishLink, ts2str, showAvatar, iconLink } from "@jx3box/jx3box-common/js/utils";
-import { WikiPost } from "@jx3box/jx3box-common/js/helper";
 import WikiPanel from "@jx3box/jx3box-common-ui/src/wiki/WikiPanel";
 import WikiRevisions from "@jx3box/jx3box-common-ui/src/wiki/WikiRevisions";
 import WikiComments from "@jx3box/jx3box-common-ui/src/wiki/WikiComments";
+import Article from "@jx3box/jx3box-editor/src/Article.vue";
 
 import { getQuest } from "@/service/quest";
 import buildPoints from "@/utils/quest/generatePoints";
@@ -189,6 +190,7 @@ export default {
         RewardItem,
         QuestChain,
         PointFilter,
+        Article,
         WikiPanel,
         WikiRevisions,
         WikiComments,
@@ -425,6 +427,6 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 @import "~@/assets/css/quest/single.less";
 </style>
