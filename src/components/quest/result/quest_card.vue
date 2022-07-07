@@ -4,8 +4,12 @@
         <div>
             <span>
                 <span class="quest-name" :style="questNameColor">{{ quest.name }}</span>
-                <el-tooltip :content="`该任务仅 ${quest.schoolName} 门派可接取`" placement="top">
-                    <img class="quest-school" v-if="quest.schoolName" :src="schoolIcon(quest.schoolName)" alt="" />
+                <el-tooltip
+                    v-if="quest.schoolName"
+                    :content="`该任务仅 ${quest.schoolName} 门派可接取`"
+                    placement="top"
+                >
+                    <img class="quest-school" :src="schoolIcon(quest.schoolName)" alt="" />
                 </el-tooltip>
             </span>
             <span>（ID：{{ quest.id }}）</span>
@@ -20,8 +24,9 @@
                 <item-icon
                     v-for="item in items"
                     :key="item.id"
-                    :item="item"
-                    :displayName="false"
+                    :item_id="item.id"
+                    :amount="item.amount"
+                    :onlyIcon="true"
                     :size="28"
                 ></item-icon>
             </div>
@@ -45,7 +50,7 @@ export default {
     },
     methods: {
         go(id) {
-            this.$router.push({ name: "single", params: { id } });
+            this.$router.push({ name: "single", params: { quest_id: id } });
         },
         schoolIcon(school) {
             let map = {

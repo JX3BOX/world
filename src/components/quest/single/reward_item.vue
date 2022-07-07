@@ -1,5 +1,5 @@
 <template>
-    <div class="reward-item" :class="classes">
+    <div class="reward-item" :class="classes" v-if="display">
         <!-- 金钱 -->
         <template v-if="reward.type == 'money'"> 获得金钱：<game-price :price="reward.count"></game-price> </template>
         <template v-else-if="reward.type == 'exp'"> 获得阅历：{{ reward.count }} </template>
@@ -35,13 +35,13 @@
         >
         </point-reward>
         <template v-else-if="reward.type == 'item_group'">
-            <p class="group-type">{{ reward.all ? "你将获得以下全部道具：" : "你可以在以下道具中选择一种：" }}</p>
+            <p class="group-type">{{ reward | item_group_tips }}</p>
             <div class="item-list">
                 <item-icon
                     v-for="item in reward.items"
                     :key="item.id"
-                    :item="item"
-                    :displayName="true"
+                    :item_id="item.id"
+                    :amount="item.amount"
                     :size="36"
                 ></item-icon>
             </div>
@@ -66,6 +66,11 @@ export default {
         ItemIcon,
         PointReward,
     },
+    data() {
+        return {
+            display: true,
+        };
+    },
     methods: {},
     computed: {
         classes() {
@@ -83,6 +88,17 @@ export default {
                 return "+" + count;
             } else {
                 return count;
+            }
+        },
+        item_group_tips: (award) => {
+            if (award.all) {
+                if (award.accordForce) {
+                    return "你将获得以下全部道具（根据门派）：";
+                } else {
+                    return "你将获得以下全部道具：";
+                }
+            } else {
+                return "你可以在以下道具中选择一种：";
             }
         },
     },

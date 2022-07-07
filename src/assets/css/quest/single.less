@@ -82,16 +82,26 @@
             margin-top: 2rem;
 
             .sub-target {
+                .flex;
                 color: gray;
                 margin: 0.25rem 0;
-                text-indent: 2.3rem;
-                .flex;
+                padding-left: 2.3rem;
                 align-items: center;
+                font-size: 15px;
+
+                &>span {
+                    margin-right: 8px;
+                }
             }
 
             .sub-target:last-of-type {
                 margin-bottom: 2rem;
             }
+        }
+
+        .offer-item .list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
         }
     }
 
@@ -102,8 +112,6 @@
     }
 
     .reward {
-        margin-top: 2rem;
-
         &>p {
             margin-bottom: 4px;
         }

@@ -29,12 +29,6 @@ module.exports = {
     //❤️ Porxy ~
     devServer: {
         proxy: {
-            "/api/quest": {
-                target: "http://127.0.0.1:7002",
-                onProxyReq: function (request) {
-                    request.setHeader("origin", "");
-                },
-            },
             "/api/calendar": {
                 target: "https://helper.jx3box.com",
                 onProxyReq: function (request) {

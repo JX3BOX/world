@@ -93,7 +93,13 @@ export default {
             }
         },
         pointStyle(Coordinates, MapId) {
-            let mapScales = MapScales[`${MapId}`][0];
+            let mapScales = MapScales[`${MapId}`];
+            if (mapScales) {
+                mapScales = mapScales[0];
+            } else {
+                console.warn(`未知的地图ID：${MapId}`);
+                return {};
+            }
             let res = {
                 left: `${(Coordinates[0] - mapScales.StartX) * mapScales.Scale * (this.width / 1024)}px`,
                 bottom: `${(Coordinates[1] - mapScales.StartY) * mapScales.Scale * (this.height / 896)}px`,

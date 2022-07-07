@@ -17,8 +17,8 @@
             </div>
             <p class="start" v-show="quest.start">
                 <span>任务起点: </span>
-                <span>{{ quest.start.map }} - {{ quest.start.name || "未知" }}</span>
-                <span class="id">({{ quest.start.type | startType }}ID: {{ quest.start.id }})</span>
+                <span>{{ quest.start.mapName }} - {{ quest.start.name || "未知" }}</span>
+                <span class="id">({{ quest.start.type | startType }}ID: {{ quest.start.id | idFilter }})</span>
                 <point-filter
                     v-if="showPointFilter('Start')"
                     :default="true"
@@ -28,8 +28,8 @@
             </p>
             <p class="end">
                 <span>任务终点: </span>
-                <span>{{ quest.end.map }} - {{ quest.end.name || "未知" }}</span>
-                <span class="id">({{ quest.end.type | startType }}ID: {{ quest.end.id }})</span>
+                <span>{{ quest.end.mapName }} - {{ quest.end.name || "未知" }}</span>
+                <span class="id">({{ quest.end.type | startType }}ID: {{ quest.end.id | idFilter }})</span>
                 <point-filter
                     v-if="showPointFilter('End')"
                     :default="true"
@@ -42,13 +42,14 @@
                 <p v-html="targetDesc"></p>
                 <template v-if="quest.killNpcs && quest.killNpcs.length > 0">
                     <div v-for="(killNpc, i) in quest.killNpcs" :key="i" class="sub-target">
-                        <span>击杀 {{ killNpc.name }}</span>
+                        <span>击杀</span>
+                        <span>{{ killNpc.name }}</span>
                         <el-tooltip v-if="killNpc.share" content="该目标可共享击杀" placement="top">
                             <img src="@/assets/img/quest/target-15.png" alt="" />
                         </el-tooltip>
-                        <span> x {{ killNpc.count }}</span>
+                        <span> x {{ killNpc.amount }}</span>
                         <point-filter
-                            v-if="showPointFilter(`KillNpc${i + 1}`)"
+                            v-if="showPointFilter('KillNpc' + (i + 1))"
                             :default="true"
                             :pointType="`KillNpc${i + 1}`"
                             @onPointFilterChange="changePointFilter"
@@ -57,19 +58,21 @@
                 </template>
                 <template v-if="quest.needItems && quest.needItems.length > 0">
                     <div v-for="(needItem, i) in quest.needItems" :key="i" class="sub-target">
-                        <span>收集 {{ needItem.name }} x {{ needItem.count }}</span>
+                        <span>收集</span>
+                        <item-icon :item_id="needItem.id"></item-icon>
+                        <span>x {{ needItem.amount }}</span>
                         <point-filter
-                            v-if="showPointFilter(`NeedItem${i + 1}`)"
+                            v-if="showPointFilter('NeedItem' + (i + 1))"
                             :default="true"
                             :pointType="`NeedItem${i + 1}`"
                             @onPointFilterChange="changePointFilter"
                         ></point-filter>
                     </div>
                 </template>
-                <div v-for="(target, i) in quest.questValueStrs" :key="target" class="sub-target">
-                    <span>{{ target }} x {{ quest.questValue[i] }}</span>
+                <div v-for="(questValue, i) in quest.questValues" :key="i" class="sub-target">
+                    <span>{{ questValue.str }} x {{ questValue.value }}</span>
                     <point-filter
-                        v-if="showPointFilter(`State${i + 1}`)"
+                        v-if="showPointFilter('State' + (i + 1))"
                         :default="true"
                         :pointType="`State${i + 1}`"
                         @onPointFilterChange="changePointFilter"
@@ -80,6 +83,17 @@
                 <p>任务描述：</p>
                 <p v-html="questDesc"></p>
             </div>
+            <div class="offer-item" v-if="quest.offerItems">
+                <p>提供物品：</p>
+                <div class="list">
+                    <item-icon
+                        v-for="item in quest.offerItems"
+                        :key="item.id"
+                        :item_id="item.id"
+                        :size="36"
+                    ></item-icon>
+                </div>
+            </div>
             <div class="reward" v-show="showReward">
                 <p>任务奖励：</p>
                 <div class="list">
@@ -89,12 +103,7 @@
             <quest-chain :current="id" :data="quest.chain"></quest-chain>
         </div>
         <div class="quest-map">
-            <quest-map
-                :points="quest.points"
-                :filter="point_filter"
-                :questType="quest.questType"
-                v-if="showMap"
-            ></quest-map>
+            <quest-map :points="points" :filter="point_filter" :questType="quest.questType" v-if="showMap"> </quest-map>
             <div class="empty" v-else>该任务妹有指引</div>
         </div>
         <div class="m-wiki-post-panel" v-if="wiki_post && wiki_post.post">
@@ -148,9 +157,6 @@
             <span>暂无攻略，我要</span>
             <a class="s-link" :href="publish_url(`quest/${id}`)">完善攻略</a>
         </div>
-        <!-- <div class="quest-comment">
-            <Comment :id="id" category="quest" order="desc" />
-        </div> -->
     </div>
 </template>
 
@@ -159,6 +165,8 @@ import QuestChain from "@/components/quest/single/quest_chain.vue";
 import QuestMap from "@/components/quest/single/quest_map.vue";
 import RewardItem from "@/components/quest/single/reward_item.vue";
 import PointFilter from "@/components/quest/single/point_filter.vue";
+import ItemIcon from "@/components/quest/item_icon.vue";
+
 import { postStat, getStat } from "@jx3box/jx3box-common/js/stat.js";
 import { getAppIcon } from "@jx3box/jx3box-common/js/utils";
 import questFont from "@/assets/data/questFont.json";
@@ -170,10 +178,13 @@ import WikiRevisions from "@jx3box/jx3box-common-ui/src/wiki/WikiRevisions";
 import WikiComments from "@jx3box/jx3box-common-ui/src/wiki/WikiComments";
 
 import { getQuest } from "@/service/quest";
+import buildPoints from "@/utils/quest/generatePoints";
+import isArray from "lodash/isArray";
 
 export default {
     name: "QuestSingle",
     components: {
+        ItemIcon,
         QuestMap,
         RewardItem,
         QuestChain,
@@ -198,12 +209,16 @@ export default {
                     type: "npc",
                     id: -1,
                     map: "扬州",
+                    guides: [],
                 },
                 end: {
                     type: "npc",
                     id: -1,
                     map: "扬州",
+                    guides: [],
                 },
+                canAssist: 0,
+                canShare: 0,
                 questDesc: "",
                 targetDesc: "",
                 rewards: [],
@@ -211,7 +226,8 @@ export default {
                     current: [],
                     branch: [],
                 },
-                points: {},
+                killNpcs: [],
+                needItems: [],
             },
             point_filter: {
                 Start: true,
@@ -242,58 +258,32 @@ export default {
             this.$set(this.point_filter, type, enable);
         },
         showPointFilter(type) {
-            let points = [];
-            for (let map in this.quest.points) {
-                points.push(...this.quest.points[map]);
-            }
-            return points.some((point) => {
-                return point.Types === type;
+            return Object.values(this.points).some((points) => {
+                return points.some((point) => {
+                    return point.Types === type;
+                });
             });
         },
-        //
+        //百科相关
         loadData: function () {
             // 获取最新攻略
             if (this.id) {
-                if (this.client == "std") {
-                    WikiPost.newest("quest", this.id, 1, "std").then((res) => {
-                        let data = res?.data?.data;
-                        this.wiki_post = data;
-                        if (data.post) {
-                            this.is_empty = false;
-                        }
-                        // console.log("获取重制攻略");
-                    });
-                } else {
-                    WikiPost.newest("quest", this.id, 1, "origin")
-                        .then((res) => {
-                            let data = res?.data?.data;
-                            this.wiki_post = data;
-                            if (data.post) {
-                                this.is_empty = false;
-                            }
-                            // console.log("获取缘起攻略");
-                            return !!data.post;
-                        })
-                        .then((data) => {
-                            if (!data) {
-                                // console.log("兼容：获取重制攻略");
-                                WikiPost.newest("quest", this.id, 1, "std").then((res) => {
-                                    let data = res?.data?.data;
-                                    this.wiki_post = data;
-                                    if (data.post) {
-                                        this.is_empty = false;
-                                    }
-                                    this.compatible = true;
-                                });
-                            }
-                        });
-                }
+                wiki.mix({ type: "quest", id: this.id, client: this.client }, { supply: 1 }).then((res) => {
+                    const { post, source, compatible, isEmpty, users } = res;
+                    this.wiki_post = {
+                        post: post,
+                        source: source,
+                        users,
+                    };
+                    this.is_empty = isEmpty;
+                    this.compatible = compatible;
+                });
             }
             this.triggerStat();
         },
         loadRevision: function () {
             // 获取指定攻略
-            WikiPost.view(this.post_id, { type: "quest" }).then((res) => {
+            wiki.getById(this.post_id, { type: "quest" }).then((res) => {
                 this.wiki_post = res?.data?.data;
             });
             this.triggerStat();
@@ -306,6 +296,7 @@ export default {
                 postStat("quest", this.id);
             }
         },
+        buildPoints,
     },
     mounted() {
         this.getData();
@@ -320,7 +311,7 @@ export default {
             return parseInt(this.$route.params.quest_id);
         },
         showMap: function () {
-            return this.quest.points && Object.keys(this.quest.points).length > 0;
+            return this.points && Object.keys(this.points).length > 0;
         },
         questDesc: function () {
             if (this.quest.questDesc) {
@@ -367,8 +358,11 @@ export default {
         client() {
             return this.$store.state.client;
         },
+        points() {
+            return this.buildPoints(this.quest);
+        },
 
-        //
+        //wiki相关
         post_id: function () {
             return this.$route.params.post_id;
         },
@@ -422,11 +416,15 @@ export default {
             else if (value === "item") return "物品";
             else return "";
         },
+        idFilter: (id) => {
+            if (isArray(id)) {
+                return `${id[0]}_${id[1]}`;
+            } else return id;
+        },
     },
 };
 </script>
 
 <style lang="less" scoped>
 @import "~@/assets/css/quest/single.less";
-@import "~@jx3box/jx3box-editor/assets/css/module/jx3_element.less";
 </style>
