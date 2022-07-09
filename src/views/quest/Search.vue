@@ -3,7 +3,11 @@
         <img class="u-logo" src="@/assets/img/quest/quest_logo.png" alt="" />
         <h1 class="u-title">任务百科</h1>
         <div class="u-input">
-            <el-input placeholder="输入任务关键字（可包括中括号），「回车」进行搜索" v-model="keyword">
+            <el-input
+                placeholder="输入任务关键字（可包括中括号），「回车」进行搜索"
+                v-model="keyword"
+                @keyup.enter.native="search"
+            >
                 <el-button @click="search" slot="append"><span>搜 索</span></el-button>
             </el-input>
             <el-tooltip content="查看任务链需要键入完整任务名或任务ID哦" placement="top">
