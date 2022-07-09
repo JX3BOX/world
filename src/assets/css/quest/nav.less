@@ -3,49 +3,64 @@
     .fz(14px, 28px);
     .h(28px);
     user-select: none;
-  }
+}
 
-  //子级节点
-  .is-leaf + .el-tree-node__label {
+//子级节点
+.is-leaf + .el-tree-node__label {
     &:before {
-      // content: '⇨ ';
-      // color: #d0d4dd;
-      .mr(5px);
+        // content: '⇨ ';
+        // color: #d0d4dd;
+        .mr(5px);
     }
-  }
+}
 
-  .is-current {
+.is-current {
     & > .el-tree-node__content {
-      .bold;
+        .bold;
     }
-  }
+}
 
-  .el-tree-node__label {
+.el-tree-node__label {
     .w(100%);
 
     .u-count {
-      font-size: 13px;
-      color: #888;
-      margin-left: 5px;
-      font-style: normal;
+        font-size: 13px;
+        color: #888;
+        margin-left: 5px;
+        font-style: normal;
     }
-  }
+}
 
-  .m-nav {
+.el-tree-node__expand-icon.is-leaf{
+    .none;
+}
+
+.m-nav {
     .pr;
     .h(100%);
 
     @search-input-height: 50px;
 
     .m-menus-panel {
-      .pa;
-      top: @search-input-height;
-      .w(100%);
-      .h(calc(~'100% - 30px -' @search-input-height));
-      overflow-y: auto;
+        .pa;
+        top: @search-input-height;
+        .w(100%);
+        .h(calc(~"100% - 30px -" @search-input-height));
+        overflow-y: auto;
     }
 
     .m-menus {
-      background-color: transparent;
+        background-color: transparent;
     }
-  }
+
+    .router-link-exact-active{
+        background-color:@color-link;
+        color:#fff;
+        .r(3px);
+        .u-count{
+            color:#eee;
+        }
+    }
+
+
+}

@@ -1,7 +1,7 @@
 <!--
  * @Author: iRuxu
  * @Date: 2022-07-09 19:40:42
- * @LastEditTime: 2022-07-10 02:44:28
+ * @LastEditTime: 2022-07-10 03:15:29
  * @Description:
 -->
 <template>
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import Nav from "../../components/quest/nav.vue";
+import Nav from "@/components/quest/nav.vue";
 
 export default {
     name: "Quest",
