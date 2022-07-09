@@ -3,7 +3,7 @@
         <div class="u-input">
             <el-input placeholder="输入任务关键字（可包括中括号），「回车」进行搜索" v-model="input">
                 <template slot="prepend"><span>关键词</span></template>
-                <el-button slot="append" @click="pushRoute()"><span>搜索</span></el-button>
+                <el-button slot="append" @click="pushRoute()"><i class="el-icon-search"></i></el-button>
             </el-input>
             <el-tooltip content="查看任务链需要键入完整任务名或任务ID哦" placement="top">
                 <el-checkbox v-model="checkChain" @change="pushRoute()">查看任务链</el-checkbox>
@@ -18,11 +18,11 @@
         </div>
         <template v-if="resultIsObject">
             <template v-if="result.prev && result.prev.length > 0">
-                <el-divider>前置分支</el-divider>
+                <el-divider><i class="el-icon-star-off"></i> 前置分支</el-divider>
                 <quest-card v-for="quest in result.prev" :key="quest.id" :quest="quest"></quest-card>
             </template>
             <template v-if="result.current && result.current.length > 0">
-                <el-divider v-if="result.current.length > 0">任务链条</el-divider>
+                <el-divider v-if="result.current.length > 0"><i class="el-icon-star-off"></i> 任务链条</el-divider>
                 <quest-card
                     v-for="quest in result.current"
                     :class="{ current: quest.name == keyword }"
@@ -31,19 +31,19 @@
                 ></quest-card>
             </template>
             <template v-if="result.branch && result.branch.length > 0">
-                <el-divider>任务分支</el-divider>
+                <el-divider><i class="el-icon-star-off"></i> 任务分支</el-divider>
                 <quest-card v-for="quest in result.branch" :key="quest.id" :quest="quest"></quest-card>
             </template>
             <template v-if="result.byId && result.byId.length > 0">
-                <el-divider>任务ID匹配</el-divider>
+                <el-divider><i class="el-icon-star-off"></i> 任务ID匹配</el-divider>
                 <quest-card v-for="quest in result.byId" :key="quest.id" :quest="quest"></quest-card>
             </template>
             <template v-if="result.byItem && result.byItem.length > 0">
-                <el-divider>物品匹配</el-divider>
+                <el-divider><i class="el-icon-star-off"></i> 物品匹配</el-divider>
                 <quest-card v-for="quest in result.byItem" :key="quest.id" :quest="quest"></quest-card>
             </template>
             <template v-if="result.byKeyword && result.byKeyword.length > 0">
-                <el-divider>模糊搜索结果</el-divider>
+                <el-divider class="u-result-hr"><i class="el-icon-star-off"></i> 模糊搜索结果</el-divider>
                 <quest-card v-for="quest in result.byKeyword" :key="quest.id" :quest="quest"></quest-card>
             </template>
         </template>
@@ -135,6 +135,6 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 @import "~@/assets/css/quest/result.less";
 </style>

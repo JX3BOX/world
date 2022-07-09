@@ -12,10 +12,10 @@
                     <img class="quest-school" :src="schoolIcon(quest.schoolName)" alt="" />
                 </el-tooltip>
             </span>
-            <span>（ID：{{ quest.id }}）</span>
+            <span class="u-id">（ID：{{ quest.id }}）</span>
         </div>
         <div>{{ quest.level }}</div>
-        <div>{{ quest.target }}</div>
+        <div class="u-target">{{ quest.target }}</div>
         <div>
             <div class="text-reward">
                 {{ quest.reward | rewardFilter }}
@@ -138,6 +138,6 @@ export default {
     transform: translateY(-10px);
 }
 </style>
-<style lang="less" scoped>
+<style lang="less">
 @import "~@/assets/css/quest/quest_card.less";
 </style>

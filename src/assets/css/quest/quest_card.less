@@ -1,7 +1,8 @@
 .quest-card {
-    border-radius: 16px;
-    border: 1px solid #d7dae2;
-    margin: 8px 0;
+    border-radius: 6px;
+    border: 1px solid #eee;
+    background-color:@bg-light;
+    margin-bottom: 20px;
     min-height: 120px;
     white-space: pre-line;
     column-gap: 8px;
@@ -9,7 +10,8 @@
     text-align: center;
 
     &:hover {
-        border: 1px solid #909399;
+        border: 1px solid @color-link;
+        background-color:#fff;
     }
 
     &>div:nth-of-type(2) {
@@ -17,7 +19,7 @@
             .flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 4px;
+            // margin-bottom: 4px;
             width: 100%;
             font-weight: bold;
             font-size: 16px;
@@ -61,5 +63,17 @@
         &>span {
             .mr(4px);
         }
+    }
+
+    // .quest-name{
+    //     color:#fba524;
+    // }
+
+    .u-id,.text-reward{
+        .fz(12px,2) !important;
+    }
+    .u-target{
+        color:@color;
+        .fz(13px);
     }
 }
