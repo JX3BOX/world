@@ -1,7 +1,7 @@
 <!--
  * @Author: iRuxu
  * @Date: 2022-07-09 19:40:42
- * @LastEditTime: 2022-07-10 03:07:51
+ * @LastEditTime: 2022-07-10 04:16:23
  * @Description:
 -->
 <template>
@@ -9,7 +9,7 @@
         <img class="u-logo" src="@/assets/img/quest/quest_logo.png" alt="" />
         <h1 class="u-title">任务百科</h1>
         <div class="u-input">
-            <el-input placeholder="输入任务关键字（可包括中括号），「回车」进行搜索" v-model="keyword">
+            <el-input placeholder="输入任务关键字（可包括中括号），「回车」进行搜索" v-model="keyword" @keyup.enter.native="search">
                 <span slot="prepend">
                     <el-tooltip content="查看任务链需要键入完整任务名或任务ID哦" placement="top">
                         <el-checkbox v-model="chain">查看任务链</el-checkbox>

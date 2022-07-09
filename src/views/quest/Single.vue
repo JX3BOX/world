@@ -17,27 +17,27 @@
             </div>
             <div class="start-end">
                 <p class="start" v-show="quest.start">
-                <span class="u-label"><i class="el-icon-video-play"></i> 任务起点: </span>
-                <span>{{ quest.start.mapName }} - {{ quest.start.name || "未知" }}</span>
-                <span class="id">({{ quest.start.type | startType }}ID: {{ quest.start.id | idFilter }})</span>
-                <point-filter
-                    v-if="showPointFilter('Start')"
-                    :default="true"
-                    :pointType="'Start'"
-                    @onPointFilterChange="changePointFilter"
-                ></point-filter>
-            </p>
-            <p class="end">
-                <span class="u-label"><i class="el-icon-remove-outline"></i> 任务终点: </span>
-                <span>{{ quest.end.mapName }} - {{ quest.end.name || "未知" }}</span>
-                <span class="id">({{ quest.end.type | startType }}ID: {{ quest.end.id | idFilter }})</span>
-                <point-filter
-                    v-if="showPointFilter('End')"
-                    :default="true"
-                    :pointType="'End'"
-                    @onPointFilterChange="changePointFilter"
-                ></point-filter>
-            </p>
+                    <span class="u-label"><i class="el-icon-video-play"></i> 任务起点: </span>
+                    <span>{{ quest.start.mapName }} - {{ quest.start.name || "未知" }}</span>
+                    <span class="id">({{ quest.start.type | startType }}ID: {{ quest.start.id | idFilter }})</span>
+                    <point-filter
+                        v-if="showPointFilter('Start')"
+                        :default="true"
+                        :pointType="'Start'"
+                        @onPointFilterChange="changePointFilter"
+                    ></point-filter>
+                </p>
+                <p class="end">
+                    <span class="u-label"><i class="el-icon-remove-outline"></i> 任务终点: </span>
+                    <span>{{ quest.end.mapName }} - {{ quest.end.name || "未知" }}</span>
+                    <span class="id">({{ quest.end.type | startType }}ID: {{ quest.end.id | idFilter }})</span>
+                    <point-filter
+                        v-if="showPointFilter('End')"
+                        :default="true"
+                        :pointType="'End'"
+                        @onPointFilterChange="changePointFilter"
+                    ></point-filter>
+                </p>
             </div>
             <div class="target" v-show="targetDesc">
                 <p class="u-subtitle">【任务目标】</p>
