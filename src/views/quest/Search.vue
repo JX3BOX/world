@@ -1,14 +1,22 @@
+<!--
+ * @Author: iRuxu
+ * @Date: 2022-07-09 19:40:42
+ * @LastEditTime: 2022-07-10 03:07:51
+ * @Description:
+-->
 <template>
     <div class="m-quest">
         <img class="u-logo" src="@/assets/img/quest/quest_logo.png" alt="" />
         <h1 class="u-title">任务百科</h1>
         <div class="u-input">
             <el-input placeholder="输入任务关键字（可包括中括号），「回车」进行搜索" v-model="keyword">
+                <span slot="prepend">
+                    <el-tooltip content="查看任务链需要键入完整任务名或任务ID哦" placement="top">
+                        <el-checkbox v-model="chain">查看任务链</el-checkbox>
+                    </el-tooltip>
+                </span>
                 <el-button @click="search" slot="append"><span>搜 索</span></el-button>
             </el-input>
-            <el-tooltip content="查看任务链需要键入完整任务名或任务ID哦" placement="top">
-                <el-checkbox v-model="chain">查看任务链</el-checkbox>
-            </el-tooltip>
         </div>
         <p class="u-desc">
             <span>※ 支持任务名称精确或模糊搜索</span> <br />

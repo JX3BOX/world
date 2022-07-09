@@ -1,7 +1,13 @@
+<!--
+ * @Author: iRuxu
+ * @Date: 2022-07-09 19:40:42
+ * @LastEditTime: 2022-07-10 02:44:28
+ * @Description:
+-->
 <template>
     <div id="app">
         <Header></Header>
-        <Breadcrumb name="任务百科" slug="quest" :publishEnable="false" :feedbackEnable="true" :crumbEnable="false">
+        <Breadcrumb name="任务百科" slug="quest" :publishEnable="true" :feedbackEnable="true" :crumbEnable="false">
         </Breadcrumb>
         <LeftSidebar>
             <Nav></Nav>
