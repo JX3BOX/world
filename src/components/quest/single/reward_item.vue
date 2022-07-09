@@ -92,7 +92,7 @@ export default {
         },
         item_group_tips: (award) => {
             if (award.all) {
-                if (award.accordForce) {
+                if (award.bySchool) {
                     return "你将获得以下全部道具（根据门派）：";
                 } else {
                     return "你将获得以下全部道具：";
