@@ -15,8 +15,9 @@
                     ><img src="@/assets/img/quest/player-62.png" alt="" />可协助任务</el-tag
                 >
             </div>
-            <p class="start" v-show="quest.start">
-                <span>任务起点: </span>
+            <div class="start-end">
+                <p class="start" v-show="quest.start">
+                <span class="u-label"><i class="el-icon-video-play"></i> 任务起点: </span>
                 <span>{{ quest.start.mapName }} - {{ quest.start.name || "未知" }}</span>
                 <span class="id">({{ quest.start.type | startType }}ID: {{ quest.start.id | idFilter }})</span>
                 <point-filter
@@ -27,7 +28,7 @@
                 ></point-filter>
             </p>
             <p class="end">
-                <span>任务终点: </span>
+                <span class="u-label"><i class="el-icon-remove-outline"></i> 任务终点: </span>
                 <span>{{ quest.end.mapName }} - {{ quest.end.name || "未知" }}</span>
                 <span class="id">({{ quest.end.type | startType }}ID: {{ quest.end.id | idFilter }})</span>
                 <point-filter
@@ -37,8 +38,9 @@
                     @onPointFilterChange="changePointFilter"
                 ></point-filter>
             </p>
+            </div>
             <div class="target" v-show="targetDesc">
-                <p>任务目标：</p>
+                <p class="u-subtitle">【任务目标】</p>
                 <p v-html="targetDesc"></p>
                 <template v-if="quest.killNpcs && quest.killNpcs.length > 0">
                     <div v-for="(killNpc, i) in quest.killNpcs" :key="i" class="sub-target">
@@ -80,7 +82,7 @@
                 </div>
             </div>
             <div class="desc" v-show="questDesc">
-                <p>任务描述：</p>
+                <p class="u-subtitle">【任务描述】</p>
                 <p v-html="questDesc"></p>
             </div>
             <div class="offer-item" v-if="quest.offerItems">
@@ -95,7 +97,7 @@
                 </div>
             </div>
             <div class="reward" v-show="showReward">
-                <p>任务奖励：</p>
+                <p class="u-subtitle">【任务奖励】</p>
                 <div class="list">
                     <reward-item v-for="(reward, i) in quest.rewards" :key="i" :reward="reward"></reward-item>
                 </div>

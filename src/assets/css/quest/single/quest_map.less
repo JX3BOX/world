@@ -1,6 +1,5 @@
 .blinkBorder(@color: #ccc, @time: 3s) {
     @keyframes fadeOut {
-
         0%,
         43%,
         100% {
@@ -12,10 +11,10 @@
         }
     }
 
-    animation-name:fadeOut;
-    animation-duration:@time;
-    animation-timing-function:ease-out;
-    animation-fill-mode:forwards;
+    animation-name: fadeOut;
+    animation-duration: @time;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
     animation-iteration-count: infinite;
 }
 
@@ -24,17 +23,20 @@
         color: green;
         display: absolute;
     }
+    padding:40px;
 
     width: 100%;
     min-height: 768px;
 
     .container {
+        border: 1px solid rgb(238, 238, 238);
+        box-shadow: rgb(0 0 0 / 10%) 0px 0px 3px;
+        box-sizing: border-box;
         height: 100%;
         .pr;
         .auto(x);
         .x(left);
         user-select: none;
-
 
         .map-img {
             .z(1);
@@ -74,8 +76,11 @@
             justify-content: center;
 
             .map-name {
-                margin: .8rem;
+                margin: 0.8rem;
                 text-shadow: 0 0 4px #000;
+                background: #3d454d;
+                padding: 3px 5px;
+                border-radius: 2px;
             }
         }
 
@@ -105,8 +110,6 @@
                 .blinkBorder;
             }
         }
-
-
     }
 }
 
@@ -136,7 +139,7 @@
         }
 
         p {
-            margin: .125rem;
+            margin: 0.125rem;
         }
     }
 }
