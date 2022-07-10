@@ -71,12 +71,6 @@ module.exports = {
                     request.setHeader("origin", "");
                 },
             },
-            "/quest": {
-                target: "https://node.jx3box.com",
-                onProxyReq: function (request) {
-                    request.setHeader("origin", "");
-                },
-            },
             "/api/team": {
                 target: "https://team.api.jx3box.com",
                 onProxyReq: function (request) {

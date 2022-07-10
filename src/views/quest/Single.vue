@@ -1,5 +1,8 @@
 <template>
     <div class="quest">
+        <div class="search">
+            <search-input></search-input>
+        </div>
         <div class="info">
             <p class="title">
                 <span class="name">
@@ -174,6 +177,7 @@ import QuestMap from "@/components/quest/single/quest_map.vue";
 import RewardItem from "@/components/quest/single/reward_item.vue";
 import PointFilter from "@/components/quest/single/point_filter.vue";
 import ItemIcon from "@/components/quest/item_icon.vue";
+import SearchInput from "@/components/quest/search_input.vue";
 
 import { postStat, getStat } from "@jx3box/jx3box-common/js/stat.js";
 import { wiki } from "@jx3box/jx3box-common/js/wiki.js";
@@ -198,6 +202,7 @@ export default {
         RewardItem,
         QuestChain,
         PointFilter,
+        SearchInput,
         Article,
         WikiPanel,
         WikiRevisions,

@@ -1,18 +1,6 @@
 <template>
     <div class="search-result">
-        <div class="u-input">
-            <el-input
-                placeholder="输入任务关键字（可包括中括号），「回车」进行搜索"
-                v-model="input"
-                @keyup.enter.native="pushRoute()"
-            >
-                <template slot="prepend"><span>关键词</span></template>
-                <el-button slot="append" @click="pushRoute()"><i class="el-icon-search"></i></el-button>
-            </el-input>
-            <el-tooltip content="查看任务链需要键入完整任务名或任务ID哦" placement="top">
-                <el-checkbox v-model="checkChain" @change="pushRoute()">查看任务链</el-checkbox>
-            </el-tooltip>
-        </div>
+        <search-input></search-input>
         <div class="result-head">
             <div>起始地图</div>
             <div>任务名称</div>
@@ -59,13 +47,12 @@
 <script>
 import { getQuests } from "@/service/quest";
 import QuestCard from "@/components/quest/result/quest_card.vue";
+import SearchInput from "@/components/quest/search_input.vue";
 
 export default {
     name: "SearchResult",
-    components: { QuestCard },
+    components: { QuestCard, SearchInput },
     data: () => ({
-        input: "",
-        checkChain: false,
         total: 1,
         pageSize: 10,
         result: {},
@@ -76,15 +63,6 @@ export default {
         this.search();
     },
     methods: {
-        pushRoute() {
-            this.$router.push({
-                name: "result",
-                query: {
-                    keyword: this.input,
-                    chain: this.checkChain,
-                },
-            });
-        },
         search(page = 1) {
             getQuests({
                 keyword: this.keyword,

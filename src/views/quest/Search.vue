@@ -8,23 +8,7 @@
     <div class="m-quest">
         <img class="u-logo" src="@/assets/img/quest/quest_logo.png" alt="" />
         <h1 class="u-title">任务百科</h1>
-        <div class="u-input">
-            <el-input
-                placeholder="输入任务关键字（可包括中括号），「回车」进行搜索"
-                v-model="keyword"
-                @keyup.enter.native="search"
-            >
-                <span slot="prepend">
-                    <el-tooltip content="查看任务链需要键入完整任务名或任务ID哦" placement="top">
-                        <el-checkbox v-model="chain">查看任务链</el-checkbox>
-                    </el-tooltip>
-                </span>
-                <el-button @click="search" slot="append">
-                    <span class="lg">搜 索</span>
-                    <i class="xs el-icon-search"></i>
-                </el-button>
-            </el-input>
-        </div>
+        <search-input></search-input>
         <p class="u-desc">
             <span>※ 支持任务名称精确或模糊搜索</span> <br />
             <span>※ 支持任务相关物品名称精确搜索</span> <br />
@@ -47,13 +31,12 @@
 </template>
 
 <script>
+import SearchInput from "@/components/quest/search_input.vue";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "Search",
-    components: {},
+    components: { SearchInput },
     data: () => ({
-        keyword: "",
-        chain: false,
         by: "all",
         recommand: [
             {
@@ -97,12 +80,6 @@ export default {
     mounted() {},
     methods: {
         iconLink,
-        search() {
-            this.$router.push({
-                name: "result",
-                query: { keyword: this.keyword, chain: this.chain },
-            });
-        },
     },
 };
 </script>

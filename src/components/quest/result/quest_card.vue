@@ -23,8 +23,11 @@
         <div class="u-level">{{ quest.level }}</div>
         <div class="u-target">{{ quest.target }}</div>
         <div class="u-reward">
-            <div class="text-reward">
-                <span class="reward-item" v-for="reward in textReward" :key="reward"> {{ reward }}</span>
+            <div class="text-rewards">
+                <span class="text-reward" v-for="reward in textReward" :key="reward.label + reward.data">
+                    <span class="text-reward-label">{{ reward.label }}：</span>
+                    <span class="text-reward-data">{{ reward.data }}</span>
+                </span>
             </div>
             <div class="item-reward">
                 <item-icon
@@ -60,6 +63,20 @@ export default {
             this.$router.push({ name: "single", params: { quest_id: id } });
         },
         schoolIcon,
+        moneyFormat(price) {
+            let z = "";
+            let result = {
+                zhuan: Math.floor(price * 0.01 * 0.01 * 0.0001) || 0,
+                jin: Math.floor((price * 0.01 * 0.01) % 10000) || 0,
+                yin: Math.floor((price * 0.01) % 100) || 0,
+                tong: Math.floor(price % 100) || 0,
+            };
+            if (result["zhuan"]) z += `${result["zhuan"]}砖`;
+            if (result["jin"]) z += `${result["jin"]}金`;
+            if (result["yin"]) z += `${result["yin"]}银`;
+            if (result["tong"]) z += `${result["tong"]}铜`;
+            return `${z}`;
+        },
     },
     computed: {
         items() {
@@ -82,44 +99,33 @@ export default {
             };
         },
         textReward() {
-            return this.quest.reward
-                .filter((i) => i.type != "item_group")
-                .map((item) => {
-                    if (item.type == "money") {
-                        let price = item.count;
-                        let z = "";
-                        let result = {
-                            zhuan: Math.floor(price * 0.01 * 0.01 * 0.0001) || 0,
-                            jin: Math.floor((price * 0.01 * 0.01) % 10000) || 0,
-                            yin: Math.floor((price * 0.01) % 100) || 0,
-                            tong: Math.floor(price % 100) || 0,
-                        };
-                        if (result["zhuan"]) z += `${result["zhuan"]}砖`;
-                        if (result["jin"]) z += `${result["jin"]}金`;
-                        if (result["yin"]) z += `${result["yin"]}银`;
-                        if (result["tong"]) z += `${result["tong"]}铜`;
-                        return `金钱：${z}`;
-                    } else if (item.type == "exp") {
-                        return `阅历：${item.count}`;
-                    } else if (item.type == "justice") {
-                        return `侠行点：${item.count}`;
-                    } else if (item.type == "prestige") {
-                        return `威名点：${item.count}`;
-                    } else if (item.type == "tongFund") {
-                        return `帮会资金：${item.count}`;
-                    } else if (item.type == "vigor") {
-                        return `精力：${item.count}`;
-                    } else if (item.type == "tongResource") {
-                        return `载具资源：${item.count}`;
-                    } else if (item.type == "affect") {
-                        return `声望：${item.force}${item.count > 0 ? "+" : ""}${item.count}`;
-                    } else if (item.type == "achievement") {
-                        return `成就：${item.name}`;
-                    } else if (item.type == "train") {
-                        return `修为：${item.count}`;
-                    }
-                })
-                .filter((str) => str != undefined);
+            let rewards = this.quest.reward.filter((i) => i.type != "item_group");
+            let textRewards = [];
+            let rewardName = {
+                money: "金钱",
+                exp: "阅历",
+                justice: "侠行点",
+                prestige: "威名点",
+                tongFund: "帮会资金",
+                vigor: "精力",
+                tongResource: "载具资源",
+                affect: "声望",
+                achievement: "成就",
+                train: "修为",
+            };
+            for (let r of rewards) {
+                let data = r.count;
+                if (r.type == "money") {
+                    data = this.moneyFormat(data);
+                } else if (r.type == "affect") {
+                    data = `${r.force}${r.count > 0 ? "+" : ""}${r.count}`;
+                }
+                textRewards.push({
+                    label: rewardName[r.type],
+                    data,
+                });
+            }
+            return textRewards;
         },
     },
 };
