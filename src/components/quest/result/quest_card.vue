@@ -24,7 +24,7 @@
         <div class="u-target">{{ quest.target }}</div>
         <div class="u-reward">
             <div class="text-reward">
-                <span class="reward-item" v-for="reward in textReward" :key="reward"> {{ reward }}</span>
+                <span class="reward-item" v-for="reward in textReward" :key="reward">{{ reward }}</span>
             </div>
             <div class="item-reward">
                 <item-icon
@@ -98,25 +98,25 @@ export default {
                         if (result["jin"]) z += `${result["jin"]}金`;
                         if (result["yin"]) z += `${result["yin"]}银`;
                         if (result["tong"]) z += `${result["tong"]}铜`;
-                        return `金钱：${z}`;
+                        return `金钱:${z}`;
                     } else if (item.type == "exp") {
-                        return `阅历：${item.count}`;
+                        return `阅历:${item.count}`;
                     } else if (item.type == "justice") {
-                        return `侠行点：${item.count}`;
+                        return `侠行点:${item.count}`;
                     } else if (item.type == "prestige") {
-                        return `威名点：${item.count}`;
+                        return `威名点:${item.count}`;
                     } else if (item.type == "tongFund") {
-                        return `帮会资金：${item.count}`;
+                        return `帮会资金:${item.count}`;
                     } else if (item.type == "vigor") {
-                        return `精力：${item.count}`;
+                        return `精力:${item.count}`;
                     } else if (item.type == "tongResource") {
-                        return `载具资源：${item.count}`;
+                        return `载具资源:${item.count}`;
                     } else if (item.type == "affect") {
-                        return `声望：${item.force}${item.count > 0 ? "+" : ""}${item.count}`;
+                        return `声望:${item.force}${item.count > 0 ? "+" : ""}${item.count}`;
                     } else if (item.type == "achievement") {
-                        return `成就：${item.name}`;
+                        return `成就:${item.name}`;
                     } else if (item.type == "train") {
-                        return `修为：${item.count}`;
+                        return `修为:${item.count}`;
                     }
                 })
                 .filter((str) => str != undefined);
