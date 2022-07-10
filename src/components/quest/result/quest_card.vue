@@ -1,8 +1,14 @@
 <template>
     <div class="quest-card" @click="go(quest.id)">
-        <div>{{ quest.map }}</div>
-        <div>
+        <div class="u-map">{{ quest.map }}</div>
+        <div class="u-name">
             <span>
+                <el-tooltip v-if="quest.questType == 'act'" :content="`该任务是活动任务`" placement="top">
+                    <img class="quest-type" src="@/assets/img/quest/quest_logo_purple.png" />
+                </el-tooltip>
+                <el-tooltip v-else-if="quest.questType == 'repeat'" :content="`该任务可重复完成`" placement="top">
+                    <img class="quest-type" src="@/assets/img/quest/quest_logo_blue.png" />
+                </el-tooltip>
                 <span class="quest-name" :style="questNameColor">{{ quest.name }}</span>
                 <el-tooltip
                     v-if="quest.schoolName"
@@ -14,11 +20,11 @@
             </span>
             <span class="u-id">（ID：{{ quest.id }}）</span>
         </div>
-        <div>{{ quest.level }}</div>
+        <div class="u-level">{{ quest.level }}</div>
         <div class="u-target">{{ quest.target }}</div>
-        <div>
+        <div class="u-reward">
             <div class="text-reward">
-                {{ quest.reward | rewardFilter }}
+                <span class="reward-item" v-for="reward in textReward" :key="reward"> {{ reward }}</span>
             </div>
             <div class="item-reward">
                 <item-icon
@@ -35,6 +41,7 @@
 </template>
 
 <script>
+import { schoolIcon } from "@/utils/quest";
 import ItemIcon from "../item_icon.vue";
 
 export default {
@@ -52,21 +59,32 @@ export default {
         go(id) {
             this.$router.push({ name: "single", params: { quest_id: id } });
         },
-        schoolIcon(school) {
-            let map = {
-                北天药宗: "药宗",
-                凌雪阁: "凌雪",
-                衍天宗: "衍天",
-            };
-            if (map[school]) school = map[school];
-            return `https://img.jx3box.com/image/school/${school}.png`;
-        },
+        schoolIcon,
     },
-    filters: {
-        rewardFilter: function (reward) {
-            reward = reward
+    computed: {
+        items() {
+            if (!this.quest.reward || this.quest.reward.length == 0) {
+                return [];
+            }
+            let rewards = this.quest.reward.filter((i) => i.type == "item_group");
+            let items = [];
+            for (let reward of rewards) items.push(...reward.items);
+            return items.slice(0, 7);
+        },
+        questNameColor() {
+            let map = {
+                common: "#0d0e0d",
+                repeat: "#0366d6",
+                act: "#7632ff",
+            };
+            return {
+                color: map[this.quest.questType],
+            };
+        },
+        textReward() {
+            return this.quest.reward
                 .filter((i) => i.type != "item_group")
-                .map(function (item) {
+                .map((item) => {
                     if (item.type == "money") {
                         let price = item.count;
                         let z = "";
@@ -102,28 +120,6 @@ export default {
                     }
                 })
                 .filter((str) => str != undefined);
-            return reward.join("\n");
-        },
-    },
-    computed: {
-        items() {
-            if (!this.quest.reward || this.quest.reward.length == 0) {
-                return [];
-            }
-            let rewards = this.quest.reward.filter((i) => i.type == "item_group");
-            let items = [];
-            for (let reward of rewards) items.push(...reward.items);
-            return items.slice(0, 7);
-        },
-        questNameColor() {
-            let map = {
-                common: "#0d0e0d",
-                repeat: "#0366d6",
-                act: "#7632ff",
-            };
-            return {
-                color: map[this.quest.questType],
-            };
         },
     },
 };

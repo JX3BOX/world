@@ -12,7 +12,7 @@
                     class="item-icon"
                     target="_blank"
                     :style="`height:${size}px; width:${size}px`"
-                    :href="`https://${client == 'std' ? 'www' : 'origin'}.jx3box.com/item/#/view/${source.id}`"
+                    :href="getLink('item', source.id)"
                     v-if="!onlyName"
                 >
                     <img class="item-img" :style="`height:${size}px; width:${size}px`" :src="iconLink(source.IconID)" />
@@ -35,7 +35,7 @@
 <script>
 import Item from "@jx3box/jx3box-editor/src/Item";
 import { get_item } from "@jx3box/jx3box-editor/service/item";
-import { iconLink } from "@jx3box/jx3box-common/js/utils";
+import { iconLink, getLink } from "@jx3box/jx3box-common/js/utils";
 import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
 
 export default {
@@ -88,6 +88,7 @@ export default {
             }
         },
         iconLink,
+        getLink,
         item_border_quest(item) {
             if (item.IsQuest > 0) return `url(${__imgPath}image/item/renwu.png)`;
             return "";

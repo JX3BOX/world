@@ -38,14 +38,6 @@
                 <el-divider><i class="el-icon-star-off"></i> 任务分支</el-divider>
                 <quest-card v-for="quest in result.branch" :key="quest.id" :quest="quest"></quest-card>
             </template>
-            <template v-if="result.byId && result.byId.length > 0">
-                <el-divider><i class="el-icon-star-off"></i> 任务ID匹配</el-divider>
-                <quest-card v-for="quest in result.byId" :key="quest.id" :quest="quest"></quest-card>
-            </template>
-            <template v-if="result.byItem && result.byItem.length > 0">
-                <el-divider><i class="el-icon-star-off"></i> 物品匹配</el-divider>
-                <quest-card v-for="quest in result.byItem" :key="quest.id" :quest="quest"></quest-card>
-            </template>
             <template v-if="result.byKeyword && result.byKeyword.length > 0">
                 <el-divider class="u-result-hr"><i class="el-icon-star-off"></i> 模糊搜索结果</el-divider>
                 <quest-card v-for="quest in result.byKeyword" :key="quest.id" :quest="quest"></quest-card>

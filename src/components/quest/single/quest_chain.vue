@@ -8,7 +8,7 @@
     <div class="chain">
         <div class="list" v-if="showCurrent">
             <el-divider><i class="el-icon-connection"></i> 任务链</el-divider>
-            <div class="quest-name" v-for="item in display_data.current" :key="item.id">
+            <div class="quest-name" v-for="(item, i) in display_data.current" :key="item.id">
                 <span v-if="item.logic !== undefined">
                     <span :class="{ all: item.logic, one: !item.logic }" v-for="b in item.quests" :key="b.id">
                         【<router-link
@@ -27,6 +27,7 @@
                         >{{ item.name }}</router-link
                     >】
                 </span>
+                <i v-if="i != display_data.current.length - 1" class="el-icon-d-arrow-right"></i>
             </div>
         </div>
         <div class="branch" v-if="showBranch">
@@ -55,7 +56,7 @@ export default {
     computed: {
         display_data() {
             let current = this.data.current;
-            if (current[0].id.startsWith("b_")) {
+            if (current?.[0]?.id?.startsWith("b_")) {
                 current[0].quests = current[0].quests.filter((item) => item.visible);
                 if (current[0].quests.length == 1) {
                     current[0] = current[0].quests[0];
@@ -63,16 +64,20 @@ export default {
             }
             current = current.filter((item) => item.hasOwnProperty("logic") || item.visible);
             let branch = this.data.branch.filter((item) => item.visible);
+            if (branch && branch.length == 1) {
+                current.push(...branch);
+                branch = [];
+            }
             return {
                 current,
                 branch,
             };
         },
         showBranch() {
-            return this.data.branch.length > 0;
+            return this.display_data.branch.length > 0;
         },
         showCurrent() {
-            return this.data.current.length > 1;
+            return this.display_data.current.length > 1;
         },
     },
 };

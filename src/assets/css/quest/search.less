@@ -18,28 +18,50 @@
 
     .u-input {
         .flex;
-        width: 760px;
+        width: 100%;
         align-items: center;
         .mb(1.75rem);
 
-        .el-input-group--prepend{
+        .el-input-group__prepend {
             border-top-left-radius: 12px;
             border-bottom-left-radius: 12px;
         }
 
         .el-input-group__append {
+
             text-align: center;
-            width: 64px;
+
             border-top-right-radius: 12px;
             border-bottom-right-radius: 12px;
+        }
+
+        @media screen and (min-width: 768px) {
+            .el-input-group__append {
+                width: 64px;
+
+                .xs {
+                    .none;
+                }
+            }
+        }
+
+
+        @media screen and (max-width: 768px) {
+            .el-input-group__append {
+                width: 24px;
+
+                .lg {
+                    .none;
+                }
+            }
         }
     }
 
     .u-desc {
-        width: 760px;
+        width: 100%;
         color: #8291a2;
         .mb(12rem);
-        .fz(14px,2);
+        .fz(14px, 2);
     }
 
     .u-recommand {
