@@ -38,8 +38,8 @@
             <p class="group-type">{{ reward | item_group_tips }}</p>
             <div class="item-list">
                 <item-icon
-                    v-for="item in reward.items"
-                    :key="item.id"
+                    v-for="(item, index) in reward.items"
+                    :key="index"
                     :item_id="item.id"
                     :amount="item.amount"
                     :size="36"

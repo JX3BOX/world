@@ -43,6 +43,7 @@ export default {
     data() {
         return {
             source: {},
+            real_id: null,
             maybeBook: false,
         };
     },
@@ -87,7 +88,7 @@ export default {
                         if (e?.data?.code == 400) {
                             if (this.maybeBook === false) {
                                 this.maybeBook = true;
-                                this.item_id = `${this.item_id}_${this.amount}`;
+                                this.real_id = `${this.item_id}_${this.amount}`;
                             }
                         }
                     });
@@ -117,7 +118,7 @@ export default {
             return this.$store.state.client;
         },
         cache_key() {
-            return `item-${this.client}-${this.item_id}`;
+            return `item-${this.client}-${this.real_id}`;
         },
         display_amount() {
             if (this.maybeBook === false) {
@@ -128,7 +129,7 @@ export default {
         },
     },
     watch: {
-        item_id: {
+        real_id: {
             immediate: true,
             handler() {
                 let _cache = localStorage.getItem(this.cache_key);
@@ -137,13 +138,16 @@ export default {
                         this.source = JSON.parse(_cache);
                     } catch (e) {
                         console.log(e, "[Item]无法解析本地缓存");
-                        this.get_data(this.item_id);
+                        this.get_data(this.real_id);
                     }
                 } else {
-                    this.get_data(this.item_id);
+                    this.get_data(this.real_id);
                 }
             },
         },
+    },
+    mounted() {
+        this.real_id = this.item_id;
     },
 };
 </script>

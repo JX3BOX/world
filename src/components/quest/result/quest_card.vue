@@ -31,8 +31,8 @@
             </div>
             <div class="item-reward">
                 <item-icon
-                    v-for="item in items"
-                    :key="item.id"
+                    v-for="(item, index) in items"
+                    :key="index"
                     :item_id="item.id"
                     :amount="item.amount"
                     :onlyIcon="true"
