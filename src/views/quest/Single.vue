@@ -149,10 +149,10 @@
             </WikiPanel>
 
             <!-- 历史版本 -->
-            <WikiRevisions type="quest" :source-id="id" />
+            <WikiRevisions type="quest" :source-id="String(id)" />
 
             <!-- 百科评论 -->
-            <WikiComments type="quest" :source-id="id" />
+            <WikiComments type="quest" :source-id="String(id)" />
         </div>
         <div class="m-wiki-post-empty" v-else>
             <i class="el-icon-s-opportunity"></i>
