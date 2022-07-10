@@ -22,14 +22,14 @@
         }
 
         .title {
-            padding:5px 0;
+            padding: 5px 0;
 
             .name {
                 display: inline-flex;
                 justify-content: center;
                 align-items: center;
                 .mr(10px);
-                .fz(18px,2);
+                .fz(18px, 2);
                 font-weight: bold;
 
                 img {
@@ -57,9 +57,11 @@
                     margin-bottom: 2px;
                 }
             }
-            .el-tag{
-                border-color:#ac9d84;
+
+            .el-tag {
+                border-color: #ac9d84;
             }
+
             .mb(10px);
         }
 
@@ -78,16 +80,24 @@
                 color: #909399;
             }
 
-            .u-label{
-                color:#8a6d3b;
+            .u-label {
+                color: #8a6d3b;
             }
 
             margin:0;
         }
 
-        .start-end{
-            border-bottom:1px dashed #ddd;
-            padding-bottom:10px;
+        .start-end {
+            border-bottom: 1px dashed #ddd;
+            padding-bottom: 10px;
+
+            .separate {
+                margin: 0 4px;
+            }
+
+            .item {
+                margin-top: 3px;
+            }
         }
 
 
@@ -118,9 +128,16 @@
             }
         }
 
-        .offer-item .list {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+        .offer-item {
+            .u-subtitle {
+                margin-bottom: 8px;
+            }
+
+            .list {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                padding-left: 30px;
+            }
         }
     }
 
@@ -132,6 +149,7 @@
 
     .reward {
         .mt(20px);
+
         &>p {
             margin-bottom: 4px;
         }
@@ -139,13 +157,13 @@
         .list {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            padding-left:30px;
+            padding-left: 30px;
         }
     }
 
-    .u-subtitle{
+    .u-subtitle {
         .bold;
-        padding:5px 0;
+        padding: 5px 0;
     }
 
     .quest-comment,
@@ -154,7 +172,7 @@
         grid-column: span 3;
     }
 
-    .chain{
+    .chain {
         .lh(2);
     }
 }

@@ -9,18 +9,26 @@
         <img class="u-logo" src="@/assets/img/quest/quest_logo.png" alt="" />
         <h1 class="u-title">任务百科</h1>
         <div class="u-input">
-            <el-input placeholder="输入任务关键字（可包括中括号），「回车」进行搜索" v-model="keyword" @keyup.enter.native="search">
+            <el-input
+                placeholder="输入任务关键字（可包括中括号），「回车」进行搜索"
+                v-model="keyword"
+                @keyup.enter.native="search"
+            >
                 <span slot="prepend">
                     <el-tooltip content="查看任务链需要键入完整任务名或任务ID哦" placement="top">
                         <el-checkbox v-model="chain">查看任务链</el-checkbox>
                     </el-tooltip>
                 </span>
-                <el-button @click="search" slot="append"><span>搜 索</span></el-button>
+                <el-button @click="search" slot="append">
+                    <span class="lg">搜 索</span>
+                    <i class="xs el-icon-search"></i>
+                </el-button>
             </el-input>
         </div>
         <p class="u-desc">
             <span>※ 支持任务名称精确或模糊搜索</span> <br />
             <span>※ 支持任务相关物品名称精确搜索</span> <br />
+            <span>※ 支持成就名称精确搜索</span> <br />
             <span>※ 支持声望名称精确搜索</span>
         </p>
         <!-- <div class="u-recommand">

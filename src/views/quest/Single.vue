@@ -18,8 +18,11 @@
             <div class="start-end">
                 <p class="start" v-show="quest.start">
                     <span class="u-label"><i class="el-icon-video-play"></i> 任务起点: </span>
-                    <span>{{ quest.start.mapName }} - {{ quest.start.name || "未知" }}</span>
-                    <span class="id">({{ quest.start.type | startType }}ID: {{ quest.start.id | idFilter }})</span>
+                    <span>{{ quest.start.mapName }}</span>
+                    <span class="separate"> - </span>
+                    <item-icon v-if="quest.start.type == 'item'" :item_id="quest.start.id" class="item"></item-icon>
+                    <span v-else>{{ quest.start.name || "未知" }}</span>
+                    <span class="id">({{ quest.start.type | pointType }}ID: {{ quest.start.id | idFilter }})</span>
                     <point-filter
                         v-if="showPointFilter('Start')"
                         :default="true"
@@ -29,8 +32,11 @@
                 </p>
                 <p class="end">
                     <span class="u-label"><i class="el-icon-remove-outline"></i> 任务终点: </span>
-                    <span>{{ quest.end.mapName }} - {{ quest.end.name || "未知" }}</span>
-                    <span class="id">({{ quest.end.type | startType }}ID: {{ quest.end.id | idFilter }})</span>
+                    <span>{{ quest.end.mapName }}</span>
+                    <span class="separate"> - </span>
+                    <item-icon v-if="quest.end.type == 'item'" :item_id="quest.end.id" class="item"></item-icon>
+                    <span v-else>{{ quest.end.name || "未知" }}</span>
+                    <span class="id">({{ quest.end.type | pointType }}ID: {{ quest.end.id | idFilter }})</span>
                     <point-filter
                         v-if="showPointFilter('End')"
                         :default="true"
@@ -86,7 +92,7 @@
                 <p v-html="questDesc"></p>
             </div>
             <div class="offer-item" v-if="quest.offerItems">
-                <p>提供物品：</p>
+                <p class="u-subtitle">【提供物品】</p>
                 <div class="list">
                     <item-icon
                         v-for="item in quest.offerItems"
@@ -152,7 +158,7 @@
             <WikiRevisions type="quest" :source-id="String(id)" />
 
             <!-- 百科评论 -->
-            <WikiComments type="quest" :source-id="String(id)" />
+            <WikiComments type="quest" :source-id="id_str" />
         </div>
         <div class="m-wiki-post-empty" v-else>
             <i class="el-icon-s-opportunity"></i>
@@ -181,7 +187,7 @@ import WikiComments from "@jx3box/jx3box-common-ui/src/wiki/WikiComments";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
 
 import { getQuest } from "@/service/quest";
-import buildPoints from "@/utils/quest/generatePoints";
+import { buildPoints, schoolIcon } from "@/utils/quest.js";
 import isArray from "lodash/isArray";
 
 export default {
@@ -249,15 +255,7 @@ export default {
                 this.quest = res.data;
             });
         },
-        schoolIcon(school) {
-            let map = {
-                北天药宗: "药宗",
-                凌雪阁: "凌雪",
-                衍天宗: "衍天",
-            };
-            if (map[school]) school = map[school];
-            return `https://img.jx3box.com/image/school/${school}.png`;
-        },
+        schoolIcon,
         changePointFilter(type, enable) {
             this.$set(this.point_filter, type, enable);
         },
@@ -311,6 +309,9 @@ export default {
         }
     },
     computed: {
+        id_str: function () {
+            return String(this.id);
+        },
         id: function () {
             return parseInt(this.$route.params.quest_id);
         },
@@ -414,7 +415,7 @@ export default {
         },
     },
     filters: {
-        startType: (value) => {
+        pointType: (value) => {
             if (value === "npc") return "NPC";
             else if (value === "doodad") return "交互物品";
             else if (value === "item") return "物品";
