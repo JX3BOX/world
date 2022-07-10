@@ -1,3 +1,5 @@
+import { __imgPath } from '@jx3box/jx3box-common/data/jx3box.json'
+
 const buildPoints = (quest) => {
     let result = {};
     const pushPoint = (map, point) => {
@@ -134,4 +136,14 @@ const buildPoints = (quest) => {
     return result;
 }
 
-export default buildPoints;
+const schoolIcon = (school) => {
+    let filenameMap = {
+        北天药宗: '药宗',
+        凌雪阁: '凌雪',
+        衍天宗: '衍天'
+    }
+    if (filenameMap[school]) return school = filenameMap[school];
+    return `${__imgPath}/image/school/${school}.png`;
+}
+
+export { buildPoints, schoolIcon };

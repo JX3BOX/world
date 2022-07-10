@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { iconLink } from "@jx3box/jx3box-common/js/utils";
+import { getLink, iconLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     props: {
         type: {
@@ -89,7 +89,7 @@ export default {
         },
         toUrl: function () {
             if (this.type == "achievement" && this.id) {
-                return `https://${this.client == "origin" ? "origin" : "www"}.jx3box.com/cj/#/view/${this.id}`;
+                return getLink("achievement", this.id);
             }
             return "#";
         },
