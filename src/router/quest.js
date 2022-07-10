@@ -1,3 +1,9 @@
+/*
+ * @Author: iRuxu
+ * @Date: 2022-07-10 21:24:08
+ * @LastEditTime: 2022-07-10 21:47:34
+ * @Description:
+ */
 import Vue from "vue";
 import VueRouter from "vue-router";
 Vue.use(VueRouter);
