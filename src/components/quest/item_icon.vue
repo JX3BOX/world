@@ -21,7 +21,7 @@
                         :style="{ backgroundImage: item_border(source), opacity: source.Quality == 5 ? 0.9 : 1 }"
                     ></div>
                     <div class="border-quest" :style="{ backgroundImage: item_border_quest(source) }"></div>
-                    <span class="item-count" v-if="amount !== 1">{{ amount }}</span>
+                    <span class="item-count" v-if="display_amount !== 1">{{ display_amount }}</span>
                 </a>
                 <div v-if="!onlyIcon" class="item-name" :class="`e-jx3-item-q${source.Quality}`">
                     {{ source.Name }}
@@ -43,6 +43,7 @@ export default {
     data() {
         return {
             source: {},
+            maybeBook: false,
         };
     },
     components: {
@@ -82,8 +83,13 @@ export default {
                             localStorage.setItem(this.cache_key, JSON.stringify(item));
                         }
                     })
-                    .catch(() => {
-                        this.source = {};
+                    .catch((e) => {
+                        if (e?.data?.code == 400) {
+                            if (this.maybeBook === false) {
+                                this.maybeBook = true;
+                                this.item_id = `${this.item_id}_${this.amount}`;
+                            }
+                        }
                     });
             }
         },
@@ -110,8 +116,15 @@ export default {
         client() {
             return this.$store.state.client;
         },
-        cache_key: function () {
+        cache_key() {
             return `item-${this.client}-${this.item_id}`;
+        },
+        display_amount() {
+            if (this.maybeBook === false) {
+                return this.amount;
+            } else {
+                return 1;
+            }
         },
     },
     watch: {
