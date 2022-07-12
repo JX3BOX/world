@@ -1,7 +1,7 @@
 <!--
  * @Author: iRuxu
  * @Date: 2022-07-09 19:40:42
- * @LastEditTime: 2022-07-10 04:16:23
+ * @LastEditTime: 2022-07-12 13:44:14
  * @Description:
 -->
 <template>
@@ -13,7 +13,6 @@
             <span>※ 支持任务名称精确或模糊搜索</span> <br />
             <span>※ 支持任务相关物品名称精确搜索</span> <br />
             <span>※ 支持成就名称精确搜索</span> <br />
-            <span>※ 支持声望名称精确搜索</span>
         </p>
         <!-- <div class="u-recommand">
             <p class="title"><i class="el-icon-collection-tag"></i> 热门任务</p>
@@ -31,7 +30,7 @@
 </template>
 
 <script>
-import SearchInput from "@/components/quest/search_input.vue";
+import SearchInput from "@/components/quest/common/search_input.vue";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "Search",

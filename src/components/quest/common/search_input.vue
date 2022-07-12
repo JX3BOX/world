@@ -1,5 +1,12 @@
+<!--
+ * @Author: X3ZvaWQ
+ * @Date: 2022-07-11 00:14:57
+ * @LastEditors: X3ZvaWQ
+ * @LastEditTime: 2022-07-12 12:52:34
+ * @Description: 抽离出来的三个页面都有用到的搜索框
+-->
 <template>
-    <div class="u-input">
+    <div class="m-search-input">
         <el-input
             placeholder="输入任务关键字（可包括中括号），「回车」进行搜索"
             v-model="keyword"
@@ -11,8 +18,8 @@
                 </el-tooltip>
             </span>
             <el-button @click="search" slot="append">
-                <span class="lg">搜 索</span>
-                <i class="xs el-icon-search"></i>
+                <span class="u-input-button__normal">搜 索</span>
+                <span class="u-input-button__small"><i class="xs el-icon-search"></i></span>
             </el-button>
         </el-input>
     </div>
@@ -40,5 +47,5 @@ export default {
 </script>
 
 <style lang="less">
-@import "~@/assets/css/quest/search_input.less";
+@import "~@/assets/css/quest/common/search_input.less";
 </style>

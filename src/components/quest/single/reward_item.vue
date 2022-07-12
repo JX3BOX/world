@@ -51,7 +51,7 @@
 
 <script>
 import GamePrice from "@jx3box/jx3box-common-ui/src/wiki/GamePrice.vue";
-import ItemIcon from "../item_icon.vue";
+import ItemIcon from "../common/item_icon.vue";
 import PointReward from "./point_reward.vue";
 
 export default {

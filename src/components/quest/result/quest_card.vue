@@ -1,35 +1,35 @@
 <template>
-    <div class="quest-card" @click="go(quest.id)">
+    <div class="m-quest-card" @click="go(quest.id)">
         <div class="u-map">{{ quest.map }}</div>
         <div class="u-name">
-            <span>
+            <span class="u-name-title">
                 <el-tooltip v-if="quest.questType == 'act'" :content="`该任务是活动任务`" placement="top">
-                    <img class="quest-type" src="@/assets/img/quest/quest_logo_purple.png" />
+                    <img class="u-name-type" src="@/assets/img/quest/quest_logo_purple.png" />
                 </el-tooltip>
                 <el-tooltip v-else-if="quest.questType == 'repeat'" :content="`该任务可重复完成`" placement="top">
-                    <img class="quest-type" src="@/assets/img/quest/quest_logo_blue.png" />
+                    <img class="u-name-type" src="@/assets/img/quest/quest_logo_blue.png" />
                 </el-tooltip>
-                <span class="quest-name" :style="questNameColor">{{ quest.name }}</span>
+                <span class="u-name-text" :style="questNameColor">{{ quest.name }}</span>
                 <el-tooltip
                     v-if="quest.schoolName"
                     :content="`该任务仅 ${quest.schoolName} 门派可接取`"
                     placement="top"
                 >
-                    <img class="quest-school" :src="schoolIcon(quest.schoolName)" alt="" />
+                    <img class="u-name-school" :src="schoolIcon(quest.schoolName)" alt="" />
                 </el-tooltip>
             </span>
-            <span class="u-id">（ID：{{ quest.id }}）</span>
+            <span class="u-name-id">（ID：{{ quest.id }}）</span>
         </div>
         <div class="u-level">{{ quest.level }}</div>
         <div class="u-target">{{ quest.target }}</div>
         <div class="u-reward">
-            <div class="text-rewards">
-                <span class="text-reward" v-for="reward in textReward" :key="reward.label + reward.data">
-                    <span class="text-reward-label">{{ reward.label }}：</span>
-                    <span class="text-reward-data">{{ reward.data }}</span>
+            <div class="u-reward-text__container">
+                <span class="u-reward-text" v-for="reward in textReward" :key="reward.label + reward.data">
+                    <span class="u-reward-label">{{ reward.label }}：</span>
+                    <span class="u-reward-data">{{ reward.data }}</span>
                 </span>
             </div>
-            <div class="item-reward">
+            <div class="u-reward-item">
                 <item-icon
                     v-for="(item, index) in items"
                     :key="index"
@@ -45,7 +45,7 @@
 
 <script>
 import { schoolIcon } from "@/utils/quest";
-import ItemIcon from "../item_icon.vue";
+import ItemIcon from "../common/item_icon.vue";
 
 export default {
     name: "QuestCard",
@@ -130,16 +130,6 @@ export default {
     },
 };
 </script>
-<style lang="less">
-.item-icon-popup {
-    min-width: initial;
-    padding: 0;
-    border: none;
-    box-shadow: none;
-    background-color: transparent;
-    transform: translateY(-10px);
-}
-</style>
-<style lang="less">
-@import "~@/assets/css/quest/quest_card.less";
+<style lang="less" scoped>
+@import "~@/assets/css/quest/result/quest_card.less";
 </style>

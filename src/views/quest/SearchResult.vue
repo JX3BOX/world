@@ -1,7 +1,7 @@
 <template>
-    <div class="search-result">
+    <div class="m-search-result">
         <search-input></search-input>
-        <div class="result-head">
+        <div class="u-head">
             <div>起始地图</div>
             <div>任务名称</div>
             <div>可接等级</div>
@@ -47,7 +47,7 @@
 <script>
 import { getQuests } from "@/service/quest";
 import QuestCard from "@/components/quest/result/quest_card.vue";
-import SearchInput from "@/components/quest/search_input.vue";
+import SearchInput from "@/components/quest/common/search_input.vue";
 
 export default {
     name: "SearchResult",
@@ -109,6 +109,6 @@ export default {
 };
 </script>
 
-<style lang="less">
-@import "~@/assets/css/quest/result.less";
+<style lang="less" scoped>
+@import "~@/assets/css/quest/result/search_result.less";
 </style>
