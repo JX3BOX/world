@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import Nav from "@/components/common/Nav.vue";
+import Nav from "@/components/calendar/nav";
 import User from '@jx3box/jx3box-common/js/user';
 import { getProfile } from "@/service/calendar.js";
 export default {

@@ -55,6 +55,7 @@ export default {
                 children: "children",
                 label: "label",
             },
+            defaultExpandedKeys: ["knowledge"],
         };
     },
     computed: {

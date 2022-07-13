@@ -93,13 +93,13 @@
                     //     ],
                     // },
 
-                    knowledge: {
-                        label: "通识",
-                        key: "knowledge",
-                        app: "knowledge",
-                        path: "/",
-                        children: [],
-                    },
+                    // knowledge: {
+                    //     label: "通识",
+                    //     key: "knowledge",
+                    //     app: "knowledge",
+                    //     path: "/",
+                    //     children: [],
+                    // },
                 },
                 defaultProps: {
                     children: "children",

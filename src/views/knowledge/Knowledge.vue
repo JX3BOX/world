@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import Nav from "@/components/common/Nav.vue";
+import Nav from "@/components/knowledge/nav";
 export default {
     name: "App",
     props: [],
