@@ -150,6 +150,7 @@
                         :authors="authors"
                         mode="wiki"
                         :key="'quest-thx-' + id"
+                        :client="client"
                     />
                 </template>
             </WikiPanel>
