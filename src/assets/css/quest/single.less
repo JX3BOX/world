@@ -1,51 +1,44 @@
-.quest {
+.m-quest-view {
     @media screen and (min-width: 768px) {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         column-gap: 14px;
-
-        .comment {
-            grid-column-start: span 2;
-        }
     }
 
     p {
         margin: 0;
     }
 
-    .info {
-        // padding: .75rem;
-
-        .id {
-            .fz(12px) !important;
-            color: #909399;
-        }
-
-        .title {
+    .w-quest {
+        .u-title__warpper {
             padding: 5px 0;
 
-            .name {
+            .u-title {
                 display: inline-flex;
                 justify-content: center;
                 align-items: center;
                 .mr(10px);
                 .fz(18px, 2);
                 font-weight: bold;
-
-                img {
-                    .size(30px);
-                    margin-right: 4px;
-                    margin-left: 8px;
-                }
-
-                .difficulty {
-                    color: #909399;
-                }
             }
 
+            .u-title-school {
+                .size(30px);
+                margin-right: 4px;
+                margin-left: 8px;
+            }
+
+            .u-title-difficulty {
+                color: #909399;
+            }
+
+            .u-title-id {
+                .fz(12px);
+                color: #909399;
+            }
         }
 
-        .tag-list {
+        .u-tag-list {
             &>span {
                 background-color: white;
                 color: #3d454d;
@@ -65,8 +58,12 @@
             .mb(10px);
         }
 
-        .start,
-        .end {
+        .u-endpoint__warpper {
+            border-bottom: 1px dashed #ddd;
+            padding-bottom: 10px;
+        }
+
+        .u-endpoint {
             .flex;
             align-items: center;
 
@@ -74,43 +71,33 @@
                 margin-right: 4px;
             }
 
-            .id {
+            .u-endpoint-id {
                 .ml(.75rem);
-                .fz(14px);
+                .fz(12px);
                 color: #909399;
             }
 
-            .u-label {
+            .u-endpoint-label {
                 color: #8a6d3b;
+            }
+
+            .u-endpoint-separate {
+                margin: 0 4px;
+            }
+
+            .u-endpoint-item {
+                margin-top: 3px;
             }
 
             margin:0;
         }
 
-        .start-end {
-            border-bottom: 1px dashed #ddd;
-            padding-bottom: 10px;
-
-            .separate {
-                margin: 0 4px;
-            }
-
-            .item {
-                margin-top: 3px;
-            }
-        }
-
-
-        .desc,
-        .target {
+        .u-target {
             white-space: pre-line;
             line-height: 1.8rem;
-        }
-
-        .target {
             margin-top: 20px;
 
-            .sub-target {
+            .u-target-sub {
                 .flex;
                 color: gray;
                 margin: 0.25rem 0;
@@ -123,21 +110,19 @@
                 }
             }
 
-            .sub-target:last-of-type {
+            .u-target-sub:last-of-type {
                 margin-bottom: 20px;
             }
         }
 
-        & > .desc{
+        .u-desc {
+            white-space: pre-line;
+            line-height: 1.8rem;
             .mt(20px);
         }
 
-        .offer-item {
-            .u-subtitle {
-                margin-bottom: 8px;
-            }
-
-            .list {
+        .u-offer {
+            .u-offer-list {
                 display: grid;
                 grid-template-columns: repeat(3, 1fr);
                 padding-left: 30px;
@@ -145,20 +130,20 @@
         }
     }
 
-    .quest-map {
+    .u-quest-map {
         .flex;
         align-items: center;
         justify-content: center;
     }
 
-    .reward {
+    .u-reward {
         .mt(20px);
 
         &>p {
             margin-bottom: 4px;
         }
 
-        .list {
+        .u-reward-list {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             padding-left: 30px;
@@ -170,18 +155,15 @@
         padding: 5px 0;
     }
 
-    .m-wiki-post-panel,.m-wiki-post-empty{
+    .m-wiki-post-panel,
+    .m-wiki-post-empty {
         .mt(20px);
     }
 
-    .quest-comment,
+    .m-search,
     .m-wiki-post-panel,
     .m-wiki-post-empty {
         grid-column: span 3;
-    }
-
-    .chain {
-        .lh(2);
     }
 }
 

@@ -1,5 +1,12 @@
+<!--
+ * @Author: X3ZvaWQ
+ * @Date: 2022-07-10 13:29:23
+ * @LastEditors: X3ZvaWQ
+ * @LastEditTime: 2022-07-12 13:46:10
+ * @Description:
+-->
 <template>
-    <div class="point-filter" @click="changeFilter">
+    <div class="u-point-filter" @click="changeFilter">
         <img v-if="active" draggable="false" :src="icon(true)" alt="" />
         <img v-else draggable="false" :src="icon(false)" alt="" />
     </div>

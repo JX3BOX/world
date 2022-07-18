@@ -1,16 +1,23 @@
+<!--
+ * @Author: X3ZvaWQ
+ * @Date: 2022-07-11 00:14:36
+ * @LastEditors: X3ZvaWQ
+ * @LastEditTime: 2022-07-12 14:52:23
+ * @Description: 数值奖励的图标组件，如成就、侠义值等
+-->
 <template>
     <a
-        class="justice value-reward-icon"
+        class="u-point-reward"
         draggable="false"
-        :class="{ achievement: id }"
+        :class="{ 'u-point-reward__achievement': id }"
         :href="toUrl"
         :target="id ? '_blank' : '_self'"
     >
-        <div class="icon">
-            <img class="background" :src="backgroundUrl" alt="图标背景" />
-            <img v-if="icon == null" class="point-icon" :src="pointImgUrl" alt="图标" />
+        <div class="u-reward-icon">
+            <img class="u-icon-bg" :src="backgroundUrl" alt="图标背景" />
+            <img v-if="icon == null" class="u-icon-img" :src="pointImgUrl" alt="图标" />
         </div>
-        <div class="desc">{{ displayName }}<br />{{ value }}</div>
+        <div class="u-reward-desc">{{ displayName }}<br />{{ value }}</div>
     </a>
 </template>
 

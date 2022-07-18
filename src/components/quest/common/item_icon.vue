@@ -1,29 +1,40 @@
+<!--
+ * @Author: X3ZvaWQ
+ * @Date: 2022-07-11 00:14:57
+ * @LastEditors: X3ZvaWQ
+ * @LastEditTime: 2022-07-11 13:22:09
+ * @Description: 各个地方都有用到的，后端没有联物品表，只提供了物品id，通过该组件展示物品
+-->
 <template>
     <el-popover
-        class="item"
+        class="u-item"
         placement="right-start"
         trigger="hover"
         :visible-arrow="false"
-        popper-class="item-icon-popup"
+        popper-class="u-item__popup"
     >
         <template slot="reference">
-            <div class="item-div" :class="{ background: !onlyIcon }">
+            <div class="u-item__warpper" :class="{ background: !onlyIcon }">
                 <a
-                    class="item-icon"
+                    class="u-item-icon"
                     target="_blank"
                     :style="`height:${size}px; width:${size}px`"
                     :href="getLink('item', source.id)"
                     v-if="!onlyName"
                 >
-                    <img class="item-img" :style="`height:${size}px; width:${size}px`" :src="iconLink(source.IconID)" />
+                    <img
+                        class="u-item-icon__img"
+                        :style="`height:${size}px; width:${size}px`"
+                        :src="iconLink(source.IconID)"
+                    />
                     <div
-                        class="border"
+                        class="u-item-icon__quality"
                         :style="{ backgroundImage: item_border(source), opacity: source.Quality == 5 ? 0.9 : 1 }"
                     ></div>
-                    <div class="border-quest" :style="{ backgroundImage: item_border_quest(source) }"></div>
-                    <span class="item-count" v-if="display_amount !== 1">{{ display_amount }}</span>
+                    <div class="u-item-icon__quest" :style="{ backgroundImage: item_border_quest(source) }"></div>
+                    <span class="u-item-icon__count" v-if="display_amount !== 1">{{ display_amount }}</span>
                 </a>
-                <div v-if="!onlyIcon" class="item-name" :class="`e-jx3-item-q${source.Quality}`">
+                <div v-if="!onlyIcon" class="u-item-name" :class="`e-jx3-item__q${source.Quality}`">
                     {{ source.Name }}
                 </div>
             </div>
@@ -43,6 +54,7 @@ export default {
     data() {
         return {
             source: {},
+            real_id: null,
             maybeBook: false,
         };
     },
@@ -84,10 +96,11 @@ export default {
                         }
                     })
                     .catch((e) => {
+                        //书籍类物品id为 type_id_recipe， 其中recipe记录在物品的count里面
                         if (e?.data?.code == 400) {
                             if (this.maybeBook === false) {
                                 this.maybeBook = true;
-                                this.item_id = `${this.item_id}_${this.amount}`;
+                                this.real_id = `${this.item_id}_${this.amount}`;
                             }
                         }
                     });
@@ -117,7 +130,7 @@ export default {
             return this.$store.state.client;
         },
         cache_key() {
-            return `item-${this.client}-${this.item_id}`;
+            return `item-${this.client}-${this.real_id}`;
         },
         display_amount() {
             if (this.maybeBook === false) {
@@ -128,7 +141,7 @@ export default {
         },
     },
     watch: {
-        item_id: {
+        real_id: {
             immediate: true,
             handler() {
                 let _cache = localStorage.getItem(this.cache_key);
@@ -137,17 +150,20 @@ export default {
                         this.source = JSON.parse(_cache);
                     } catch (e) {
                         console.log(e, "[Item]无法解析本地缓存");
-                        this.get_data(this.item_id);
+                        this.get_data(this.real_id);
                     }
                 } else {
-                    this.get_data(this.item_id);
+                    this.get_data(this.real_id);
                 }
             },
         },
+    },
+    mounted() {
+        this.real_id = this.item_id;
     },
 };
 </script>
 
 <style lang="less">
-@import "~@/assets/css/quest/item_icon.less";
+@import "~@/assets/css/quest/common/item_icon.less";
 </style>

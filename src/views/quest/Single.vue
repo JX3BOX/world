@@ -1,28 +1,37 @@
 <template>
-    <div class="quest">
-        <div class="info">
-            <p class="title">
-                <span class="name">
-                    <span :style="questNameColor">{{ quest.name }}</span>
-                    <img v-if="quest.schoolName" :src="schoolIcon(quest.schoolName)" alt="" />
-                    <span class="difficulty" v-if="quest.difficulty">【{{ quest.difficulty }}】</span>
+    <div class="m-quest-view">
+        <div class="m-search">
+            <search-input></search-input>
+        </div>
+        <div class="w-quest">
+            <p class="u-title__warpper">
+                <span class="u-title">
+                    <span class="u-title-name" :style="questNameColor">{{ quest.name }}</span>
+                    <img class="u-title-school" v-if="quest.schoolName" :src="schoolIcon(quest.schoolName)" alt="" />
+                    <span class="u-title-difficulty" v-if="quest.difficulty">【{{ quest.difficulty }}】</span>
                 </span>
-                <span class="id"> (ID:{{ quest.id }})</span>
+                <span class="u-title-id"> (ID:{{ quest.id }})</span>
             </p>
-            <div class="tag-list">
+            <div class="u-tag-list">
                 <el-tag v-show="quest.canShare"><img src="@/assets/img/quest/player-63.png" alt="" />可分享任务</el-tag>
                 <el-tag v-show="quest.canAssist"
                     ><img src="@/assets/img/quest/player-62.png" alt="" />可协助任务</el-tag
                 >
             </div>
-            <div class="start-end">
-                <p class="start" v-show="quest.start">
-                    <span class="u-label"><i class="el-icon-video-play"></i> 任务起点: </span>
+            <div class="u-endpoint__warpper">
+                <p class="u-endpoint" v-show="quest.start">
+                    <span class="u-endpoint-label"><i class="el-icon-video-play"></i> 任务起点: </span>
                     <span>{{ quest.start.mapName }}</span>
-                    <span class="separate"> - </span>
-                    <item-icon v-if="quest.start.type == 'item'" :item_id="quest.start.id" class="item"></item-icon>
+                    <span class="u-endpoint-separate"> - </span>
+                    <item-icon
+                        class="u-endpoint-item"
+                        v-if="quest.start.type == 'item'"
+                        :item_id="quest.start.id"
+                    ></item-icon>
                     <span v-else>{{ quest.start.name || "未知" }}</span>
-                    <span class="id">({{ quest.start.type | pointType }}ID: {{ quest.start.id | idFilter }})</span>
+                    <span class="u-endpoint-id"
+                        >({{ quest.start.type | pointType }}ID: {{ quest.start.id | idFilter }})</span
+                    >
                     <point-filter
                         v-if="showPointFilter('Start')"
                         :default="true"
@@ -30,13 +39,19 @@
                         @onPointFilterChange="changePointFilter"
                     ></point-filter>
                 </p>
-                <p class="end">
-                    <span class="u-label"><i class="el-icon-remove-outline"></i> 任务终点: </span>
+                <p class="u-endpoint">
+                    <span class="u-endpoint-label"><i class="el-icon-remove-outline"></i> 任务终点: </span>
                     <span>{{ quest.end.mapName }}</span>
-                    <span class="separate"> - </span>
-                    <item-icon v-if="quest.end.type == 'item'" :item_id="quest.end.id" class="item"></item-icon>
+                    <span class="u-endpoint-separate"> - </span>
+                    <item-icon
+                        class="u-endpoint-item"
+                        v-if="quest.end.type == 'item'"
+                        :item_id="quest.end.id"
+                    ></item-icon>
                     <span v-else>{{ quest.end.name || "未知" }}</span>
-                    <span class="id">({{ quest.end.type | pointType }}ID: {{ quest.end.id | idFilter }})</span>
+                    <span class="u-endpoint-id"
+                        >({{ quest.end.type | pointType }}ID: {{ quest.end.id | idFilter }})</span
+                    >
                     <point-filter
                         v-if="showPointFilter('End')"
                         :default="true"
@@ -45,11 +60,11 @@
                     ></point-filter>
                 </p>
             </div>
-            <div class="target" v-show="targetDesc">
+            <div class="u-target" v-show="targetDesc">
                 <p class="u-subtitle">【任务目标】</p>
                 <p v-html="targetDesc"></p>
                 <template v-if="quest.killNpcs && quest.killNpcs.length > 0">
-                    <div v-for="(killNpc, i) in quest.killNpcs" :key="i" class="sub-target">
+                    <div class="u-target-sub" v-for="(killNpc, i) in quest.killNpcs" :key="i">
                         <span>击杀</span>
                         <span>{{ killNpc.name }}</span>
                         <el-tooltip v-if="killNpc.share" content="该目标可共享击杀" placement="top">
@@ -65,7 +80,7 @@
                     </div>
                 </template>
                 <template v-if="quest.needItems && quest.needItems.length > 0">
-                    <div v-for="(needItem, i) in quest.needItems" :key="i" class="sub-target">
+                    <div class="u-target-sub" v-for="(needItem, i) in quest.needItems" :key="i">
                         <span>收集</span>
                         <item-icon :item_id="needItem.id"></item-icon>
                         <span>x {{ needItem.amount }}</span>
@@ -77,7 +92,7 @@
                         ></point-filter>
                     </div>
                 </template>
-                <div v-for="(questValue, i) in quest.questValues" :key="i" class="sub-target">
+                <div class="u-target-sub" v-for="(questValue, i) in quest.questValues" :key="i">
                     <span>{{ questValue.str }} x {{ questValue.value }}</span>
                     <point-filter
                         v-if="showPointFilter('State' + (i + 1))"
@@ -87,13 +102,13 @@
                     ></point-filter>
                 </div>
             </div>
-            <div class="desc" v-show="questDesc">
+            <div class="u-desc" v-show="questDesc">
                 <p class="u-subtitle">【任务描述】</p>
                 <p v-html="questDesc"></p>
             </div>
-            <div class="offer-item" v-if="quest.offerItems">
+            <div class="u-offer" v-if="quest.offerItems">
                 <p class="u-subtitle">【提供物品】</p>
-                <div class="list">
+                <div class="u-offer-list">
                     <item-icon
                         v-for="item in quest.offerItems"
                         :key="item.id"
@@ -102,17 +117,17 @@
                     ></item-icon>
                 </div>
             </div>
-            <div class="reward" v-show="showReward">
+            <div class="u-reward" v-show="showReward">
                 <p class="u-subtitle">【任务奖励】</p>
-                <div class="list">
+                <div class="u-reward-list">
                     <reward-item v-for="(reward, i) in quest.rewards" :key="i" :reward="reward"></reward-item>
                 </div>
             </div>
             <quest-chain :current="id" :data="quest.chain"></quest-chain>
         </div>
-        <div class="quest-map">
+        <div class="u-quest-map">
             <quest-map :points="points" :filter="point_filter" :questType="quest.questType" v-if="showMap"> </quest-map>
-            <div class="empty" v-else>该任务妹有指引</div>
+            <div class="u-map-empty" v-else>该任务妹有指引</div>
         </div>
         <div class="m-wiki-post-panel" v-if="wiki_post && wiki_post.post">
             <WikiPanel :wiki-post="wiki_post">
@@ -174,9 +189,10 @@ import QuestChain from "@/components/quest/single/quest_chain.vue";
 import QuestMap from "@/components/quest/single/quest_map.vue";
 import RewardItem from "@/components/quest/single/reward_item.vue";
 import PointFilter from "@/components/quest/single/point_filter.vue";
-import ItemIcon from "@/components/quest/item_icon.vue";
+import ItemIcon from "@/components/quest/common/item_icon.vue";
+import SearchInput from "@/components/quest/common/search_input.vue";
 
-import { postStat, getStat } from "@jx3box/jx3box-common/js/stat.js";
+import { postStat } from "@jx3box/jx3box-common/js/stat.js";
 import { wiki } from "@jx3box/jx3box-common/js/wiki.js";
 import { getAppIcon } from "@jx3box/jx3box-common/js/utils";
 import questFont from "@/assets/data/questFont.json";
@@ -199,6 +215,7 @@ export default {
         RewardItem,
         QuestChain,
         PointFilter,
+        SearchInput,
         Article,
         WikiPanel,
         WikiRevisions,

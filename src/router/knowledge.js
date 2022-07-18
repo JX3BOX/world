@@ -14,6 +14,8 @@ const routes = [
 
 const router = new VueRouter({
     routes,
+    base: '/knowledge',
+    mode: 'history',
 });
 
 router.beforeEach((to, from, next) => {

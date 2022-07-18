@@ -1,28 +1,28 @@
 <template>
-    <div class="map">
+    <div class="m-quest-map">
         <el-carousel :autoplay="false" :arrow="showArrow" ref="carousel" :height="`${height}px`">
             <el-carousel-item v-for="(ps, mapId) in points" :key="mapId">
-                <div class="container" :style="containerSize">
-                    <img class="map-img" :src="mapImgUrl(mapId)" draggable="false" alt="任务地图图片" />
-                    <div class="map-tool">
-                        <p class="map-name">{{ mapName(mapId) }}</p>
+                <div class="u-map__container" :style="containerSize">
+                    <img class="u-map-img" :src="mapImgUrl(mapId)" draggable="false" alt="任务地图图片" />
+                    <div class="u-map-tool">
+                        <p class="u-map-name">{{ mapName(mapId) }}</p>
                     </div>
                     <template v-for="point in ps">
                         <el-popover
                             :key="point.Types + JSON.stringify(point.Coordinates)"
                             v-if="filter[point.Types]"
-                            class="map-point-popover"
+                            class="u-map-point__warpper"
                             :class="{
-                                'bigger-point': point.Types === 'Start' || point.Types === 'End',
-                                'start-point': point.Types === 'Start',
+                                'u-map-point__bigger': point.Types === 'Start' || point.Types === 'End',
+                                'u-map-point__start': point.Types === 'Start',
                             }"
                             placement="top"
                             trigger="hover"
                             :style="pointStyle(point.Coordinates, mapId)"
-                            popper-class="map-point-popover"
+                            popper-class="u-map-point__popover"
                             :visible-arrow="false"
                         >
-                            <div class="popover-content">
+                            <div class="u-popover-content">
                                 <p>{{ point.Types | pointType }}</p>
                                 <p>{{ point.ObjectName }} ({{ point.ObjectType | objectType }} {{ point.ObjectID }})</p>
                                 <p>{{ point.Coordinates | coordinates }}</p>
@@ -108,10 +108,10 @@ export default {
         },
         pointClass(point) {
             return {
-                "map-point": true,
-                "kill-npc": point.Types.startsWith("KillNpc"),
-                "need-item": point.Types.startsWith("NeedItem"),
-                "map-icon": point.Types == "Start" || point.Types == "End",
+                "u-map-point": true,
+                "u-map-point__kill": point.Types.startsWith("KillNpc"),
+                "u-map-point__item": point.Types.startsWith("NeedItem"),
+                "u-map-point__icon": point.Types == "Start" || point.Types == "End",
             };
         },
         pointIcon(type, questType) {

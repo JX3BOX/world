@@ -38,8 +38,8 @@
             <p class="group-type">{{ reward | item_group_tips }}</p>
             <div class="item-list">
                 <item-icon
-                    v-for="item in reward.items"
-                    :key="item.id"
+                    v-for="(item, index) in reward.items"
+                    :key="index"
                     :item_id="item.id"
                     :amount="item.amount"
                     :size="36"
@@ -51,7 +51,7 @@
 
 <script>
 import GamePrice from "@jx3box/jx3box-common-ui/src/wiki/GamePrice.vue";
-import ItemIcon from "../item_icon.vue";
+import ItemIcon from "../common/item_icon.vue";
 import PointReward from "./point_reward.vue";
 
 export default {
