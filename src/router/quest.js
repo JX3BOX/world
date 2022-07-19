@@ -1,7 +1,7 @@
 /*
  * @Author: iRuxu
  * @Date: 2022-07-10 21:24:08
- * @LastEditTime: 2022-07-10 21:47:34
+ * @LastEditTime: 2022-07-19 17:17:38
  * @Description:
  */
 import Vue from "vue";
@@ -29,7 +29,7 @@ const routes = [
     },
     {
         name: "single",
-        path: "/:quest_id([_\\d]+)/:post_id(\\d+)?",
+        path: "/view/:quest_id([_\\d]+)/:post_id(\\d+)?",
         component: () => import("@/views/quest/Single.vue"),
     }
 ];
