@@ -2,7 +2,7 @@
  * @Author: X3ZvaWQ
  * @Date: 2022-07-11 00:14:57
  * @LastEditors: X3ZvaWQ
- * @LastEditTime: 2022-07-11 13:22:09
+ * @LastEditTime: 2022-08-23 20:11:18
  * @Description: 各个地方都有用到的，后端没有联物品表，只提供了物品id，通过该组件展示物品
 -->
 <template>
@@ -92,7 +92,7 @@ export default {
                         let item = data.data.item;
                         if (Object.keys(item).length) {
                             this.source = item;
-                            localStorage.setItem(this.cache_key, JSON.stringify(item));
+                            sessionStorage.setItem(this.cache_key, JSON.stringify(item));
                         }
                     })
                     .catch((e) => {
@@ -144,7 +144,7 @@ export default {
         real_id: {
             immediate: true,
             handler() {
-                let _cache = localStorage.getItem(this.cache_key);
+                let _cache = sessionStorage.getItem(this.cache_key);
                 if (_cache) {
                     try {
                         this.source = JSON.parse(_cache);
