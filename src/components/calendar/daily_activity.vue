@@ -15,7 +15,7 @@
                         <td>{{ item.zone }}</td>
                         <td>{{ item.name }}</td>
                     </tr>
-                    <meirentu v-if="today && client === 'std'"></meirentu>
+                    <!-- <meirentu v-if="today && client === 'std'"></meirentu> -->
                     <lucky-pet :date="date" :client="client"></lucky-pet>
                     <furniture v-if="isCurrentWeek" :date="date" :client="client"></furniture>
                 </tbody>
@@ -29,7 +29,7 @@ import { getDaily } from "@/service/spider";
 import dayjs from 'dayjs';
 import isToday from 'dayjs/plugin/isToday';
 import isoWeek from 'dayjs/plugin/isoWeek';
-import meirentu from './meirentu';
+// import meirentu from './meirentu';
 import luckyPet from './lucky_pet';
 import furniture from './furniture';
 
@@ -38,7 +38,7 @@ dayjs.extend(isToday);
 export default {
     name: "daily-activity",
     components: {
-        meirentu,
+        // meirentu,
         luckyPet,
         furniture,
     },
