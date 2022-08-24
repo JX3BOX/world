@@ -82,7 +82,7 @@ export default {
             let date = dayjs(this.date).format('YYYY-MM-DD');
             if (this.today) {
                 const hour = dayjs().hour();
-                if (0 <= hour < 7) {
+                if (0 <= hour && hour < 7) {
                     date = dayjs(date).subtract(1, 'day').format('YYYY-MM-DD');
                 }
             }
