@@ -81,7 +81,6 @@ export default {
         init: function () {
             // 通识
             this.loadKnowledge();
-            this.data.calendar.children = buildCalendarNav({ start: 2009, end: new Date().getFullYear() });
         },
         loadKnowledge: function () {
             // 加载通识子类统计

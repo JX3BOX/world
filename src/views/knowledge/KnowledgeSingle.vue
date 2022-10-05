@@ -3,6 +3,7 @@
         <div class="m-navigation">
             <el-button class="u-goback" size="medium" icon="el-icon-arrow-left" @click="goBack" plain>返回列表</el-button>
             <!-- <Fav class="u-collect" post-type="knowledge" :post-id="id" /> -->
+            <el-button v-if="isEditor" size="medium" icon="el-icon-delete" plain type="danger" @click="del">删除</el-button>
         </div>
 
         <div class="m-wiki" v-if="data && data.post">
@@ -40,11 +41,12 @@
 </template>
 
 <script>
-import { getKnowledgeDetail, getKnowledgePost } from "@/service/knowledge.js";
+import { getKnowledgeDetail, getKnowledgePost, removeKnowledge } from "@/service/knowledge.js";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
 import { publishLink } from "@jx3box/jx3box-common/js/utils";
 import WikiPanel from "@jx3box/jx3box-common-ui/src/wiki/WikiPanel";
 import WikiRevisions from "@jx3box/jx3box-common-ui/src/wiki/WikiRevisions";
+import User from "@jx3box/jx3box-common/js/user";
 
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import Comment from "@jx3box/jx3box-comment-ui/src/Comment.vue";
@@ -98,6 +100,9 @@ export default {
             }
             return [];
         },
+        isEditor: function (){
+            return User.isEditor();
+        }
     },
     methods: {
         getData() {
@@ -125,9 +130,37 @@ export default {
                 });
         },
         goBack() {
-            this.$router.push({ name: "normal", params: { knowledge_type: this.data.source.type } });
+            if (this.data?.source?.type) {
+                this.$router.push({ name: "normal", params: { knowledge_type: this.data.source.type } });
+            } else {
+                this.$router.push({ name: "index" });
+            }
         },
         publishLink,
+        // 删除
+        del() {
+            this.$confirm("此操作将永久删除该百科通识, 是否继续?", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning",
+            })
+                .then(() => {
+                    removeKnowledge(this.id)
+                        .then((res) => {
+                            this.$message({
+                                type: "success",
+                                message: "删除成功!",
+                            });
+                            this.goBack();
+                        })
+                        .catch((err) => {
+                            this.$message({
+                                type: "error",
+                                message: "删除失败!",
+                            });
+                        });
+                })
+        }
     },
     created: function () {
         this.getData(this.id);

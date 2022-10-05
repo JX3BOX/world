@@ -125,9 +125,8 @@
             </div>
             <quest-chain :current="id" :data="quest.chain"></quest-chain>
         </div>
-        <div class="u-quest-map">
-            <quest-map :points="points" :filter="point_filter" :questType="quest.questType" v-if="showMap"> </quest-map>
-            <div class="u-map-empty" v-else>该任务妹有指引</div>
+        <div class="u-quest-map" v-if="showMap">
+            <quest-map :points="points" :filter="point_filter" :questType="quest.questType"> </quest-map>
         </div>
         <div class="m-wiki-post-panel" v-if="wiki_post && wiki_post.post">
             <WikiPanel :wiki-post="wiki_post">

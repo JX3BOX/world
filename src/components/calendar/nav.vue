@@ -128,26 +128,7 @@
         methods: {
             // 数据加载
             init: function () {
-                // 通识
-                this.loadKnowledge();
                 this.data.calendar.children = buildCalendarNav({ start: 2009, end: new Date().getFullYear() });
-            },
-            loadKnowledge: function () {
-                // 加载通识子类统计
-                getKnowledgeMenus().then((res) => {
-                    let knowledgeMenus = res?.data?.data?.menus;
-                    let knowledgeTree = [];
-                    each(knowledgeMenus, (item, key) => {
-                        knowledgeTree.push({
-                            key: key,
-                            path: "/type/" + key,
-                            label: item.label,
-                            count: item.count,
-                            app: 'knowledge',
-                        });
-                    });
-                    this.data.knowledge.children = knowledgeTree;
-                });
             },
             loadCalendarCount: function (year) {
                 getCalendarCount({ year }).then((res) => {
