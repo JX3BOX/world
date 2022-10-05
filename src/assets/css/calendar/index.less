@@ -48,10 +48,25 @@
     // height: 100%;
     // .pf;
     // .rt(0,@header-height + @bread-height);
+
+    .u-expand-icon {
+        position: absolute;
+        float: left;
+        font-size: 16px;
+        padding: 5px;
+        transform: rotate(90deg);
+        display: none;
+        color: #3d454d;
+    }
+    &.expanded {
+        display: none;
+    }
 }
 .c-footer.archive {
     .none;
 }
+
+
 @media screen and (min-width: 2000px) {
     // .m-calendar{
     //     padding-right: @aside_width + 140px;
@@ -66,6 +81,15 @@
     // .c-footer.archive {
     //     .mr(@aside_width + 140px);
     // }
+}
+
+
+@media screen and (max-width: @phone) {
+    .m-calendar-aside {
+        .u-expand-icon {
+            display: block;
+        }
+    }
 }
 
 .m-calendar-header {

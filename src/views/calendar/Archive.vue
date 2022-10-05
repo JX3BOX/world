@@ -37,7 +37,8 @@
                 </section>
             </section>
         </main>
-        <aside class="m-calendar-aside">
+        <aside class="m-calendar-aside" :class="{ expanded: !isExpand }">
+            <i class="u-expand-icon el-icon-upload2" @click="setExpand(false)"></i>
             <calendar-detail :date-obj="current"></calendar-detail>
         </aside>
         <!-- <calendar-rank v-if="rank_show" @calendarRank="rank_show = false" /> -->
@@ -114,6 +115,9 @@ export default {
                 backgroundImage: `url(${resolveImagePath(this.pageSlogan?.img)})`,
             };
         },
+        isExpand() {
+            return this.$store.state.isExpand
+        }
     },
     watch: {
         "$route.params": {
@@ -256,6 +260,8 @@ export default {
             this.current.date = date;
 
             this.$router.push(`/archive/${this.current.year}/${this.current.month}/${this.current.date}`);
+
+            this.setExpand(true);
         },
         // 判断是否为今日
         isToday({ year, month, date }) {
@@ -340,6 +346,12 @@ export default {
             return this.pageSlogan?.[key];
         },
         resolveImagePath,
+        setExpand(val) {
+            this.$store.commit('SET_STATE', {
+                key: 'isExpand',
+                value: val
+            })
+        }
     },
 };
 </script>

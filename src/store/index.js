@@ -5,7 +5,8 @@ Vue.use(Vuex);
 let store = {
     state: {
         client: location.href.includes("origin") ? "origin" : "std",
-        server: ''
+        server: '',
+        isExpand: true
     },
     mutations: {
         SET_STATE: (state, payload) => {
