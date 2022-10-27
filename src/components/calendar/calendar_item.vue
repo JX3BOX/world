@@ -2,7 +2,7 @@
     <div class="m-calendar-item" :class="slogan ? slogan.style : ''" :style="sloganStyle" :key="uiKey">
         <span
             class="u-date-text"
-            :style="{ backgroundColor: isToday && themeColor, color: isToday && themeColor && '#fff' }"
+            :style="{ backgroundColor: isToday && themeColor, color: isToday && themeColor && '#3d454d' }"
             >{{ data.date }}</span
         >
         <div v-if="data.type === 'normal'" class="u-links">
