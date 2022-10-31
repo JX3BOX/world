@@ -126,8 +126,10 @@
             <quest-chain :current="id" :data="quest.chain"></quest-chain>
         </div>
         <el-tabs v-model="activeTab" @tab-click="handleTabClick">
-            <el-tab-pane label="任务对话" name="dialog">
-                <div class="u-quest-dialog">111111111</div>
+            <el-tab-pane label="任务对话" v-if="showDialog" name="dialog">
+                <div class="u-quest-dialog">
+                    <quest-dialog :desc="quest.desc"></quest-dialog>
+                </div>
             </el-tab-pane>
             <el-tab-pane label="任务地图" v-if="showMap" name="map">
                 <div class="u-quest-map">
@@ -198,6 +200,7 @@ import RewardItem from "@/components/quest/single/reward_item.vue";
 import PointFilter from "@/components/quest/single/point_filter.vue";
 import ItemIcon from "@/components/quest/common/item_icon.vue";
 import SearchInput from "@/components/quest/common/search_input.vue";
+import QuestDialog from "@/components/quest/single/quest_dialog.vue";
 
 import { postStat } from "@jx3box/jx3box-common/js/stat.js";
 import { wiki } from "@jx3box/jx3box-common/js/wiki.js";
@@ -222,6 +225,7 @@ export default {
         QuestChain,
         PointFilter,
         SearchInput,
+        QuestDialog,
         Article,
         WikiPanel,
         WikiRevisions,
@@ -255,8 +259,6 @@ export default {
                 },
                 canAssist: 0,
                 canShare: 0,
-                questDesc: "",
-                targetDesc: "",
                 rewards: [],
                 chain: {
                     current: [],
@@ -351,11 +353,14 @@ export default {
         showMap: function () {
             return this.points && Object.keys(this.points).length > 0;
         },
+        showDialog: function () {
+            return this.quest.desc;
+        },
         questDesc: function () {
-            return questDescFormat(this.quest.questDesc);
+            return questDescFormat(this.quest.desc?.Description);
         },
         targetDesc: function () {
-            return questTargetDescFormat(this.quest.targetDesc);
+            return questTargetDescFormat(this.quest.desc?.Objective);
         },
         showReward: function () {
             return this.quest.rewards && this.quest.rewards.length > 0;

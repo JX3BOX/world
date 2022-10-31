@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { schoolIcon } from "@/utils/quest";
+import { schoolIcon, questTargetDescFormat } from "@/utils/quest";
 import ItemIcon from "../common/item_icon.vue";
 
 export default {
@@ -79,6 +79,9 @@ export default {
         },
     },
     computed: {
+        targetFormatted() {
+            return questTargetDescFormat(this.quest.desc?.Objective);
+        },
         items() {
             if (!this.quest.reward || this.quest.reward.length == 0) {
                 return [];

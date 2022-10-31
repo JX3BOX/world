@@ -155,6 +155,8 @@ export const questDescFormat = (desc) => {
             .replace(/\<G\>/g, "&emsp;&emsp;")
             .replace(/\<N\>/g, playerName)
             .replace(/\<C\>/g, playerBody)
+            .replace(/\<CMD NPC_NAME (.+?)\>/g, `<strong class="u-dialog-name">$1</strong><br />`)
+            .replace(/\<CMD PLAYER_NAME >/g, `<strong class="u-dialog-name">${playerName}</strong><br />`)
             .replace(/\<H(\d+)\>/g, '<div style="height: calc($1px - 1.5rem)"></div>');
         while (true) {
             let match = /\<F(\d+) (.+?)\>/.exec(result);
