@@ -25,7 +25,6 @@
         }
     }
 
-
     @media screen and (max-width: 768px) {
         .el-input-group__append {
             width: 24px;
@@ -34,5 +33,27 @@
                 .none;
             }
         }
+    }
+
+    & > span:last-of-type {
+        flex-shrink: 0;
+    }
+    .u-player {
+        .flex;
+        padding: 0 12px;
+        align-items: center;
+        .u-player-name {
+            margin-right: 6px;
+        }
+        .el-button {
+            margin-left: 2px;
+            margin-bottom: -2px;
+        }
+    }
+}
+
+.u-player-setting-popover {
+    .el-input {
+        margin-bottom: 6px;
     }
 }
