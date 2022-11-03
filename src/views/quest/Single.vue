@@ -126,7 +126,7 @@
             <quest-chain :current="id" :data="quest.chain"></quest-chain>
         </div>
         <el-tabs v-model="activeTab" @tab-click="handleTabClick">
-            <el-tab-pane label="任务对话" v-if="showDialog" name="dialog">
+            <el-tab-pane label="任务文案" v-if="showDialog" name="dialog">
                 <div class="u-quest-dialog">
                     <quest-dialog :desc="quest.desc"></quest-dialog>
                 </div>
