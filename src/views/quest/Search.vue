@@ -14,6 +14,7 @@
             <span>※ 支持任务相关物品名称精确搜索</span> <br />
             <span>※ 支持成就名称精确搜索</span> <br />
         </p>
+        <quest-newest></quest-newest>
         <!-- <div class="u-recommand">
             <p class="title"><i class="el-icon-collection-tag"></i> 热门任务</p>
             <div class="list">
@@ -31,10 +32,11 @@
 
 <script>
 import SearchInput from "@/components/quest/common/search_input.vue";
+import QuestNewest from "@/components/quest/newest.vue";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "Search",
-    components: { SearchInput },
+    components: { SearchInput, QuestNewest },
     data: () => ({
         by: "all",
         recommand: [
