@@ -1,4 +1,4 @@
-import { $node } from "@jx3box/jx3box-common/js/https";
+import { $node, $helper } from "@jx3box/jx3box-common/js/https";
 const $ = $node()
 
 /* import axios from 'axios'
@@ -17,4 +17,12 @@ export function getQuest(params) {
 
 export function getQuests(params) {
     return $.get(`/quests`, { params });
+}
+
+export function getNewest(client = 'std') {
+    const params = {
+        type: 'quest',
+        client
+    };
+    return $helper().get(`/api/wiki/posts/newest`, { params });
 }

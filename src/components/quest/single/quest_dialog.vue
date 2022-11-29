@@ -51,9 +51,6 @@ export default {
     data() {
         return {};
     },
-    mounted() {
-        console.log(this.desc);
-    },
     methods: {
         questTargetDescFormat,
         questDescFormat,
