@@ -26,3 +26,18 @@ export function getNewest(client = 'std') {
     };
     return $helper().get(`/api/wiki/posts/newest`, { params });
 }
+
+export function getWaiting(page, client) {
+    const params = {
+        page,
+        client
+    };
+    return $helper().get(`/api/quest/waiting`, { params });
+}
+
+export function getWaitingRate(client) {
+    const params = {
+        client
+    };
+    return $helper().get(`/api/quest/waiting/rate`, { params });
+}

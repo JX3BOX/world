@@ -17,6 +17,7 @@
                                     source_id: post.id,
                                 },
                             }"
+                            target='_blank'
                             v-text="questName(post.title)"
                         ></router-link>
                         <div class="u-quest-level" v-text="'综合难度：' + star(post.level)"></div>
@@ -29,6 +30,7 @@
                                 :href="post.user_id ? authorLink(post.user_id) : null"
                                 class="u-name"
                                 v-text="post.user_nickname"
+                                target="_blank"
                             ></a>
                         </div>
                         <div class="u-updated" v-text="ts2str(post.updated)"></div>
