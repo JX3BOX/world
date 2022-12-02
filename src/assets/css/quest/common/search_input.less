@@ -2,7 +2,7 @@
     .flex;
     width: 100%;
     align-items: center;
-    // .mb(1.75rem);
+    .mb(16px);
 
     .el-input-group__prepend {
         border-top-left-radius: 12px;
@@ -43,13 +43,18 @@
         padding: 0 12px;
         align-items: center;
         .fz(14px, 1.5);
-        .u-player-name {
-            margin-right: 6px;
+        .u-player-name,
+        .u-player-body {
+            .mt(-4px);
+            .mr(6px);
         }
         .el-button {
-            margin-left: 2px;
-            margin-bottom: -2px;
+            .ml(2px);
         }
+    }
+
+    .u-tips {
+        .ml(8px);
     }
 }
 

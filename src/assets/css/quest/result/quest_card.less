@@ -1,3 +1,4 @@
+@import "./grid_layout.less";
 .m-quest-card {
     //指针
     .pointer;
@@ -9,20 +10,16 @@
 
     margin-bottom: 20px;
     min-height: 120px;
-    column-gap: 8px;
     text-align: center;
 
-    display: grid;
-    grid-template-columns: 1fr 2fr 0.8fr 3fr 3fr;
-    justify-items: center;
-    align-items: center;
+    .grid-layout;
 
     @media screen and (max-width: 768px) {
-        &>.u-level {
+        & > .u-level {
             .none;
         }
 
-        &>div {
+        & > div {
             margin-bottom: 12px;
         }
 
@@ -92,7 +89,7 @@
         .flex;
         align-items: flex-start;
 
-        &>span {
+        & > span {
             .mr(4px);
         }
     }

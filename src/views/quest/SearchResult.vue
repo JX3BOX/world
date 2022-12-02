@@ -1,13 +1,7 @@
 <template>
     <div class="m-search-result">
         <search-input></search-input>
-        <div class="u-head">
-            <div>起始地图</div>
-            <div>任务名称</div>
-            <div>可接等级</div>
-            <div>任务目标</div>
-            <div>任务奖励</div>
-        </div>
+        <list-head></list-head>
         <template v-if="resultIsObject">
             <template v-if="result.prev && result.prev.length > 0">
                 <el-divider><i class="el-icon-star-off"></i> 前置分支</el-divider>
@@ -27,7 +21,6 @@
                 <quest-card v-for="quest in result.branch" :key="quest.id" :quest="quest"></quest-card>
             </template>
             <template v-if="result.byKeyword && result.byKeyword.length > 0">
-                <el-divider class="u-result-hr"><i class="el-icon-star-off"></i> 模糊搜索结果</el-divider>
                 <quest-card v-for="quest in result.byKeyword" :key="quest.id" :quest="quest"></quest-card>
             </template>
         </template>
@@ -48,10 +41,10 @@
 import { getQuests } from "@/service/quest";
 import QuestCard from "@/components/quest/result/quest_card.vue";
 import SearchInput from "@/components/quest/common/search_input.vue";
-
+import ListHead from "@/components/quest/result/list_head.vue";
 export default {
     name: "SearchResult",
-    components: { QuestCard, SearchInput },
+    components: { QuestCard, SearchInput, ListHead },
     data: () => ({
         total: 1,
         pageSize: 10,

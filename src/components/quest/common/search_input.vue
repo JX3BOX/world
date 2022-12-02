@@ -18,10 +18,22 @@
                 </el-tooltip>
             </span>
             <el-button @click="search" slot="append">
-                <span class="u-input-button__normal">搜 索</span>
+                <div class="u-input-button__normal">
+                    <i class="el-icon-position"></i>
+                    <span>搜索</span>
+                </div>
                 <span class="u-input-button__small"><i class="xs el-icon-search"></i></span>
             </el-button>
         </el-input>
+        <el-tooltip class="u-tips" effect="dark" placement="bottom">
+            <div slot="content">
+                <span>※ 支持任务名称精确或模糊搜索</span> <br />
+                <span>※ 支持任务相关物品名称精确搜索</span> <br />
+                <span>※ 支持成就名称精确搜索</span> <br />
+            </div>
+            <el-button>左下</el-button>
+            <el-button type="text" icon="el-icon-question"></el-button>
+        </el-tooltip>
         <el-popover popper-class="u-player-setting-popover" placement="top" width="160" v-model="settingVisible">
             <el-input v-model="playerName" placeholder="称呼" @input="handlePlayerInfoChange"></el-input>
             <el-input v-model="playerBody" placeholder="体型" @input="handlePlayerInfoChange"></el-input>
