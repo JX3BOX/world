@@ -6,8 +6,8 @@
 -->
 <template>
     <div class="m-quest">
-        <img class="u-logo" src="@/assets/img/quest/quest_logo.png" alt="" />
-        <h1 class="u-title">任务百科</h1>
+        <!-- <img class="u-logo" src="@/assets/img/quest/quest_logo.png" alt="" /> -->
+        <!-- <h1 class="u-title">任务百科</h1> -->
         <search-input></search-input>
         <p class="u-desc">
             <span>※ 支持任务名称精确或模糊搜索</span> <br />
