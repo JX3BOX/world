@@ -1,10 +1,10 @@
 import { $node, $helper } from "@jx3box/jx3box-common/js/https";
-/* const $ = $node() */
+const $ = $node()
 
-import axios from 'axios'
+/* import axios from 'axios'
 const $ = axios.create({
     baseURL: 'http://localhost:7002/',
-})
+}) */
 
 
 export function getCategory(params) {
