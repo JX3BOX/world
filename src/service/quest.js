@@ -31,17 +31,16 @@ export function getNewestPost(client = 'std') {
     return $helper().get(`/api/wiki/posts/newest`, { params });
 }
 
-export function getWaiting(page, client) {
-    const params = {
-        page,
-        client
-    };
-    return $helper().get(`/api/quest/waiting`, { params });
+export function getWaiting(params) {
+    params = Object.assign(params, {
+        type: 'quest',
+    });
+    return $helper().get(`/api/wiki/posts/waiting`, { params });
 }
 
 export function getWaitingRate(client) {
-    const params = {
-        client
-    };
-    return $helper().get(`/api/quest/waiting/rate`, { params });
+    params = Object.assign(params, {
+        type: 'quest',
+    });
+    return $helper().get(`/api/wiki/posts/counter`, { params });
 }
