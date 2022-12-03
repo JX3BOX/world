@@ -31,7 +31,6 @@
                 <span>※ 支持任务相关物品名称精确搜索</span> <br />
                 <span>※ 支持成就名称精确搜索</span> <br />
             </div>
-            <el-button>左下</el-button>
             <el-button type="text" icon="el-icon-question"></el-button>
         </el-tooltip>
         <el-popover popper-class="u-player-setting-popover" placement="top" width="160" v-model="settingVisible">
