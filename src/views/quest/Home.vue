@@ -31,6 +31,7 @@
                         <router-link :to="{ name: 'waiting' }">
                             <i class="el-icon-edit-outline"></i>
                             <span>待攻略任务</span>
+                            <span class="u-waiting" :style="waitingColorStyle()">（{{ solveRate.toFixed(2) }}%）</span>
                         </router-link>
                     </li>
                 </ul>
@@ -73,11 +74,10 @@ import WikiPanel from "@jx3box/jx3box-common-ui/src/wiki/WikiPanel";
 import NewestPost from "@/components/quest/home/newest_post.vue";
 import QuestCarousel from "@/components/quest/home/quest_carousel.vue";
 
-import { getQuests } from "@/service/quest";
+import { getQuests, getNewestQuests, getWaitingRate } from "@/service/quest";
 import { feedback } from "@jx3box/jx3box-common/data/jx3box.json";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 import { getStatRank } from "@jx3box/jx3box-common/js/stat";
-import { getNewestQuests } from "@/service/quest";
 
 export default {
     name: "Home",
@@ -90,6 +90,8 @@ export default {
 
         hotQuests: [],
         hotViews: {},
+
+        solveRate: 0,
     }),
     computed: {
         client() {
@@ -97,7 +99,7 @@ export default {
         },
     },
     methods: {
-        getNewestData(page = 1) {
+        async getNewestData(page = 1) {
             let params = {
                 page,
                 pageSize: 12,
@@ -107,7 +109,7 @@ export default {
                 this.newestQuests = res.data.list;
             });
         },
-        getHotData() {
+        async getHotData() {
             const key = this.client == "origin" ? "origin_quest" : "quest";
             getStatRank(key, "views", 12).then((res) => {
                 res = res.data;
@@ -125,11 +127,27 @@ export default {
                 });
             });
         },
+        async getWaiting() {
+            getWaitingRate({ client: this.client }).then((res) => {
+                let { wiki_count: solve, source_count: all } = res.data.data ?? {};
+                this.solveRate = (solve / all) * 100;
+            });
+        },
+        waitingColorStyle() {
+            if (this.solveRate > 95) {
+                return "color: #8dfa58";
+            } else if (this.solveRate > 60) {
+                return "color: #e2d849";
+            } else {
+                return "color: #ff3838";
+            }
+        },
         iconLink,
     },
     mounted() {
         this.getNewestData();
         this.getHotData();
+        this.getWaiting();
     },
 };
 </script>

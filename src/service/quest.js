@@ -38,7 +38,7 @@ export function getWaiting(params) {
     return $helper().get(`/api/wiki/posts/waiting`, { params });
 }
 
-export function getWaitingRate(client) {
+export function getWaitingRate(params) {
     params = Object.assign(params, {
         type: 'quest',
     });
