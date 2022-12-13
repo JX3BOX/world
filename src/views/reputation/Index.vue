@@ -36,6 +36,11 @@
       </template>
       <template slot="body">
         <list-head></list-head>
+        <item-card
+          v-for="reputation in news"
+          :key="reputation.dwForceID"
+          :item="reputation"
+        ></item-card>
       </template>
     </wiki-panel>
   </div>
@@ -45,16 +50,20 @@
 import SearchInput from "@/components/reputation/common/search_input.vue";
 import WikiPanel from "@jx3box/jx3box-common-ui/src/wiki/WikiPanel";
 import ListHead from "@/components/reputation/result/list_head.vue";
+import ItemCard from "@/components/reputation/result/item_card.vue";
 
 import { feedback } from "@jx3box/jx3box-common/data/jx3box.json";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 
+import { getNews } from "@/service/reputation";
+
 export default {
-  name: "Home",
-  components: { SearchInput, WikiPanel, ListHead },
+  name: "Index",
+  components: { SearchInput, WikiPanel, ListHead, ItemCard },
   data: () => ({
     by: "all",
     feedback,
+    news: []
   }),
   computed: {
     client () {
@@ -63,8 +72,16 @@ export default {
   },
   methods: {
     iconLink,
+    getNews () {
+      getNews({
+      }).then((res) => {
+        this.news = res.data.list || [];
+        console.log(this.news)
+      });
+    },
   },
   mounted () {
+    this.getNews();
   },
 };
 </script>

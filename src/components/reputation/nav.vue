@@ -17,8 +17,9 @@
             v-text="'【 ' + data.name + ' 】'"
           ></span>
           <em
+            v-if="data.total"
             class="u-count"
-            v-text="`(${1})`"
+            v-text="`(${data.total})`"
           ></em>
         </router-link>
       </el-tree>
@@ -27,7 +28,7 @@
 </template>
 
 <script>
-import { getCategory } from "@/service/quest";
+import { getMenus } from "@/service/reputation";
 import maps from "@jx3box/jx3box-data/data/fb/fb_map.json";
 
 export default {
@@ -47,63 +48,28 @@ export default {
       return { name: "result", query: { id: menu.id } };
     },
     getMenus () {
-      getCategory({
-        by: 'map',
-        client: this.client,
+      getMenus({
       }).then((res) => {
-        const data = [{
-          id: 1,
-          name: '霸刀山庄',
-          type: 0,
-          typeName: '风起稻香'
-        }, {
-          id: 1,
-          name: '藏剑山庄',
-          type: 1,
-          typeName: '巴蜀风云'
-        }, {
-          id: 2,
-          name: '天策府',
-          type: 1,
-          typeName: '巴蜀风云'
-        }];
-        const types = []
-        data.forEach(item => {
-          if (!types.find(type => type.id === item.type)) {
-            types.push({
-              id: item.type,
-              name: item.typeName,
-              total: data.filter(dItem => dItem.type === item.type).length
+        // console.log(res)
+        const list = res.data.dlc || []
+        const arr = Object.keys(maps).reverse()
+        arr.unshift('声望总览')
+        this.versions = list.map((item, i) => {
+          if (!item.nDlcID) {
+            item.nDlcID = 0
+            item.total = list.map(lItem => lItem.total).reduce(function (prev, cur) {
+              return prev + cur
             })
           }
+          return {
+            ...item,
+            name: arr[i]
+          }
         })
-        types.push({
-          id: -1,
-          name: '声望总览',
-          total: data.length
-        })
-        const menus = types.sort((a, b) => a.id - b.id)
-        this.menus = menus
       });
     },
   },
   mounted () {
-    const arr = []
-    let i = 1
-    for (const version in maps) {
-      if (!arr.includes(version)) {
-        arr.unshift({
-          id: i,
-          name: version
-        })
-        i++;
-      }
-    }
-    arr.unshift({
-      id: 0,
-      name: '声望总览'
-    })
-    this.versions = arr
     this.getMenus();
   },
 };

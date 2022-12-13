@@ -48,7 +48,7 @@ module.exports = {
         },
       },
       "/api/reputation": {
-        target: "https://helper.jx3box.com",
+        target: "https://node.jx3box.com",
         onProxyReq: function (request) {
           request.setHeader("origin", "");
         },
