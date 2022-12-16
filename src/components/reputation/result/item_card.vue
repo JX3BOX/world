@@ -31,7 +31,7 @@
     <div class="u-name">
       <template v-if="getPath(item.szName)">
         <div>
-          <div>{{ getPath(item.szName) }}</div>
+          <div class="u-path">{{ getPath(item.szName) }}</div>
           <span class="u-name-id">（遗失的尊敬）</span>
         </div>
       </template>

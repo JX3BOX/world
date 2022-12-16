@@ -59,6 +59,7 @@ export default {
 
     .servant-desc {
         text-indent: 1em;
+        line-height: 1.8;
     }
     .servant-list {
         width: calc(100% - 210px);

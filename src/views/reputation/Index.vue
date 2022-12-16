@@ -1,9 +1,9 @@
 <template>
-  <div class="m-reputation-home">
-    <!-- 通用输入框 -->
-    <search-input></search-input>
-    <!-- <reputation-filter :level.sync="level"></reputation-filter> -->
-    <wiki-panel :border-none="true">
+    <div class="m-reputation-home">
+        <!-- 通用输入框 -->
+        <search-input></search-input>
+        <!-- <reputation-filter :level.sync="level"></reputation-filter> -->
+        <!-- <wiki-panel :border-none="true">
       <template slot="head-title">
         <i class="el-icon-location-information"></i>
         <span>便捷入口</span>
@@ -29,23 +29,23 @@
           </li>
         </ul>
       </template>
-    </wiki-panel>
-    <wiki-panel :border-none="true">
-      <template slot="head-title">
-        <i class="el-icon-notebook-2"></i>
-        <span>最新声望</span>
-      </template>
-      <template slot="body">
-        <list-head></list-head>
-        <item-card
-          v-for="reputation in (level === -1) ? news : list"
-          :key="reputation.dwForceID"
-          :item="reputation"
-          :level="level"
-        ></item-card>
-      </template>
-    </wiki-panel>
-  </div>
+    </wiki-panel> -->
+        <wiki-panel :border-none="true">
+            <template slot="head-title">
+                <i class="el-icon-notebook-2"></i>
+                <span>最新声望</span>
+            </template>
+            <template slot="body">
+                <list-head></list-head>
+                <item-card
+                    v-for="reputation in level === -1 ? news : list"
+                    :key="reputation.dwForceID"
+                    :item="reputation"
+                    :level="level"
+                ></item-card>
+            </template>
+        </wiki-panel>
+    </div>
 </template>
 
 <script>
@@ -61,44 +61,43 @@ import { iconLink } from "@jx3box/jx3box-common/js/utils";
 import { getNews } from "@/service/reputation";
 
 export default {
-  name: "Index",
-  components: { SearchInput, WikiPanel, ListHead, ItemCard },
-  data: () => ({
-    by: "all",
-    feedback,
-    news: [],
-    list: [],
-    level: -1
-  }),
-  computed: {
-    client () {
-      return this.$store.state.client;
+    name: "Index",
+    components: { SearchInput, WikiPanel, ListHead, ItemCard },
+    data: () => ({
+        by: "all",
+        feedback,
+        news: [],
+        list: [],
+        level: -1,
+    }),
+    computed: {
+        client() {
+            return this.$store.state.client;
+        },
     },
-  },
-  watch: {
-    level (level) {
-      if (level !== -1) {
-        this.list = this.news.filter(item => {
-          return Object.keys(item.RewardItems).some(rItem => rItem >= level)
-        })
-      } else {
-        this.list = this.news
-      }
-    }
-  },
-  methods: {
-    iconLink,
-    getNews () {
-      getNews({
-      }).then((res) => {
-        this.news = res.data.list || [];
-        // console.log(this.news)
-      });
+    watch: {
+        level(level) {
+            if (level !== -1) {
+                this.list = this.news.filter((item) => {
+                    return Object.keys(item.RewardItems).some((rItem) => rItem >= level);
+                });
+            } else {
+                this.list = this.news;
+            }
+        },
     },
-  },
-  mounted () {
-    this.getNews();
-  },
+    methods: {
+        iconLink,
+        getNews() {
+            getNews({}).then((res) => {
+                this.news = res.data.list || [];
+                // console.log(this.news)
+            });
+        },
+    },
+    mounted() {
+        this.getNews();
+    },
 };
 </script>
 
