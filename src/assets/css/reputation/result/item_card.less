@@ -39,7 +39,14 @@
     padding: 0 16px;
   }
 
+  .u-name-icon {
+    img {
+      max-height: 76px;
+    }
+  }
+
   .u-name {
+
     .u-name-title {
       .flex;
       align-items: center;
@@ -79,8 +86,8 @@
 
   .u-reward {
     width: 100%;
-    padding: 0 16px;
-    text-align: left;
+    // padding: 0 16px;
+    text-align: center;
   }
 
   .u-reward-item {
@@ -88,7 +95,9 @@
     .mt(4px);
     .mb(4px);
     .flex;
+    flex-wrap: wrap;
     align-items: flex-start;
+    justify-content: center;
 
     &>span {
       .mr(4px);

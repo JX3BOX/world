@@ -1,10 +1,10 @@
 <template>
   <div class="m-filter-wrap">
-    <reputation-filter></reputation-filter>
     <div class="m-search-input">
       <el-input
-        placeholder="输入声望名称、地图名称、奖励名称，「回车」进行搜索"
+        placeholder="输入声望/地图/奖励/势力名称，「回车」进行搜索"
         v-model="keyword"
+        clearable
         @keyup.enter.native="search"
       >
         <span slot="prepend">
@@ -26,10 +26,8 @@
 </template>
 
 <script>
-import ReputationFilter from './reputation_filter.vue'
 export default {
   name: "SearchInput",
-  components: { ReputationFilter },
   data () {
     return {
       keyword: ""

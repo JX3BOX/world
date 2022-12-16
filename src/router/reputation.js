@@ -21,6 +21,11 @@ const routes = [
     path: "/search",
     component: () => import("@/views/reputation/SearchResult.vue"),
   },
+  {
+    name: "single",
+    path: "/view/:reputation_id([_\\d]+)/:post_id(\\d+)?",
+    component: () => import("@/views/reputation/Single.vue"),
+  },
 ];
 
 const router = new VueRouter({

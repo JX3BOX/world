@@ -2,6 +2,7 @@
   <div class="m-reputation-home">
     <!-- 通用输入框 -->
     <search-input></search-input>
+    <!-- <reputation-filter :level.sync="level"></reputation-filter> -->
     <wiki-panel :border-none="true">
       <template slot="head-title">
         <i class="el-icon-location-information"></i>
@@ -37,9 +38,10 @@
       <template slot="body">
         <list-head></list-head>
         <item-card
-          v-for="reputation in news"
+          v-for="reputation in (level === -1) ? news : list"
           :key="reputation.dwForceID"
           :item="reputation"
+          :level="level"
         ></item-card>
       </template>
     </wiki-panel>
@@ -48,6 +50,7 @@
 
 <script>
 import SearchInput from "@/components/reputation/common/search_input.vue";
+// import ReputationFilter from '@/components/reputation/common/reputation_filter.vue'
 import WikiPanel from "@jx3box/jx3box-common-ui/src/wiki/WikiPanel";
 import ListHead from "@/components/reputation/result/list_head.vue";
 import ItemCard from "@/components/reputation/result/item_card.vue";
@@ -63,12 +66,25 @@ export default {
   data: () => ({
     by: "all",
     feedback,
-    news: []
+    news: [],
+    list: [],
+    level: -1
   }),
   computed: {
     client () {
       return this.$store.state.client;
     },
+  },
+  watch: {
+    level (level) {
+      if (level !== -1) {
+        this.list = this.news.filter(item => {
+          return Object.keys(item.RewardItems).some(rItem => rItem >= level)
+        })
+      } else {
+        this.list = this.news
+      }
+    }
   },
   methods: {
     iconLink,
@@ -76,7 +92,7 @@ export default {
       getNews({
       }).then((res) => {
         this.news = res.data.list || [];
-        console.log(this.news)
+        // console.log(this.news)
       });
     },
   },

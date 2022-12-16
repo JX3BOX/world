@@ -1,8 +1,9 @@
 <template>
   <div class="m-filter-content">
     <el-select
-      v-model="level"
+      v-model="currentLevel"
       placeholder="声望等级"
+      @change="levelChange"
     >
       <el-option
         v-for="item in list"
@@ -18,15 +19,21 @@
 import list from '@/assets/data/reputation_level.json'
 export default {
   name: "ReputationFilter",
+  props: ['level'],
   data () {
     return {
-      level: -1,
+      currentLevel: -1,
       list: list
     };
   },
   methods: {
+    levelChange (value) {
+      this.currentLevel = value
+      this.$emit('update:level', value)
+    }
   },
   mounted () {
+    this.currentLevel = this.level
   },
 };
 </script>

@@ -8,3 +8,11 @@ export function getMenus (params) {
 export function getNews (params) {
   return $.get(`/reputation/newest`, { params });
 }
+
+export function getList (params) {
+  return $.get(`/reputations`, { params });
+}
+
+export function getInfo (params) {
+  return $.get(`/reputation`, { params });
+}

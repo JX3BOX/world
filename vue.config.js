@@ -24,7 +24,7 @@ module.exports = {
       entry: "src/pages/quest.js",
       filename: "quest/index.html",
     },
-    quest: {
+    reputation: {
       title: "声望百科 - JX3BOX",
       template: "public/index.html",
       entry: "src/pages/reputation.js",

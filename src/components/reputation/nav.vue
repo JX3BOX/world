@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     menuLink (menu) {
-      return { name: "result", query: { id: menu.id } };
+      return { name: "result", query: { id: menu.nDlcID } };
     },
     getMenus () {
       getMenus({
@@ -56,7 +56,6 @@ export default {
         arr.unshift('声望总览')
         this.versions = list.map((item, i) => {
           if (!item.nDlcID) {
-            item.nDlcID = 0
             item.total = list.map(lItem => lItem.total).reduce(function (prev, cur) {
               return prev + cur
             })
