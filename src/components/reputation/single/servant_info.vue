@@ -23,7 +23,10 @@
         </div>
         <div class="servant-item">
           <p class="u-subtitle">【知交故事】</p>
-          <p class="servant-desc">{{info.szDescPersonality}}</p>
+          <p
+            class="servant-desc"
+            v-html="info.szDescPersonality.replace(/\\n/g, '<br>')"
+          ></p>
         </div>
       </div>
     </div>
