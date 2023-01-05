@@ -5,7 +5,7 @@
 		</div>
     <div class="m-search-input">
       <el-input
-        placeholder="输入声望/地图/奖励/势力名称，「回车」进行搜索"
+        placeholder="输入书籍名称/描述，「回车」进行搜索"
         v-model="keyword"
         clearable
         @keyup.enter.native="search"
@@ -54,5 +54,5 @@ export default {
 </script>
 
 <style lang="less">
-@import "~@/assets/css/reputation/common/search_input.less";
+@import "~@/assets/css/book/common/search_input.less";
 </style>

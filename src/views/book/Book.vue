@@ -2,8 +2,8 @@
   <div id="app">
     <Header></Header>
     <Breadcrumb
-      name="声望大全"
-      slug="reputation"
+      name="书籍大全"
+      slug="book"
       :publishEnable="true"
       :feedbackEnable="true"
       :crumbEnable="false"
@@ -25,13 +25,13 @@
 </template>
 
 <script>
-import Nav from "@/components/reputation/nav.vue";
+import Nav from "@/components/book/nav.vue";
 
 export default {
-  name: "Reputation",
+  name: "Book",
   components: { Nav },
   data: () => ({
-    defaultExpandedKeys: ["reputation"],
+    defaultExpandedKeys: ["book"],
     active: "",
   }),
   computed: {

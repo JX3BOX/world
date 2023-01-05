@@ -25,10 +25,16 @@ module.exports = {
       filename: "quest/index.html",
     },
     reputation: {
-      title: "声望百科 - JX3BOX",
+      title: "声望大全 - JX3BOX",
       template: "public/index.html",
       entry: "src/pages/reputation.js",
       filename: "reputation/index.html",
+    },
+    book: {
+      title: "书籍大全 - JX3BOX",
+      template: "public/index.html",
+      entry: "src/pages/book.js",
+      filename: "book/index.html",
     }
   },
 
@@ -48,6 +54,12 @@ module.exports = {
         },
       },
       "/api/reputation": {
+        target: "https://node.jx3box.com",
+        onProxyReq: function (request) {
+          request.setHeader("origin", "");
+        },
+      },
+      "/api/book": {
         target: "https://node.jx3box.com",
         onProxyReq: function (request) {
           request.setHeader("origin", "");

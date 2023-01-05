@@ -1,0 +1,125 @@
+.m-book-content {
+    @media screen and (min-width: 768px) {
+        display: grid;
+        // grid-template-columns: repeat(2, 1fr);
+        column-gap: 14px;
+    }
+
+    p {
+        margin: 0;
+    }
+
+    .w-book {
+        .u-title__warpper {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px dashed #ccc;
+
+            .u-title-id {
+                .fz(12px);
+                color: #909399;
+            }
+            .u-desc {
+                position: absolute;
+                bottom: 8px;
+                left: 43px;
+                .fz(12px);
+                color: #909399;
+            }
+        }
+
+        .u-info__wrapper {
+            margin: 10px 0;
+            @media screen and (min-width: 768px) {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                column-gap: 14px;
+            }
+            .u-book-info {
+                padding: 5px 10px;
+                .fz(14px);
+                .u-item {
+                    margin-bottom: 5px;
+                }
+            }
+
+            .book-content {
+              margin: 10px;
+              padding: 15px;
+              background-color: #d8d5c9;
+              font-size: 14px;
+              font-weight: bold;
+              line-height: 1.5;
+              height: 380px;
+              overflow-y: auto;
+              border-radius: 5px;
+            }
+        }
+    }
+
+    .u-subtitle {
+        .bold;
+        font-size: 15px;
+        padding: 5px 0;
+    }
+
+    .m-wiki-post-panel,
+    .m-wiki-post-empty {
+        .mt(20px);
+    }
+
+    .m-search,
+    .m-wiki-post-panel,
+    .m-wiki-post-empty {
+        grid-column: span 3;
+    }
+}
+
+.u-msg-yellow {
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border: 1px solid #faebcc;
+    padding: 8px 14px 8px 14px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+}
+
+.m-wiki-post-empty {
+    .u-msg-yellow;
+    .x;
+
+    .s-link {
+        .underline(@color-link);
+    }
+
+    letter-spacing: 2px;
+    .fz(14px);
+}
+
+.m-wiki-compatible {
+    .u-msg-yellow;
+    margin: 10px auto;
+    padding: 5px 10px;
+
+    a {
+        .underline(@color-link);
+    }
+}
+
+.m-wiki-signature {
+    .x(right);
+    color: #999;
+    .fz(12px, 2);
+    border-top: 1px dashed #ddd;
+    padding: 5px 0;
+}
+
+.m-thx {
+    .mt(20px);
+
+    .w-boxcoin-records-list {
+        background-color: #fff;
+    }
+}
