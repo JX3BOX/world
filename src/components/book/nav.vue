@@ -3,7 +3,7 @@
     <div class="m-menus-panel">
       <el-tree
         class="m-menus"
-        :data="versions"
+        :data="menus"
         node-key="id"
         ref="tree"
       >
@@ -16,11 +16,6 @@
             class="u-name"
             v-text="'【 ' + data.name + ' 】'"
           ></span>
-          <em
-            v-if="data.total"
-            class="u-count"
-            v-text="`(${data.total})`"
-          ></em>
         </router-link>
       </el-tree>
     </div>
@@ -28,15 +23,18 @@
 </template>
 
 <script>
-import { getMenus } from "@/service/reputation";
-import maps from "@jx3box/jx3box-data/data/fb/fb_map.json";
+import professions from '@/assets/data/book_profession.json'
 
 export default {
   name: "Nav",
   data: () => ({
     keyword: "",
-    menus: [],
-    versions: []
+    menus: professions.map(item => {
+      if (item.id === 8) {
+        item.name = '全部'
+      }
+      return item
+    })
   }),
   computed: {
     client () {
@@ -45,31 +43,10 @@ export default {
   },
   methods: {
     menuLink (menu) {
-      return { name: "result", query: { id: menu.nDlcID } };
-    },
-    getMenus () {
-      getMenus({
-      }).then((res) => {
-        // console.log(res)
-        const list = res.data.dlc || []
-        const arr = Object.keys(maps).reverse()
-        arr.unshift('声望总览')
-        this.versions = list.map((item, i) => {
-          if (!item.nDlcID) {
-            item.total = list.map(lItem => lItem.total).reduce(function (prev, cur) {
-              return prev + cur
-            })
-          }
-          return {
-            ...item,
-            name: arr[i]
-          }
-        })
-      });
+      return { name: "result", query: { profession: menu.id } };
     },
   },
   mounted () {
-    this.getMenus();
   },
 };
 </script>

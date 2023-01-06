@@ -23,7 +23,7 @@ const routes = [
   },
   {
     name: "single",
-    path: "/view/:book_id([_\\d]+)/:item_id([_\\d]+)/:post_id(\\d+)?",
+    path: "/view/:book_id([_\\d]+)/:post_id(\\d+)?",
     component: () => import("@/views/book/Single.vue"),
   },
 ];

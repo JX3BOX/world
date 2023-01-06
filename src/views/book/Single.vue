@@ -7,23 +7,23 @@
             <div class="w-book">
                 <p class="u-title__warpper">
                     <span class="u-name-icon">
-                        <item-icon :item_id="itemID" :size="36"></item-icon>
+                        <item-icon v-if="book.ItemID" :item_id="book.ItemID" :size="36"></item-icon>
                     </span>
                     <span class="u-title-id"> ID:{{ book.idKey }} </span>
                     <span class="u-desc" v-html="book.Desc"></span>
                 </p>
                 <div class="u-info__wrapper">
+                    <div v-if="book.contentInfo" class="book-info__content">
+                        <p class="u-subtitle">【书籍内容】</p>
+                        <div class="book-content" v-html="book.contentInfo"></div>
+                    </div>
                     <div class="common-info__content">
                         <p class="u-subtitle">【书籍信息】</p>
                         <div class="u-book-info">
                             <div class="u-item">类型：{{ getProfessionType(book.ExtendProfessionID1) }}</div>
+                            <div class="u-item">来源：{{ getOrigin(book.DoodadTemplateID) }}</div>
                             <div class="u-item">套书：{{ book.BookName }}</div>
                             <div class="u-item">抄录相关：</div>
-                        </div>
-                    </div>
-                    <div v-if="book.contentInfo" class="book-info__content">
-                        <p class="u-subtitle">【书籍内容】</p>
-                        <div class="book-content" v-html="book.contentInfo">
                         </div>
                     </div>
                 </div>
@@ -40,6 +40,9 @@
 import ItemIcon from "@/components/book/common/item_icon.vue";
 import SearchInput from "@/components/book/common/search_input.vue";
 import bookProfession from "@/assets/data/book_profession.json";
+// 碑铭坐标json
+import bookMapInfoStd from "@/assets/data/stele_std_fwd.json";
+import bookMapInfoOrigin from "@/assets/data/stele_origin_fwd.json";
 
 import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
 
@@ -77,10 +80,13 @@ export default {
                 contentInfo: "",
             },
             loading: false,
-            // icon: getAppIcon("book"),
+            bookMapSite: [], // 碑铭点位信息
         };
     },
     methods: {
+        getOrigin(tempId) {
+            return tempId && this.bookMapInfo[tempId] ? "碑铭" : "其它";
+        },
         getProfessionType(type) {
             return bookProfession.find((item) => item.id === Number(type))
                 ? bookProfession.find((item) => item.id === Number(type)).name
@@ -95,6 +101,9 @@ export default {
                 .then((res) => {
                     const data = res.data;
                     data.contentInfo = data.contents.map((item) => item.content.replace(/\\n/g, "<br>")).join("<br>");
+                    if (data.DoodadTemplateID && this.bookMapInfo[data.DoodadTemplateID]) {
+                        this.bookMapSite = this.bookMapInfo[data.DoodadTemplateID];
+                    }
                     this.book = data;
                 })
                 .finally(() => {
@@ -146,9 +155,6 @@ export default {
         }
     },
     computed: {
-        itemID: function () {
-            return this.$route.params.item_id;
-        },
         idKey: function () {
             return this.$route.params.book_id;
         },
@@ -157,6 +163,9 @@ export default {
         },
         client() {
             return this.$store.state.client;
+        },
+        bookMapInfo() {
+            return this.client === "std" ? bookMapInfoStd : bookMapInfoOrigin;
         },
 
         //wiki相关
