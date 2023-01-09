@@ -23,10 +23,14 @@
                             <div class="u-item">类型：{{ getProfessionType(book.ExtendProfessionID1) }}</div>
                             <div class="u-item">来源：{{ getOrigin(book.DoodadTemplateID) }}</div>
                             <div class="u-item">套书：{{ book.BookName }}</div>
-                            <div class="u-item">抄录相关：</div>
+                            <!-- <div class="u-item">抄录相关：</div> -->
                         </div>
                     </div>
                 </div>
+            </div>
+            <div v-if="bookMapSite.length" class="book-map">
+                <p class="u-subtitle">【碑铭信息】</p>
+                <jx3box-map :map-id="parseInt(bookMapSite[0].map)" :datas="bookMapSite[0].position"></jx3box-map>
             </div>
         </div>
         <div class="m-comment">
@@ -37,6 +41,7 @@
 </template>
 
 <script>
+import Jx3boxMap from "@jx3box/jx3box-map/src/components/Map.vue";
 import ItemIcon from "@/components/book/common/item_icon.vue";
 import SearchInput from "@/components/book/common/search_input.vue";
 import bookProfession from "@/assets/data/book_profession.json";
@@ -58,11 +63,7 @@ import Comment from "@jx3box/jx3box-comment-ui/src/Comment.vue";
 
 export default {
     name: "bookSingle",
-    components: {
-        ItemIcon,
-        SearchInput,
-        Comment,
-    },
+    components: { Jx3boxMap, ItemIcon, SearchInput, Comment },
     data() {
         return {
             wiki_post: {
@@ -103,6 +104,10 @@ export default {
                     data.contentInfo = data.contents.map((item) => item.content.replace(/\\n/g, "<br>")).join("<br>");
                     if (data.DoodadTemplateID && this.bookMapInfo[data.DoodadTemplateID]) {
                         this.bookMapSite = this.bookMapInfo[data.DoodadTemplateID];
+                        this.bookMapSite[0].position[0] = Object.assign(this.bookMapSite[0].position[0], {
+                            title: data.Name,
+                            content: `坐标：(${this.bookMapSite[0].position[0].x},${this.bookMapSite[0].position[0].y},${this.bookMapSite[0].position[0].z})`,
+                        });
                     }
                     this.book = data;
                 })
