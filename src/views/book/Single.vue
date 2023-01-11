@@ -4,7 +4,7 @@
             <search-input></search-input>
         </div>
         <div class="m-book-content">
-            <div class="w-book">
+            <div class="w-book" v-if="book">
                 <p class="u-title__warpper">
                     <span class="u-name-icon">
                         <item-icon v-if="book.ItemID" :item_id="book.ItemID" :size="36"></item-icon>
@@ -29,7 +29,7 @@
                                 <div class="u-item">所属套书：{{ book.BookName }}</div>
                                 <div class="u-item">阅读等级：{{ book.RequireLevel }}级</div>
                             </div>
-                            <template v-if="book?.copy?.ID">
+                            <template v-if="book_copy_id">
                                 <p class="u-subtitle">【抄录信息】</p>
                                 <div class="u-book-info">
                                     <div class="u-item">
@@ -67,7 +67,7 @@
             </div>
             <div v-if="bookMapSite.length" class="vertical-item book-map">
                 <div class="u-header">
-                    <img class="u-icon" svg-inline src="../../assets/img/achievement.svg" />
+                    <!-- <img class="u-icon" svg-inline src="../../assets/img/achievement.svg" /> -->
                     <span class="u-txt">碑铭信息</span>
                 </div>
                 <jx3box-map
@@ -127,6 +127,11 @@ export default {
             loading: false,
             bookMapSite: [], // 碑铭点位信息
         };
+    },
+    computed : {
+        book_copy_id () {
+            return book?.copy?.ID
+        },
     },
     methods: {
         getOrigin(tempId) {
