@@ -29,7 +29,7 @@
                                 <div class="u-item">所属套书：{{ book.BookName }}</div>
                                 <div class="u-item">阅读等级：{{ book.RequireLevel }}级</div>
                             </div>
-                            <template v-if="book?.copy?.ID">
+                            <template v-if="book.copy && book.copy.ID">
                                 <p class="u-subtitle">【抄录信息】</p>
                                 <div class="u-book-info">
                                     <div class="u-item">
