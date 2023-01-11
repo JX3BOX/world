@@ -12,25 +12,69 @@
                     <span class="u-title-id"> ID:{{ book.idKey }} </span>
                     <span class="u-desc" v-html="book.Desc"></span>
                 </p>
-                <div class="u-info__wrapper">
-                    <div v-if="book.contentInfo" class="book-info__content">
-                        <p class="u-subtitle">【书籍内容】</p>
-                        <div class="book-content" v-html="book.contentInfo"></div>
+                <div class="vertical-item u-info__wrapper">
+                    <div class="u-header">
+                        <img class="u-icon" svg-inline src="../../assets/img/achievement.svg" />
+                        <span class="u-txt">书籍内容</span>
                     </div>
-                    <div class="common-info__content">
-                        <p class="u-subtitle">【书籍信息】</p>
-                        <div class="u-book-info">
-                            <div class="u-item">类型：{{ getProfessionType(book.ExtendProfessionID1) }}</div>
-                            <div class="u-item">来源：{{ getOrigin(book.DoodadTemplateID) }}</div>
-                            <div class="u-item">套书：{{ book.BookName }}</div>
-                            <!-- <div class="u-item">抄录相关：</div> -->
+                    <div class="u-content">
+                        <div v-if="book.contentInfo" class="book-info__content">
+                            <div class="book-content" v-html="book.contentInfo"></div>
+                        </div>
+                        <div class="common-info__content">
+                            <p class="u-subtitle">【书籍信息】</p>
+                            <div class="u-book-info">
+                                <div class="u-item">书籍类型：{{ getProfessionType(book.ExtendProfessionID1) }}</div>
+                                <div class="u-item">书籍来源：{{ getOrigin(book.DoodadTemplateID) }}</div>
+                                <div class="u-item">所属套书：{{ book.BookName }}</div>
+                                <div class="u-item">阅读等级：{{ book.RequireLevel }}级</div>
+                            </div>
+                            <template v-if="book?.copy?.ID">
+                                <p class="u-subtitle">【抄录信息】</p>
+                                <div class="u-book-info">
+                                    <div class="u-item">
+                                        <span>需求阅读：</span>
+                                        <span>{{ book.copy.RequireLevel }}级</span>
+                                    </div>
+                                    <div class="u-item">
+                                        <span>需求{{ getProfessionType(book.ExtendProfessionID1) }}：</span>
+                                        <span>{{ book.copy.RequireLevelExt }}级</span>
+                                    </div>
+                                    <div class="u-item">
+                                        <span>角色等级：</span>
+                                        <span>{{ book.copy.RequirePlayerLevel }}级</span>
+                                    </div>
+                                    <div class="u-item">
+                                        <span>消耗精力：</span>
+                                        <span>{{ book.copy.CostVigor }}点</span>
+                                    </div>
+                                    <div v-if="book.copyList.length" class="u-item">
+                                        <span>消耗材料：</span>
+                                        <item-icon
+                                            v-for="meterial in book.copyList"
+                                            :key="meterial.item_id"
+                                            :item_id="meterial.item_id"
+                                            :size="28"
+                                            :amount="meterial.count"
+                                            :onlyIcon="true"
+                                        ></item-icon>
+                                    </div>
+                                </div>
+                            </template>
                         </div>
                     </div>
                 </div>
             </div>
-            <div v-if="bookMapSite.length" class="book-map">
-                <p class="u-subtitle">【碑铭信息】</p>
-                <jx3box-map :map-id="parseInt(bookMapSite[0].map)" :datas="bookMapSite[0].position"></jx3box-map>
+            <div v-if="bookMapSite.length" class="vertical-item book-map">
+                <div class="u-header">
+                    <img class="u-icon" svg-inline src="../../assets/img/achievement.svg" />
+                    <span class="u-txt">碑铭信息</span>
+                </div>
+                <jx3box-map
+                    class="u-content"
+                    :map-id="parseInt(bookMapSite[0].map)"
+                    :datas="bookMapSite[0].position"
+                ></jx3box-map>
             </div>
         </div>
         <div class="m-comment">
@@ -86,7 +130,7 @@ export default {
     },
     methods: {
         getOrigin(tempId) {
-            return tempId && this.bookMapInfo[tempId] ? "碑铭" : "其它";
+            return tempId && this.bookMapInfo[tempId] ? "碑铭" : this.book.ShopID ? this.book.ShopName : "其它";
         },
         getProfessionType(type) {
             return bookProfession.find((item) => item.id === Number(type))
@@ -108,6 +152,19 @@ export default {
                             title: data.Name,
                             content: `坐标：(${this.bookMapSite[0].position[0].x},${this.bookMapSite[0].position[0].y},${this.bookMapSite[0].position[0].z})`,
                         });
+                    }
+                    if (data?.copy?.ID) {
+                        const keyArr = Object.keys(data.copy).filter((key) => key.indexOf("RequireItem") > -1);
+                        let len = parseInt(keyArr.length / 3);
+                        data.copyList = [];
+                        for (let i = 1; i <= len; i++) {
+                            if (data.copy["RequireItemType" + i]) {
+                                data.copyList.push({
+                                    item_id: data.copy["RequireItemType" + i] + "_" + data.copy["RequireItemIndex" + i],
+                                    count: data.copy["RequireItemCount" + i],
+                                });
+                            }
+                        }
                     }
                     this.book = data;
                 })

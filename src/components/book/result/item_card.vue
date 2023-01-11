@@ -12,7 +12,7 @@
         <div class="u-name">
             <span>{{ item.Desc }}</span>
         </div>
-        <div class="u-path">
+        <div class="u-path" :class="getOrigin(item.DoodadTemplateID) !== '其它' && 'special'">
             <span>{{ getOrigin(item.DoodadTemplateID) }}</span>
         </div>
     </div>
@@ -46,7 +46,7 @@ export default {
             this.$router.push({ name: "single", params: { book_id: id } });
         },
         getOrigin(tempId) {
-            return tempId && this.bookMapInfo[tempId] ? "碑铭" : "其它";
+            return tempId && this.bookMapInfo[tempId] ? "碑铭" : this.item.ShopID ? "商店" : "其它";
         },
     },
     computed: {

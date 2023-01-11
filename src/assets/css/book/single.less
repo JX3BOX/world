@@ -37,30 +37,73 @@
 
         .u-info__wrapper {
             margin: 10px 0;
-            @media screen and (min-width: 768px) {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                column-gap: 14px;
+            .u-content {
+                @media screen and (min-width: 768px) {
+                    display: grid;
+                    grid-template-columns: 2fr 1fr;
+                    column-gap: 14px;
+                }
             }
             .u-book-info {
                 padding: 5px 10px;
                 .fz(14px);
                 .u-item {
-                    margin-bottom: 5px;
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: flex-start;
+                    .pb(10px);
+                    span {
+                        .pr(2px);
+                    }
                 }
             }
 
             .book-content {
-              margin: 10px;
-              padding: 15px;
-              background-color: #d8d5c9;
-              font-size: 14px;
-              font-weight: bold;
-              line-height: 1.5;
-              height: 380px;
-              overflow-y: auto;
-              border-radius: 5px;
+                background-color: #d8d5c9;
+                padding: 15px;
+                margin-bottom: 10px;
+                font-size: 14px;
+                font-weight: bold;
+                line-height: 1.5;
+                height: 330px;
+                overflow-y: auto;
+                border-radius: 5px;
             }
+        }
+    }
+    .vertical-item {
+        margin-bottom: 15px;
+        border-radius: 5px;
+        font-size: 14px;
+        background-color: #fafbfc;
+        border: 1px solid #eee;
+        .u-header {
+            display: flex;
+            line-height: 28px;
+            padding: 10px 15px;
+            background-color: #f5f7fa;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 10px;
+            .u-icon {
+                width: 28px;
+                height: 28px;
+                font-size: 22px;
+                margin-right: 7px;
+                color: #0366d6;
+                fill: #0366d6;
+            }
+            span {
+                font-size: 17px;
+                color: #6c645c;
+                font-weight: 300;
+            }
+        }
+        .u-content {
+            margin-bottom: 15px;
+            width: calc(100% - 20px);
+            padding: 0 10px;
+            font-size: 14px;
+            background-color: #fafbfc;
         }
     }
 
