@@ -94,7 +94,9 @@ export default {
     iconLink,
     getNews () {
       this.loading = true
-      getNews({}).then((res) => {
+      getNews({
+        client: this.client,
+      }).then((res) => {
         this.news = res.data.list || [];
         // console.log(this.news)
       }).finally(() => {

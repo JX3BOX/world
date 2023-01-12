@@ -32,7 +32,9 @@ export default {
             return { name: "result", query: { id: menu.nDlcID } };
         },
         getMenus() {
-            getMenus({}).then((res) => {
+            getMenus({
+                client: this.client,
+            }).then((res) => {
                 // console.log(res)
                 const list = res.data.dlc || [];
                 const arr = Object.keys(maps).reverse();

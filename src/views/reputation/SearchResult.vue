@@ -53,6 +53,7 @@ export default {
         dlc: this.id,
         keyword: this.keyword,
         page,
+        client: this.client,
       };
       !params.dlc && delete params.dlc;
       getList(params).then((res) => {
