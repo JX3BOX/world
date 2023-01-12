@@ -128,11 +128,6 @@ export default {
             bookMapSite: [], // 碑铭点位信息
         };
     },
-    computed : {
-        book_copy_id () {
-            return book?.copy?.ID
-        },
-    },
     methods: {
         getOrigin(tempId) {
             return tempId && this.bookMapInfo[tempId] ? "碑铭" : this.book.ShopID ? this.book.ShopName : "其它";
