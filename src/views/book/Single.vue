@@ -25,7 +25,18 @@
                             <p class="u-subtitle">【书籍信息】</p>
                             <div class="u-book-info">
                                 <div class="u-item">书籍类型：{{ getProfessionType(book.ExtendProfessionID1) }}</div>
-                                <div class="u-item">书籍来源：{{ getOrigin(book.DoodadTemplateID) }}</div>
+                                <el-tooltip
+                                    v-if="getOrigin(book) === '秘境'"
+                                    placement="top"
+                                    popper-class="book-notice-tooltip"
+                                >
+                                    <div slot="content">
+                                        <div class="u-item">秘境</div>
+                                        <div class="book-fb" v-html="getBossOrigin(book)"></div>
+                                    </div>
+                                    <div class="u-item book-origin">书籍来源：{{ getOrigin(book) }}</div>
+                                </el-tooltip>
+                                <div v-else class="u-item book-origin">书籍来源：{{ getOrigin(book) }}</div>
                                 <div class="u-item">所属套书：{{ book.BookName }}</div>
                                 <div class="u-item">阅读等级：{{ book.RequireLevel }}级</div>
                             </div>
@@ -93,6 +104,10 @@ import bookProfession from "@/assets/data/book_profession.json";
 import bookMapInfoStd from "@/assets/data/stele_std_fwd.json";
 import bookMapInfoOrigin from "@/assets/data/stele_origin_fwd.json";
 
+// 副本地图json
+import maps_std from "@jx3box/jx3box-data/data/fb/fb_map.json";
+import maps_orgin from "@jx3box/jx3box-data/data/fb/fb_map_origin.json";
+
 import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
 
 import { postStat } from "@jx3box/jx3box-common/js/stat.js";
@@ -129,8 +144,54 @@ export default {
         };
     },
     methods: {
-        getOrigin(tempId) {
-            return tempId && this.bookMapInfo[tempId] ? "碑铭" : this.book.ShopID ? this.book.ShopName : "其它";
+        getBossOrigin(book) {
+            const fbMaps = this.client === "std" ? maps_std : maps_orgin;
+            const maps = Object.values(fbMaps)
+                .map((item) => Object.values(item.dungeon))
+                .reduce(function (a, b) {
+                    return a.concat(b);
+                })
+                .map((item) => {
+                    return item.maps.map((mItem) => {
+                        return {
+                            map_id: Number(mItem.map_id),
+                            name: mItem.mode + item.name,
+                        };
+                    });
+                })
+                .flat();
+            const drops = book?.drops;
+            if (drops && drops.length) {
+                let orgin = "";
+                drops.forEach((item) => {
+                    orgin =
+                        orgin +
+                        (orgin ? "<br />" : "") +
+                        ("[" + item.BossName + "]") +
+                        (maps.find((mItem) => mItem.map_id === item.MapID)
+                            ? "(" + maps.find((mItem) => mItem.map_id === item.MapID).name + ")"
+                            : "");
+                });
+                return orgin;
+            }
+            return "";
+        },
+        getShopOrigin() {},
+        getOrigin(item) {
+            const tempId = item.tempId;
+            const shopName = item.shop?.ShopName;
+            const drops = item.drops || [];
+            let orgin = "";
+            if (tempId) {
+                orgin = orgin + (orgin ? "/" : "") + (this.bookMapInfo[tempId] ? "碑铭" : "其它");
+            }
+            if (shopName) {
+                orgin = orgin + (orgin ? "/" : "") + shopName;
+            }
+            if (drops.length) {
+                orgin = orgin + (orgin ? "/" : "") + "秘境";
+            }
+            return orgin;
         },
         getProfessionType(type) {
             return bookProfession.find((item) => item.id === Number(type))
