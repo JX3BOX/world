@@ -12,8 +12,8 @@
         <div class="u-name">
             <span>{{ item.Desc }}</span>
         </div>
-        <div class="u-path" :class="getOrigin(item.DoodadTemplateID) !== '其它' && 'special'">
-            <span>{{ getOrigin(item.DoodadTemplateID) }}</span>
+        <div class="u-path" :class="getOrigin(item) !== '其它' && 'special'">
+            <span>{{ getOrigin(item) }}</span>
         </div>
     </div>
 </template>
@@ -45,8 +45,24 @@ export default {
         go(id) {
             this.$router.push({ name: "single", params: { book_id: id } });
         },
-        getOrigin(tempId) {
-            return tempId && this.bookMapInfo[tempId] ? "碑铭" : this.item.ShopID ? "商店" : "其它";
+        getOrigin(item) {
+            const tempId = item.DoodadTemplateID;
+            const shopId = item.ShopID;
+            const drops = item.drops || [];
+            let orgin = "";
+            if (tempId) {
+                orgin = orgin + (orgin ? "/" : "") + (this.bookMapInfo[tempId] ? "碑铭" : "其它");
+            }
+            if (shopId) {
+                orgin = orgin + (orgin ? "/" : "") + "商店";
+            }
+            if (drops.length) {
+                orgin = orgin + (orgin ? "/" : "") + "秘境";
+            }
+            if (!orgin) {
+                orgin = "其它";
+            }
+            return orgin;
         },
     },
     computed: {

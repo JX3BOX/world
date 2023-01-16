@@ -25,18 +25,17 @@
                             <p class="u-subtitle">【书籍信息】</p>
                             <div class="u-book-info">
                                 <div class="u-item">书籍类型：{{ getProfessionType(book.ExtendProfessionID1) }}</div>
-                                <el-tooltip
-                                    v-if="getOrigin(book) === '秘境'"
-                                    placement="top"
-                                    popper-class="book-notice-tooltip"
-                                >
-                                    <div slot="content">
-                                        <div class="u-item">秘境</div>
-                                        <div class="book-fb" v-html="getBossOrigin(book)"></div>
-                                    </div>
-                                    <div class="u-item book-origin">书籍来源：{{ getOrigin(book) }}</div>
-                                </el-tooltip>
-                                <div v-else class="u-item book-origin">书籍来源：{{ getOrigin(book) }}</div>
+                                <div v-if="getOrigin(book) === '秘境'" class="u-item book-origin">
+                                    书籍来源：
+                                    <el-tooltip placement="top" popper-class="book-notice-tooltip">
+                                        <div slot="content">
+                                            <div class="u-item">秘境</div>
+                                            <div class="book-fb" v-html="getBossOrigin(book)"></div>
+                                        </div>
+                                        <span>{{ getOrigin(book) }}</span>
+                                    </el-tooltip>
+                                </div>
+                                <div v-else class="u-item">书籍来源：{{ getOrigin(book) }}</div>
                                 <div class="u-item">所属套书：{{ book.BookName }}</div>
                                 <div class="u-item">阅读等级：{{ book.RequireLevel }}级</div>
                             </div>
@@ -178,7 +177,7 @@ export default {
         },
         getShopOrigin() {},
         getOrigin(item) {
-            const tempId = item.tempId;
+            const tempId = item.DoodadTemplateID;
             const shopName = item.shop?.ShopName;
             const drops = item.drops || [];
             let orgin = "";
@@ -190,6 +189,9 @@ export default {
             }
             if (drops.length) {
                 orgin = orgin + (orgin ? "/" : "") + "秘境";
+            }
+            if (!orgin) {
+                orgin = "其它";
             }
             return orgin;
         },

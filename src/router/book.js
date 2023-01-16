@@ -26,11 +26,6 @@ const routes = [
         path: "/view/:book_id([_\\d]+)/:post_id(\\d+)?",
         component: () => import("@/views/book/Single.vue"),
     },
-    {
-        name: "single",
-        path: "/:book_id([_\\d]+)/:post_id(\\d+)?",
-        component: () => import("@/views/book/Single.vue"),
-    },
 ];
 
 const router = new VueRouter({
