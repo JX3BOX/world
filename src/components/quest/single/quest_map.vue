@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import MapScales from "@jx3box/jx3box-petmap/output/MapScales.json";
+import MapScales from "@jx3box/jx3box-map/src/data/map_scales.json";
 import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
 
 export default {
