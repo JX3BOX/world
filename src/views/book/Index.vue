@@ -59,6 +59,7 @@ export default {
                 ids: this.id,
                 keyword: this.keyword,
                 page,
+                client: this.client,
             };
             this.list = [];
             getList(params)

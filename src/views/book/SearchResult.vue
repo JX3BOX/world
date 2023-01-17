@@ -34,7 +34,6 @@ export default {
         loading: false,
     }),
     mounted() {
-        console.log();
         this.search();
     },
     methods: {
@@ -44,6 +43,7 @@ export default {
                 ids: this.id,
                 keyword: this.keyword,
                 page,
+                client: this.client,
             };
             Number(this.profession) !== 8 && (params.profession = this.profession);
             this.list = [];

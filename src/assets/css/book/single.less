@@ -1,9 +1,4 @@
 .m-book-content {
-    @media screen and (min-width: 768px) {
-        display: grid;
-        // grid-template-columns: repeat(2, 1fr);
-        column-gap: 14px;
-    }
 
     p {
         margin: 0;
@@ -54,6 +49,12 @@
                     .pb(10px);
                     span {
                         .pr(2px);
+                    }
+                    &.book-origin {
+                      span {
+                        cursor: pointer;
+                        color: #fba524; 
+                      }
                     }
                 }
             }
@@ -170,4 +171,7 @@
     .w-boxcoin-records-list {
         background-color: #fff;
     }
+}
+.book-fb {
+  color: #f18b8b;
 }

@@ -13,7 +13,8 @@
 
 <script>
 import { getMenus } from "@/service/reputation";
-import maps from "@jx3box/jx3box-data/data/fb/fb_map.json";
+import maps_std from "@jx3box/jx3box-data/data/fb/fb_map.json";
+import maps_orgin from "@jx3box/jx3box-data/data/fb/fb_map_origin.json";
 
 export default {
     name: "Nav",
@@ -32,8 +33,11 @@ export default {
             return { name: "result", query: { id: menu.nDlcID } };
         },
         getMenus() {
-            getMenus({}).then((res) => {
+            getMenus({
+                client: this.client,
+            }).then((res) => {
                 // console.log(res)
+                const maps = this.client === "std" ? maps_std : maps_orgin;
                 const list = res.data.dlc || [];
                 const arr = Object.keys(maps).reverse();
                 arr.unshift("声望总览");
