@@ -47,17 +47,21 @@ export default {
         },
         getOrigin(item) {
             const tempId = item.DoodadTemplateID;
-            const shopId = item.ShopID;
+            const ShopNames = item.ShopNames;
             const drops = item.drops || [];
+            const quests = item?.Quests;
             let orgin = "";
             if (tempId) {
                 orgin = orgin + (orgin ? "/" : "") + (this.bookMapInfo[tempId] ? "碑铭" : "其它");
             }
-            if (shopId) {
+            if (ShopNames) {
                 orgin = orgin + (orgin ? "/" : "") + "商店";
             }
             if (drops.length) {
                 orgin = orgin + (orgin ? "/" : "") + "秘境";
+            }
+            if (quests) {
+                orgin = orgin + (orgin ? "/" : "") + "任务";
             }
             if (!orgin) {
                 orgin = "其它";

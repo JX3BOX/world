@@ -25,18 +25,48 @@
                             <p class="u-subtitle">【书籍信息】</p>
                             <div class="u-book-info">
                                 <div class="u-item">书籍类型：{{ getProfessionType(book.ExtendProfessionID1) }}</div>
-                                <div v-if="getOrigin(book) === '秘境'" class="u-item book-origin">
+                                <div v-if="!['其它', '碑铭'].includes(getOrigin(book))" class="u-item book-origin">
                                     书籍来源：
                                     <el-tooltip placement="top" popper-class="book-notice-tooltip">
                                         <div slot="content">
-                                            <div class="u-item">秘境</div>
-                                            <div class="book-fb" v-html="getBossOrigin(book)"></div>
+                                            <template v-if="getOrigin(book).indexOf('秘境') > -1">
+                                                <div class="u-detail-item">秘境</div>
+                                                <div class="book-fb" v-html="getBossOrigin(book)"></div>
+                                            </template>
+                                            <template v-if="getOrigin(book).indexOf('商店') > -1">
+                                                <div class="u-detail-item">商店</div>
+                                                <div class="book-shop" v-html="getShopOrigin(book)"></div>
+                                            </template>
+                                            <template v-if="getOrigin(book).indexOf('任务') > -1">
+                                                <div class="u-detail-item">任务</div>
+                                                <div class="book-quest">
+                                                    <div
+                                                        class="quest-item"
+                                                        v-for="item in getQuestOrigin(book)"
+                                                        :key="item.questId"
+                                                    >
+                                                        <a target="_blank" :href="getLink('quest', item.questId)">
+                                                            [{{ item.questName }}]</a
+                                                        >
+                                                    </div>
+                                                </div>
+                                            </template>
                                         </div>
                                         <span>{{ getOrigin(book) }}</span>
                                     </el-tooltip>
                                 </div>
                                 <div v-else class="u-item">书籍来源：{{ getOrigin(book) }}</div>
                                 <div class="u-item">所属套书：{{ book.BookName }}</div>
+                                <div v-if="book.AchievementID" class="u-item">
+                                    套书成就：
+                                    <a
+                                        class="book-achievement"
+                                        target="_blank"
+                                        :href="getLink('achievement', book.AchievementID)"
+                                    >
+                                        [{{ book.achievement ? book.achievement.Name : "" }}]</a
+                                    >
+                                </div>
                                 <div class="u-item">阅读等级：{{ book.RequireLevel }}级</div>
                             </div>
                             <template v-if="book.copy && book.copy.ID">
@@ -87,6 +117,52 @@
                 ></jx3box-map>
             </div>
         </div>
+        <div class="m-wiki-post-panel" v-if="wiki_post && wiki_post.post">
+            <WikiPanel :wiki-post="wiki_post">
+                <template slot="head-title">
+                    <img class="u-icon" svg-inline src="@/assets/img/item.svg" />
+                    <span class="u-txt">书籍（物品）攻略</span>
+                </template>
+                <template slot="head-actions">
+                    <a class="el-button el-button--primary" :href="publish_url(`item/${id}`)">
+                        <i class="el-icon-edit"></i>
+                        <span>完善物品攻略</span>
+                    </a>
+                </template>
+                <template slot="body">
+                    <div class="m-wiki-compatible" v-if="compatible">
+                        <i class="el-icon-warning-outline"></i> 暂无缘起攻略，以下为重制攻略，仅作参考，<a
+                            class="s-link"
+                            :href="publish_url(`item/${id}`)"
+                            >参与修订</a
+                        >。
+                    </div>
+                    <Article :content="wiki_post.post.content" />
+                    <div class="m-wiki-signature">
+                        <i class="el-icon-edit"></i>
+                        本次修订由 <b>{{ user_name }}</b> 提交于{{ updated_at }}
+                    </div>
+                    <Thx
+                        class="m-thx"
+                        :postId="id"
+                        postType="book"
+                        :postTitle="wiki_post.source.Name"
+                        :userId="author_id"
+                        :adminBoxcoinEnable="true"
+                        :userBoxcoinEnable="true"
+                        :authors="authors"
+                        mode="wiki"
+                        :key="'book-thx-' + id"
+                        :client="client"
+                    />
+                </template>
+            </WikiPanel>
+        </div>
+        <div class="m-wiki-post-empty" v-else>
+            <i class="el-icon-s-opportunity"></i>
+            <span>暂无攻略，我要</span>
+            <a class="s-link" :href="publish_url(`item/${id}`)">完善攻略</a>
+        </div>
         <div class="m-comment">
             <el-divider content-position="left">讨论</el-divider>
             <Comment :id="id" category="book" />
@@ -113,15 +189,17 @@ import { postStat } from "@jx3box/jx3box-common/js/stat.js";
 import { wiki } from "@jx3box/jx3box-common/js/wiki.js";
 // import { getAppIcon } from "@jx3box/jx3box-common/js/utils";
 
-import { publishLink, ts2str, showAvatar, iconLink } from "@jx3box/jx3box-common/js/utils";
+import { publishLink, ts2str, getLink, showAvatar, iconLink } from "@jx3box/jx3box-common/js/utils";
 
 import { getInfo } from "@/service/book";
 // import isArray from "lodash/isArray";
+import WikiPanel from "@jx3box/jx3box-common-ui/src/wiki/WikiPanel";
 import Comment from "@jx3box/jx3box-comment-ui/src/Comment.vue";
+import Article from "@jx3box/jx3box-editor/src/Article.vue";
 
 export default {
     name: "bookSingle",
-    components: { Jx3boxMap, ItemIcon, SearchInput, Comment },
+    components: { Jx3boxMap, ItemIcon, SearchInput, WikiPanel, Article, Comment },
     data() {
         return {
             wiki_post: {
@@ -175,20 +253,45 @@ export default {
             }
             return "";
         },
-        getShopOrigin() {},
+        getShopOrigin(book) {
+            let shopNames = book?.ShopNames;
+            if (shopNames) {
+                shopNames = shopNames.replace(/\|/g, "<br />");
+            }
+            return shopNames;
+        },
+        getQuestOrigin(book) {
+            const quests = book?.Quests;
+            let questList = [];
+            if (quests) {
+                questList = quests.split(";").map((item) => {
+                    if (item.indexOf(":") > -1) {
+                        return {
+                            questId: item.split(":")[0],
+                            questName: item.split(":")[1],
+                        };
+                    }
+                });
+            }
+            return questList;
+        },
         getOrigin(item) {
             const tempId = item.DoodadTemplateID;
-            const shopName = item.shop?.ShopName;
+            const ShopNames = item?.ShopNames;
             const drops = item.drops || [];
+            const quests = item?.Quests;
             let orgin = "";
             if (tempId) {
                 orgin = orgin + (orgin ? "/" : "") + (this.bookMapInfo[tempId] ? "碑铭" : "其它");
             }
-            if (shopName) {
-                orgin = orgin + (orgin ? "/" : "") + shopName;
+            if (ShopNames) {
+                orgin = orgin + (orgin ? "/" : "") + "商店";
             }
             if (drops.length) {
                 orgin = orgin + (orgin ? "/" : "") + "秘境";
+            }
+            if (quests) {
+                orgin = orgin + (orgin ? "/" : "") + "任务";
             }
             if (!orgin) {
                 orgin = "其它";
@@ -238,11 +341,12 @@ export default {
                     this.loading = false;
                 });
         },
+        getLink,
         //百科相关
         loadData: function () {
             // 获取最新攻略
             if (this.id) {
-                wiki.mix({ type: "book", id: this.id, client: this.client }, { supply: 1 }).then((res) => {
+                wiki.mix({ type: "item", id: this.book.ItemID, client: this.client }, { supply: 1 }).then((res) => {
                     const { post, source, compatible, isEmpty, users } = res;
                     this.wiki_post = {
                         post: post,
@@ -257,7 +361,7 @@ export default {
         },
         loadRevision: function () {
             // 获取指定攻略
-            wiki.getById(this.post_id, { type: "book" }).then((res) => {
+            wiki.getById(this.post_id, { type: "item" }).then((res) => {
                 this.wiki_post = res?.data?.data;
             });
             this.triggerStat();
@@ -273,11 +377,6 @@ export default {
     },
     mounted() {
         this.getData();
-        if (this.post_id) {
-            this.loadRevision();
-        } else {
-            this.loadData();
-        }
     },
     computed: {
         idKey: function () {
@@ -332,7 +431,13 @@ export default {
     watch: {
         id() {
             this.getData();
-            this.loadData();
+        },
+        'book.ItemID'() {
+          if (this.post_id) {
+                this.loadRevision();
+            } else {
+                this.loadData();
+            }
         },
         post_id: {
             handler() {
