@@ -19,7 +19,17 @@
                     </div>
                     <div class="u-content">
                         <div v-if="book.contentInfo" class="book-info__content">
-                            <div class="book-content" v-html="book.contentInfo"></div>
+                            <div
+                                v-if="/^\d+$/g.test(book.contentInfo)"
+                                class="book-content"
+                                :class="/^\d+$/g.test(book.contentInfo) && 'hidden'"
+                            >
+                                <img
+                                    :src="iconLink(book.contentInfo, client)"
+                                    :alt="iconLink(book.contentInfo, client)"
+                                />
+                            </div>
+                            <div v-else class="book-content" v-html="book.contentInfo"></div>
                         </div>
                         <div class="common-info__content">
                             <p class="u-subtitle">【书籍信息】</p>
@@ -221,6 +231,7 @@ export default {
         };
     },
     methods: {
+        iconLink,
         getBossOrigin(book) {
             const fbMaps = this.client === "std" ? maps_std : maps_orgin;
             const maps = Object.values(fbMaps)
@@ -432,8 +443,8 @@ export default {
         id() {
             this.getData();
         },
-        'book.ItemID'() {
-          if (this.post_id) {
+        "book.ItemID"() {
+            if (this.post_id) {
                 this.loadRevision();
             } else {
                 this.loadData();
