@@ -15,9 +15,9 @@ VueRouter.prototype.push = function push(to) {
 
 const routes = [
     {
-        name: "search",
+        name: "home",
         path: "/",
-        component: () => import("@/views/quest/Search.vue"),
+        component: () => import("@/views/quest/Home.vue"),
         meta: {
             sidebar: false,
         },
@@ -31,6 +31,16 @@ const routes = [
         name: "single",
         path: "/view/:quest_id([_\\d]+)/:post_id(\\d+)?",
         component: () => import("@/views/quest/Single.vue"),
+    },
+    {
+        name: "waiting",
+        path: "/waiting",
+        component: () => import("@/views/quest/Waiting.vue"),
+    },
+    {
+        name: "newest",
+        path: "/newest",
+        component: () => import("@/views/quest/Newest.vue"),
     }
 ];
 

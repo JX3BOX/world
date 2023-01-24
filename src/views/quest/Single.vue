@@ -125,9 +125,19 @@
             </div>
             <quest-chain :current="id" :data="quest.chain"></quest-chain>
         </div>
-        <div class="u-quest-map" v-if="showMap">
-            <quest-map :points="points" :filter="point_filter" :questType="quest.questType"> </quest-map>
-        </div>
+        <el-tabs v-model="activeTab" @tab-click="handleTabClick">
+            <el-tab-pane label="任务文案" v-if="showDialog" name="dialog">
+                <div class="u-quest-dialog">
+                    <quest-dialog :desc="quest.desc"></quest-dialog>
+                </div>
+            </el-tab-pane>
+            <el-tab-pane label="任务地图" v-if="showMap" name="map">
+                <div class="u-quest-map">
+                    <quest-map ref="map" :points="points" :filter="point_filter" :questType="quest.questType">
+                    </quest-map>
+                </div>
+            </el-tab-pane>
+        </el-tabs>
         <div class="m-wiki-post-panel" v-if="wiki_post && wiki_post.post">
             <WikiPanel :wiki-post="wiki_post">
                 <template slot="head-title">
@@ -190,11 +200,11 @@ import RewardItem from "@/components/quest/single/reward_item.vue";
 import PointFilter from "@/components/quest/single/point_filter.vue";
 import ItemIcon from "@/components/quest/common/item_icon.vue";
 import SearchInput from "@/components/quest/common/search_input.vue";
+import QuestDialog from "@/components/quest/single/quest_dialog.vue";
 
 import { postStat } from "@jx3box/jx3box-common/js/stat.js";
 import { wiki } from "@jx3box/jx3box-common/js/wiki.js";
 import { getAppIcon } from "@jx3box/jx3box-common/js/utils";
-import questFont from "@/assets/data/questFont.json";
 
 import { publishLink, ts2str, showAvatar, iconLink } from "@jx3box/jx3box-common/js/utils";
 import WikiPanel from "@jx3box/jx3box-common-ui/src/wiki/WikiPanel";
@@ -203,7 +213,7 @@ import WikiComments from "@jx3box/jx3box-common-ui/src/wiki/WikiComments";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
 
 import { getQuest } from "@/service/quest";
-import { buildPoints, schoolIcon } from "@/utils/quest.js";
+import { buildPoints, schoolIcon, questDescFormat, questTargetDescFormat } from "@/utils/quest.js";
 import isArray from "lodash/isArray";
 
 export default {
@@ -215,6 +225,7 @@ export default {
         QuestChain,
         PointFilter,
         SearchInput,
+        QuestDialog,
         Article,
         WikiPanel,
         WikiRevisions,
@@ -228,6 +239,8 @@ export default {
             },
             compatible: false,
             is_empty: true,
+
+            activeTab: "dialog",
 
             quest: {
                 id: -1,
@@ -246,8 +259,6 @@ export default {
                 },
                 canAssist: 0,
                 canShare: 0,
-                questDesc: "",
-                targetDesc: "",
                 rewards: [],
                 chain: {
                     current: [],
@@ -272,6 +283,14 @@ export default {
                 this.quest = res.data;
             });
         },
+        handleTabClick(tab, event) {
+            if (tab.name == "map") {
+                setTimeout(() => {
+                    this.$refs.map && this.$refs.map.updateSize();
+                }, 100);
+            }
+        },
+        buildPoints,
         schoolIcon,
         changePointFilter(type, enable) {
             this.$set(this.point_filter, type, enable);
@@ -315,7 +334,6 @@ export default {
                 postStat("quest", this.id);
             }
         },
-        buildPoints,
     },
     mounted() {
         this.getData();
@@ -335,34 +353,14 @@ export default {
         showMap: function () {
             return this.points && Object.keys(this.points).length > 0;
         },
+        showDialog: function () {
+            return this.quest.desc;
+        },
         questDesc: function () {
-            if (this.quest.questDesc) {
-                let result = this.quest.questDesc
-                    .replace(/\\n/g, "\n")
-                    .replace(/\<G\>/g, "&emsp;&emsp;")
-                    .replace(/\<N\>/g, "侠士")
-                    .replace(/\<C\>/g, "侠士")
-                    .replace(/\<H(\d+)\>/g, '<div style="height: calc($1px - 1.5rem)"></div>');
-                while (true) {
-                    let match = /\<F(\d+) (.+?)\>/.exec(result);
-                    if (match) {
-                        let font = questFont[match[1]];
-                        result = result.replace(match[0], `<span style="color: ${font.color}99">${match[2]}</span>`);
-                    } else {
-                        break;
-                    }
-                }
-                return result;
-            } else return null;
+            return questDescFormat(this.quest.desc?.Description);
         },
         targetDesc: function () {
-            if (this.quest.targetDesc)
-                return this.quest.targetDesc
-                    .replace(/\\n/g, "\n")
-                    .replace(/\<G\>/g, "&emsp;&emsp;")
-                    .replace(/\<C\>/g, "侠士")
-                    .replace(/\<N\>/g, "侠士");
-            else return null;
+            return questTargetDescFormat(this.quest.desc?.Objective);
         },
         showReward: function () {
             return this.quest.rewards && this.quest.rewards.length > 0;

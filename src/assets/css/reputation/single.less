@@ -1,0 +1,159 @@
+.m-reputation-content {
+    @media screen and (min-width: 768px) {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        column-gap: 14px;
+    }
+
+    p {
+        margin: 0;
+    }
+
+    .w-reputation {
+        .u-title__warpper {
+            display: flex;
+            padding: 5px 0;
+            border-bottom: 1px dashed #ccc;
+
+            .u-name-icon {
+                max-width: 60px;
+
+                img {
+                    max-width: 60px;
+                }
+            }
+
+            .u-title-desc {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: flex-start;
+                .mr(10px);
+                .ml(5px);
+
+                .u-title {
+                    font-weight: bold;
+                    .fz(18px, 1);
+                    padding-bottom: 5px;
+                    border-bottom: 1px solid #ccc;
+
+                    .u-title-id {
+                        .fz(12px);
+                        color: #909399;
+                    }
+                }
+
+                .u-desc {
+                    white-space: pre-line;
+                    line-height: 1.5em;
+                    .fz(12px);
+                    margin-top: 5px;
+                    color: #909399;
+                }
+            }
+        }
+
+        .u-path {
+            margin-top: 20px;
+            line-height: 1.6;
+
+            .u-path-list {
+                text-indent: 1em;
+
+                .path-item {
+                    margin-bottom: 10px;
+
+                    .desc-title {
+                        font-size: 14px;
+                    }
+
+                    .desc-info {
+                        font-size: 13px;
+                    }
+                }
+            }
+        }
+
+        .u-other-info {
+            margin-top: 20px;
+
+            .other-wrap {
+                text-indent: 1em;
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                font-size: 13px;
+            }
+        }
+    }
+
+    .u-reputation-map {
+        .flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .u-subtitle {
+        .bold;
+        font-size: 15px;
+        padding: 5px 0;
+    }
+
+    .m-wiki-post-panel,
+    .m-wiki-post-empty {
+        .mt(20px);
+    }
+
+    .m-search,
+    .m-wiki-post-panel,
+    .m-wiki-post-empty {
+        grid-column: span 3;
+    }
+}
+
+.u-msg-yellow {
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border: 1px solid #faebcc;
+    padding: 8px 14px 8px 14px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+}
+
+.m-wiki-post-empty {
+    .u-msg-yellow;
+    .x;
+
+    .s-link {
+        .underline(@color-link);
+    }
+
+    letter-spacing: 2px;
+    .fz(14px);
+}
+
+.m-wiki-compatible {
+    .u-msg-yellow;
+    margin: 10px auto;
+    padding: 5px 10px;
+
+    a {
+        .underline(@color-link);
+    }
+}
+
+.m-wiki-signature {
+    .x(right);
+    color: #999;
+    .fz(12px, 2);
+    border-top: 1px dashed #ddd;
+    padding: 5px 0;
+}
+
+.m-thx {
+    .mt(20px);
+
+    .w-boxcoin-records-list {
+        background-color: #fff;
+    }
+}

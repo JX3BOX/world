@@ -1,6 +1,7 @@
 import { __imgPath } from '@jx3box/jx3box-common/data/jx3box.json'
+import questFont from "@/assets/data/questFont.json";
 
-const buildPoints = (quest) => {
+export const buildPoints = (quest) => {
     let result = {};
     const pushPoint = (map, point) => {
         if (!result[map]) result[map] = [];
@@ -136,7 +137,7 @@ const buildPoints = (quest) => {
     return result;
 }
 
-const schoolIcon = (school) => {
+export const schoolIcon = (school) => {
     let filenameMap = {
         北天药宗: '药宗',
         凌雪阁: '凌雪',
@@ -146,4 +147,42 @@ const schoolIcon = (school) => {
     return `${__imgPath}/image/school/${school}.png`;
 }
 
-export { buildPoints, schoolIcon };
+export const questDescFormat = (desc) => {
+    const { playerName, playerBody } = getPlayerName();
+    if (desc) {
+        let result = desc
+            .replace(/\\n/g, "\n")
+            .replace(/\<G\>/g, "&emsp;&emsp;")
+            .replace(/\<N\>/g, playerName)
+            .replace(/\<C\>/g, playerBody)
+            .replace(/\<CMD NPC_NAME (.+?)\>/g, `<strong class="u-dialog-name">$1</strong><br />`)
+            .replace(/\<CMD PLAYER_NAME >/g, `<strong class="u-dialog-name">${playerName}</strong><br />`)
+            .replace(/\<H(\d+)\>/g, '<div style="height: calc($1px - 1.5rem)"></div>');
+        while (true) {
+            let match = /\<F(\d+) (.+?)\>/.exec(result);
+            if (match) {
+                let font = questFont[match[1]];
+                result = result.replace(match[0], `<span style="color: ${font.color}99">${match[2]}</span>`);
+            } else {
+                break;
+            }
+        }
+        return result;
+    } return "";
+}
+
+export const questTargetDescFormat = (target) => {
+    if (target)
+        return target
+            .replace(/\\n/g, "\n")
+            .replace(/\<G\>/g, "&emsp;&emsp;")
+            .replace(/\<C\>/g, "侠士")
+            .replace(/\<N\>/g, "侠士");
+    else return "";
+}
+
+export const getPlayerName = () => {
+    const playerName = localStorage.getItem("QuestWiki:playerName") || "侠士";
+    const playerBody = localStorage.getItem("QuestWiki:playerBody") || "少侠";
+    return { playerName, playerBody };
+}
