@@ -36,11 +36,11 @@ export default {
             getMenus({
                 client: this.client,
             }).then((res) => {
-                // console.log(res)
                 const maps = this.client === "std" ? maps_std : maps_orgin;
                 const list = res.data.dlc || [];
                 const arr = Object.keys(maps).reverse();
                 arr.unshift("声望总览");
+                list.unshift({ nDlcIDL: 0, total: 0 });
                 this.versions = list.map((item, i) => {
                     if (!item.nDlcID) {
                         item.total = list
@@ -54,6 +54,7 @@ export default {
                         name: arr[i],
                     };
                 });
+                console.log(this.versions);
             });
         },
     },
