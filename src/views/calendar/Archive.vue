@@ -5,19 +5,51 @@
                 <div class="u-time">
                     <!-- 年份切换 -->
                     <section class="m-calendar-year">
-                        <el-button icon="el-icon-arrow-left" size="medium" :disabled="prevDisabled" @click="toggleYear('prev')" class="u-btn" title="上一年"></el-button>
-                        <span class="u-year" :style="{color:getSloganMeta('color')}">{{ current.year }}</span>
-                        <el-button icon="el-icon-arrow-right" size="medium" :disabled="nextDisabled" @click="toggleYear('next')" class="u-btn" title="下一年"></el-button>
+                        <el-button
+                            icon="el-icon-arrow-left"
+                            size="medium"
+                            :disabled="prevDisabled"
+                            @click="toggleYear('prev')"
+                            class="u-btn"
+                            title="上一年"
+                        ></el-button>
+                        <span class="u-year" :style="{ color: getSloganMeta('color') }">{{ current.year }}</span>
+                        <el-button
+                            icon="el-icon-arrow-right"
+                            size="medium"
+                            :disabled="nextDisabled"
+                            @click="toggleYear('next')"
+                            class="u-btn"
+                            title="下一年"
+                        ></el-button>
                         <!-- 月份切换 -->
-                        <el-button icon="el-icon-arrow-left" size="medium" :disabled="prevDisabled" @click="toggleMonth('prev')" class="u-btn" title="上一月"></el-button>
-                        <span class="u-year u-month-text" :style="{color:getSloganMeta('color')}">{{ current.month }}</span>
-                        <el-button icon="el-icon-arrow-right" size="medium" :disabled="nextDisabled" @click="toggleMonth('next')" class="u-btn" title="下一月"></el-button>
+                        <el-button
+                            icon="el-icon-arrow-left"
+                            size="medium"
+                            :disabled="prevDisabled"
+                            @click="toggleMonth('prev')"
+                            class="u-btn"
+                            title="上一月"
+                        ></el-button>
+                        <span class="u-year u-month-text" :style="{ color: getSloganMeta('color') }">{{
+                            current.month
+                        }}</span>
+                        <el-button
+                            icon="el-icon-arrow-right"
+                            size="medium"
+                            :disabled="nextDisabled"
+                            @click="toggleMonth('next')"
+                            class="u-btn"
+                            title="下一月"
+                        ></el-button>
                     </section>
                     <!-- <span class="u-contribute" @click="rank_show = true"><i class="el-icon-s-data"></i>剑三日历贡献排行榜</span> -->
                 </div>
                 <!-- 中央海报 -->
                 <div class="u-slogan m-calendar-slogan">
-                    <a :href="getSloganMeta('url')" target="_blank" :title="getSloganMeta('title')"><img :src="resolveImagePath(getSloganMeta('banner'))" /></a>
+                    <a :href="getSloganMeta('url')" target="_blank" :title="getSloganMeta('title')"
+                        ><img :src="resolveImagePath(getSloganMeta('banner'))"
+                    /></a>
                 </div>
             </div>
             <section class="m-calendar-content">
@@ -27,12 +59,24 @@
                     </div>
                 </section>
                 <section class="m-calendar-date">
-                    <div v-for="(item, index) in dataArr" class="u-date" @click.prevent="dateClick(item)" :class="[
+                    <div
+                        v-for="(item, index) in dataArr"
+                        class="u-date"
+                        @click.prevent="dateClick(item)"
+                        :class="[
                             { 'u-other': ['pre', 'next'].includes(item.type) },
                             { 'u-today': isToday(item) },
                             { 'u-current': isCurrent(item) },
-                        ]" :key="index">
-                        <calendar-item :data="item" :counts="counts" :slogans="slogans" :pageSlogan="pageSlogan" :isToday="isToday(item)"></calendar-item>
+                        ]"
+                        :key="index"
+                    >
+                        <calendar-item
+                            :data="item"
+                            :counts="counts"
+                            :slogans="slogans"
+                            :pageSlogan="pageSlogan"
+                            :isToday="isToday(item)"
+                        ></calendar-item>
                     </div>
                 </section>
             </section>
@@ -48,13 +92,13 @@
 <script>
 import { months, weeks } from "@/assets/data/calendar.json";
 import { getCalendar, getCalendarCount, getCalendarSlogans } from "@/service/calendar.js";
-import dayjs from 'dayjs'
+import dayjs from "dayjs";
 import { getMyTeamRaid } from "@/service/team.js";
 import calendarDetail from "@/components/calendar/calendar_detail.vue";
 import calendar_item from "@/components/calendar/calendar_item.vue";
 // import calendar_rank from "@/components/calendar/calendar_rank.vue";
 import { resolveImagePath } from "@jx3box/jx3box-common/js/utils";
-import User from '@jx3box/jx3box-common/js/user'
+import User from "@jx3box/jx3box-common/js/user";
 export default {
     name: "Archive",
     components: {
@@ -116,8 +160,8 @@ export default {
             };
         },
         isExpand() {
-            return this.$store.state.isExpand
-        }
+            return this.$store.state.isExpand;
+        },
     },
     watch: {
         "$route.params": {
@@ -198,7 +242,7 @@ export default {
                     month: preInfo.month,
                     year: preInfo.year,
                     children: [],
-                    raids: []
+                    raids: [],
                 };
                 dataArr.push(preObj);
             }
@@ -210,7 +254,7 @@ export default {
                     month,
                     year,
                     children: [],
-                    raids: []
+                    raids: [],
                 };
                 dataArr.push(itemObj);
             }
@@ -222,7 +266,7 @@ export default {
                     month: nextInfo.month,
                     year: nextInfo.year,
                     children: [],
-                    raids: []
+                    raids: [],
                 };
                 dataArr.push(nextObj);
             }
@@ -290,7 +334,7 @@ export default {
                     }
                 });
                 // 需要用户登录才请求
-                if (User.isLogin()) this.loadMyTeamRaid()
+                if (User.isLogin()) this.loadMyTeamRaid();
             });
         },
         // 获取当前年月的统计数据
@@ -320,16 +364,17 @@ export default {
             const params = {
                 start_time: dayjs(`${year}-${month}-01`).startOf("month").format("YYYY-MM-DD"),
                 end_time: dayjs(`${year}-${month}-01`).endOf("month").format("YYYY-MM-DD"),
-            }
+            };
 
-            getMyTeamRaid(params).then(res => {
-                res.data.data.map(item => {
+            getMyTeamRaid(params).then((res) => {
+                const data = res.data?.data || [];
+                data.map((item) => {
                     return {
                         ...item,
                         month: dayjs(item?.raid_info?.start_time).month() + 1,
                         year: dayjs(item?.raid_info?.start_time).year(),
                         date: dayjs(item?.raid_info?.start_time).date(),
-                    }
+                    };
                 }).forEach((item) => {
                     let { year, month, date } = item;
                     let index = this.dataArr.findIndex((d) => d.year === year && d.month === month && d.date === date);
@@ -338,8 +383,7 @@ export default {
                         this.dataArr[index].raids.push(item);
                     }
                 });
-            })
-
+            });
         },
         // 过滤
         getSloganMeta(key) {
@@ -347,11 +391,11 @@ export default {
         },
         resolveImagePath,
         setExpand(val) {
-            this.$store.commit('SET_STATE', {
-                key: 'isExpand',
-                value: val
-            })
-        }
+            this.$store.commit("SET_STATE", {
+                key: "isExpand",
+                value: val,
+            });
+        },
     },
 };
 </script>

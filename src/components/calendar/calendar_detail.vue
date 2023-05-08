@@ -3,16 +3,16 @@
         <!-- 头部 -->
         <header class="m-calendar-detail-header">
             <h1 class="m-calendar-detail-title">{{ currentDate }}</h1>
-            <el-button class="m-calendar-detail-add" size="medium" type="primary" icon="el-icon-plus" @click="add">新增</el-button>
+            <el-button class="m-calendar-detail-add" size="medium" type="primary" icon="el-icon-plus" @click="add"
+                >新增</el-button
+            >
         </header>
 
         <main class="m-calendar-detail-content">
             <!-- 日常+周常活动 -->
             <section class="m-content-part" v-if="client == 'std'">
                 <div class="u-part-header">
-                    <el-divider content-position="left"
-                        ><i class="el-icon-date"></i> 日常</el-divider
-                    >
+                    <el-divider content-position="left"><i class="el-icon-date"></i> 日常</el-divider>
                 </div>
                 <daily-activity :date="date"></daily-activity>
             </section>
@@ -21,12 +21,20 @@
             <section class="m-content-part">
                 <div class="u-part-header">
                     <el-divider content-position="left"
-                        ><i class="el-icon-s-flag"></i> 活动<span class="u-count">({{ activities_count }})</span></el-divider
+                        ><i class="el-icon-s-flag"></i> 活动<span class="u-count"
+                            >({{ activities_count }})</span
+                        ></el-divider
                     >
                 </div>
                 <div class="m-part-content">
                     <template v-if="activities && activities.length">
-                        <calendar-detail-item class="u-item" v-for="item in activities" :key="item.id" :data="item" @edit="edit" />
+                        <calendar-detail-item
+                            class="u-item"
+                            v-for="item in activities"
+                            :key="item.id"
+                            :data="item"
+                            @edit="edit"
+                        />
                     </template>
                     <template v-else>
                         <div class="u-null"><i class="el-icon-warning-outline"></i>暂时没有任何活动记录</div>
@@ -38,12 +46,20 @@
             <section class="m-content-part">
                 <div class="u-part-header">
                     <el-divider content-position="left"
-                        ><i class="el-icon-collection-tag"></i> 事件<span class="u-count">({{ events_count }})</span></el-divider
+                        ><i class="el-icon-collection-tag"></i> 事件<span class="u-count"
+                            >({{ events_count }})</span
+                        ></el-divider
                     >
                 </div>
                 <div class="m-part-content">
                     <template v-if="events && events.length">
-                        <calendar-detail-item class="u-item" v-for="item in events" :key="item.id" :data="item" @edit="edit" />
+                        <calendar-detail-item
+                            class="u-item"
+                            v-for="item in events"
+                            :key="item.id"
+                            :data="item"
+                            @edit="edit"
+                        />
                     </template>
                     <template v-else>
                         <div class="u-null"><i class="el-icon-warning-outline"></i>暂时没有任何事件记录</div>
@@ -52,7 +68,15 @@
             </section>
         </main>
 
-        <calendar-dialog v-model="visible" :date-obj="dateObj" :selected="selected" @update="update" @del="del" :mode="mode" :isSuper="true"></calendar-dialog>
+        <calendar-dialog
+            v-model="visible"
+            :date-obj="dateObj"
+            :selected="selected"
+            @update="update"
+            @del="del"
+            :mode="mode"
+            :isSuper="true"
+        ></calendar-dialog>
     </div>
 </template>
 
@@ -98,18 +122,26 @@ export default {
 
         // 活动(还需要匹配相同客户端)
         activities() {
-            return this.list && this.list?.filter((item) => {
-                return item.client == this.client && item.type === 2;
-            }) || [];
+            return (
+                (this.list &&
+                    this.list?.filter((item) => {
+                        return item.client == this.client && item.type === 2;
+                    })) ||
+                []
+            );
         },
         activities_count: function () {
             return this.activities?.length || 0;
         },
         // 事件
         events() {
-            return this.list && this.list?.filter((item) => {
-                return item.type === 1;
-            }) || [];
+            return (
+                (this.list &&
+                    this.list?.filter((item) => {
+                        return item.type === 1;
+                    })) ||
+                []
+            );
         },
         events_count: function () {
             return this.events?.length || 0;
@@ -138,7 +170,7 @@ export default {
             this.loading = true;
             return getDayCalendar(this.dateObj)
                 .then((res) => {
-                    this.list = res.data.data;
+                    this.list = res.data?.data || [];
                 })
                 .finally(() => {
                     this.loading = false;
