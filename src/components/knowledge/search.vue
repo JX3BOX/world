@@ -21,3 +21,9 @@ export default {
     },
 };
 </script>
+
+<style lang="less">
+    .m-knowledge-search {
+        margin-top: 120px;
+    }
+</style>

@@ -1,4 +1,4 @@
-import { $helper } from "@jx3box/jx3box-common/js/https";
+import { $helper, $cms } from "@jx3box/jx3box-common/js/https";
 
 function getKnowledgeList(params) {
     return $helper()
@@ -51,8 +51,8 @@ function getKnowledgeNewest(params) {
 
 // 获取玩法指南
 function getMenuGroups(params) {
-    return $helper()
-        .get(`/api/menu_groups`, { params })
+    return $cms()
+        .get(`/api/cms/menu-group`, { params })
         .then((res) => {
             return res.data.data;
         });

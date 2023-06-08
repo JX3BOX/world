@@ -28,8 +28,11 @@ export default {
 	methods: {
 		// 获取玩法指南
 		getGuideData() {
-			getMenuGroups({ names: ["guide-pve", "guide-pvx", "guide-pvp"] }).then((res) => {
-				this.data = res.data;
+			getMenuGroups({ key: ["guide-pve", "guide-pvx", "guide-pvp"].join(',') }).then((res) => {
+				this.data = res.reduce((acc, cur) => {
+                    acc[cur.name] = cur;
+                    return acc;
+                }, {});
 			});
 		},
 	},
